@@ -90,6 +90,9 @@ namespace TypeReferences.Editor {
 					var classRefParts = classRef.Split(',');
 
 					s_TempContent.text = classRefParts[0].Trim();
+					if (s_TempContent.text == "")
+						s_TempContent.text = "(None)";
+
 					EditorStyles.popup.Draw(position, s_TempContent, controlID);
 					break;
 			}
@@ -108,6 +111,9 @@ namespace TypeReferences.Editor {
 
 		private static void DisplayDropDown(Rect position, List<Type> types, Type selectedType, ClassGrouping grouping) {
 			var menu = new GenericMenu();
+
+			menu.AddItem(new GUIContent("(None)"), selectedType == null, s_OnSelectedTypeName, null);
+			menu.AddSeparator("");
 
 			for (int i = 0; i < types.Count; ++i) {
 				var type = types[i];
@@ -156,7 +162,7 @@ namespace TypeReferences.Editor {
 		private static readonly GenericMenu.MenuFunction2 s_OnSelectedTypeName = OnSelectedTypeName;
 
 		private static void OnSelectedTypeName(object userData) {
-			var selectedType = (Type)userData;
+			var selectedType = userData as Type;
 
 			s_SelectedClassRef = ClassTypeReference.GetClassRef(selectedType);
 			

@@ -31,7 +31,9 @@ namespace TypeReferences {
 		/// </summary>
 		/// <param name="assemblyQualifiedClassName">Assembly qualified class name.</param>
 		public ClassTypeReference(string assemblyQualifiedClassName) {
-			Type = Type.GetType(assemblyQualifiedClassName);
+			Type = !string.IsNullOrEmpty(assemblyQualifiedClassName)
+				? Type.GetType(assemblyQualifiedClassName)
+				: null;
 		}
 
 		/// <summary>
