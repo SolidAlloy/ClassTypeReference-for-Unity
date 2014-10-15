@@ -74,7 +74,7 @@ namespace TypeReferences.Editor {
 					break;
 
 				case EventType.MouseDown:
-					if (position.Contains(Event.current.mousePosition)) {
+					if (GUI.enabled && position.Contains(Event.current.mousePosition)) {
 						s_SelectionControlID = controlID;
 						s_SelectedClassRef = classRef;
 
