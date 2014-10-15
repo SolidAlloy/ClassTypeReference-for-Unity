@@ -161,12 +161,17 @@ namespace TypeReferences.Editor {
 		}
 
 		private static void DrawTypeSelectionControl(Rect position, SerializedProperty property, GUIContent label, ClassTypeConstraintAttribute filter) {
-			bool restoreShowMixedValue = EditorGUI.showMixedValue;
-			EditorGUI.showMixedValue = property.hasMultipleDifferentValues;
+			try {
+				bool restoreShowMixedValue = EditorGUI.showMixedValue;
+				EditorGUI.showMixedValue = property.hasMultipleDifferentValues;
 
-			property.stringValue = DrawTypeSelectionControl(position, label, property.stringValue, filter);
+				property.stringValue = DrawTypeSelectionControl(position, label, property.stringValue, filter);
 
-			EditorGUI.showMixedValue = restoreShowMixedValue;
+				EditorGUI.showMixedValue = restoreShowMixedValue;
+			}
+			finally {
+				ExcludedTypeCollectionGetter = null;
+			}
 		}
 
 		private static void DisplayDropDown(Rect position, List<Type> types, Type selectedType, ClassGrouping grouping) {
