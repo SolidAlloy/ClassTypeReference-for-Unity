@@ -56,7 +56,9 @@ namespace TypeReferences.Editor {
 			if (label != null && label != GUIContent.none)
 				position = EditorGUI.PrefixLabel(position, label);
 
-			int controlID = GUIUtility.GetControlID(FocusType.Passive);
+			int controlID = GUIUtility.GetControlID(FocusType.Keyboard, position);
+
+			bool triggerDropDown = false;
 
 			switch (Event.current.GetTypeForControl(controlID)) {
 				case EventType.ExecuteCommand:
@@ -75,13 +77,18 @@ namespace TypeReferences.Editor {
 
 				case EventType.MouseDown:
 					if (GUI.enabled && position.Contains(Event.current.mousePosition)) {
-						s_SelectionControlID = controlID;
-						s_SelectedClassRef = classRef;
+						GUIUtility.keyboardControl = controlID;
+						triggerDropDown = true;
+						Event.current.Use();
+					}
+					break;
 
-						var selectedType = Type.GetType(classRef);
-
-						var filteredTypes = GetFilteredTypes(filter);
-						DisplayDropDown(position, filteredTypes, selectedType, filter.Grouping);
+				case EventType.KeyDown:
+					if (GUI.enabled && GUIUtility.keyboardControl == controlID) {
+						if (Event.current.keyCode == KeyCode.Return || Event.current.keyCode == KeyCode.Space) {
+							triggerDropDown = true;
+							Event.current.Use();
+						}
 					}
 					break;
 
@@ -95,6 +102,16 @@ namespace TypeReferences.Editor {
 
 					EditorStyles.popup.Draw(position, s_TempContent, controlID);
 					break;
+			}
+			
+			if (triggerDropDown) {
+				s_SelectionControlID = controlID;
+				s_SelectedClassRef = classRef;
+				
+				var selectedType = Type.GetType(classRef);
+				
+				var filteredTypes = GetFilteredTypes(filter);
+				DisplayDropDown(position, filteredTypes, selectedType, filter.Grouping);
 			}
 
 			return classRef;
