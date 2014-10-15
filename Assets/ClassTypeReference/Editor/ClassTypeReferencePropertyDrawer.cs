@@ -50,13 +50,14 @@ namespace TypeReferences.Editor {
 
 		#region Control Drawing / Event Handling
 
+		private static readonly int s_ControlHint = typeof(ClassTypeReferencePropertyDrawer).GetHashCode();
 		private static GUIContent s_TempContent = new GUIContent();
 
 		private static string DrawTypeSelectionControl(Rect position, GUIContent label, string classRef, ClassTypeConstraintAttribute filter) {
 			if (label != null && label != GUIContent.none)
 				position = EditorGUI.PrefixLabel(position, label);
 
-			int controlID = GUIUtility.GetControlID(FocusType.Keyboard, position);
+			int controlID = GUIUtility.GetControlID(s_ControlHint, FocusType.Keyboard, position);
 
 			bool triggerDropDown = false;
 
