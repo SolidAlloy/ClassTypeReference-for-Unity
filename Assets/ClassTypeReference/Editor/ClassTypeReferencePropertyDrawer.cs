@@ -90,6 +90,21 @@ namespace TypeReferences.Editor {
 
 		#endregion
 
+		#region Type Utility
+
+		private static Dictionary<string, Type> s_TypeMap = new Dictionary<string, Type>();
+
+		private static Type ResolveType(string classRef) {
+			Type type;
+			if (!s_TypeMap.TryGetValue(classRef, out type)) {
+				type = !string.IsNullOrEmpty(classRef) ? Type.GetType(classRef) : null;
+				s_TypeMap[classRef] = type;
+			}
+			return type;
+		}
+
+		#endregion
+
 		#region Control Drawing / Event Handling
 
 		private static readonly int s_ControlHint = typeof(ClassTypeReferencePropertyDrawer).GetHashCode();
@@ -142,19 +157,19 @@ namespace TypeReferences.Editor {
 					s_TempContent.text = classRefParts[0].Trim();
 					if (s_TempContent.text == "")
 						s_TempContent.text = "(None)";
+					else if (ResolveType(classRef) == null)
+						s_TempContent.text += " {Missing}";
 
 					EditorStyles.popup.Draw(position, s_TempContent, controlID);
 					break;
 			}
-			
+
 			if (triggerDropDown) {
 				s_SelectionControlID = controlID;
 				s_SelectedClassRef = classRef;
-				
-				var selectedType = Type.GetType(classRef);
-				
+	
 				var filteredTypes = GetFilteredTypes(filter);
-				DisplayDropDown(position, filteredTypes, selectedType, filter.Grouping);
+				DisplayDropDown(position, filteredTypes, ResolveType(classRef), filter.Grouping);
 			}
 
 			return classRef;
