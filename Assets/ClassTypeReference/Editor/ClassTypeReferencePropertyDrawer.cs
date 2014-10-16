@@ -9,7 +9,7 @@ using System.Reflection;
 using UnityEngine;
 using UnityEditor;
 
-namespace TypeReferences.Editor {
+namespace TypeReferences {
 
 	/// <summary>
 	/// Custom property drawer for <see cref="ClassTypeReference"/> properties.
