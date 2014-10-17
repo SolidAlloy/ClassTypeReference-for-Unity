@@ -39,13 +39,24 @@ namespace TypeReferences {
 	public abstract class ClassTypeConstraintAttribute : PropertyAttribute {
 
 		private ClassGrouping _grouping = ClassGrouping.ByNamespaceFlat;
+		private bool _allowAbstract = false;
 
 		/// <summary>
-		/// Gets or sets grouping of selectable classes.
+		/// Gets or sets grouping of selectable classes. Defaults to <see cref="ClassGrouping.ByNamespaceFlat"/>
+		/// unless explicitly specified.
 		/// </summary>
 		public ClassGrouping Grouping {
 			get { return _grouping; }
 			set { _grouping = value; }
+		}
+
+		/// <summary>
+		/// Gets or sets whether abstract classes can be selected from drop-down.
+		/// Defaults to a value of <c>false</c> unless explicitly specified.
+		/// </summary>
+		public bool AllowAbstract {
+			get { return _allowAbstract; }
+			set { _allowAbstract = value; }
 		}
 
 		/// <summary>
@@ -56,7 +67,9 @@ namespace TypeReferences {
 		/// A <see cref="bool"/> value indicating if the type specified by <paramref name="type"/>
 		/// satisfies this constraint and should thus be selectable.
 		/// </returns>
-		public abstract bool IsConstraintSatisfied(Type type);
+		public virtual bool IsConstraintSatisfied(Type type) {
+			return AllowAbstract || !type.IsAbstract;
+		}
 
 	}
 
@@ -88,7 +101,8 @@ namespace TypeReferences {
 
 		/// <inheritdoc/>
 		public override bool IsConstraintSatisfied(Type type) {
-			return BaseType.IsAssignableFrom(type) && type != BaseType;
+			return base.IsConstraintSatisfied(type)
+				&& BaseType.IsAssignableFrom(type) && type != BaseType;
 		}
 
 	}
@@ -121,9 +135,11 @@ namespace TypeReferences {
 
 		/// <inheritdoc/>
 		public override bool IsConstraintSatisfied(Type type) {
-			foreach (var interfaceType in type.GetInterfaces())
-				if (interfaceType == InterfaceType)
-					return true;
+			if (base.IsConstraintSatisfied(type)) {
+				foreach (var interfaceType in type.GetInterfaces())
+					if (interfaceType == InterfaceType)
+						return true;
+			}
 			return false;
 		}
 
