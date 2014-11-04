@@ -32,7 +32,7 @@ namespace TypeReferences {
 		/// property is reset to <c>null</c> each time the control is drawn.</para>
 		/// <para>Since filtering makes extensive use of <see cref="ICollection{Type}.Contains"/>
 		/// it is recommended to use a collection that is optimized for fast
-		/// lookups such as <see cref="HashSet{Type}"/> for better performance.
+		/// lookups such as <see cref="HashSet{Type}"/> for better performance.</para>
 		/// </remarks>
 		/// <example>
 		/// <para>Exclude a specific type from being selected:</para>
@@ -53,7 +53,7 @@ namespace TypeReferences {
 		///     set.Add(typeof(SpecialClassToHideInDropdown));
 		///     return set;
 		/// }
-		/// ]]>
+		/// ]]></code>
 		/// </example>
 		public static Func<ICollection<Type>> ExcludedTypeCollectionGetter { get; set; }
 
