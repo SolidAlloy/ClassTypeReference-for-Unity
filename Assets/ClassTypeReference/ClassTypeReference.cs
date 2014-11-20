@@ -1,6 +1,5 @@
 ﻿// Copyright (c) Rotorz Limited. All rights reserved.
-// Use of this source code is governed by a BSD-style license that can be
-// found in the LICENSE file.
+// Licensed under the MIT license. See LICENSE file in the project root.
 
 using System;
 using UnityEngine;

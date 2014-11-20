@@ -3,8 +3,8 @@ README
 
 A class which provides serializable references to `System.Type` of classes with an accompanying custom property drawer which allows class selection from drop-down.
 
-Use of this source code is governed by a BSD-style license that can be found in
-the LICENSE file. DO NOT contribute to this project unless you accept the terms of the
+Licensed under the MIT license. See LICENSE file in the project root for full license
+information. DO NOT contribute to this project unless you accept the terms of the
 contribution agreement.
 
 ![screenshot](https://bitbucket.org/rotorz/classtypereference-for-unity/raw/master/screenshot.png)
@@ -101,7 +101,7 @@ Useful links
 Contribution Agreement
 ----------------------
 
-This project is licensed under the BSD license (see LICENSE). To be in the best
+This project is licensed under the MIT license (see LICENSE). To be in the best
 position to enforce these licenses the copyright status of this project needs to
 be as simple as possible. To achieve this the following terms and conditions
 must be met:
