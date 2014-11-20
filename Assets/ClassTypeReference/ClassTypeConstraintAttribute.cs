@@ -3,7 +3,6 @@
 // found in the LICENSE file.
 
 using System;
-
 using UnityEngine;
 
 namespace TypeReferences {

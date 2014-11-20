@@ -3,10 +3,8 @@
 // found in the LICENSE file.
 
 using System;
-
-using UnityEngine;
-
 using TypeReferences;
+using UnityEngine;
 
 namespace Example {
 
