@@ -73,7 +73,7 @@ namespace TypeReferences {
 
 		private static void FilterTypes(Assembly assembly, ClassTypeConstraintAttribute filter, ICollection<Type> excludedTypes, List<Type> output) {
 			foreach (var type in assembly.GetTypes()) {
-				if (!type.IsPublic || !type.IsClass)
+				if (!type.IsVisible || !type.IsClass)
 					continue;
 
 				if (filter != null && !filter.IsConstraintSatisfied(type))
