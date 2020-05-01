@@ -1,0 +1,19 @@
+image: atlassian/default-image:2
+
+pipelines:
+  branches:
+    master:
+      - step:
+          script:
+            - |
+              git branch -d upm &> /dev/null || echo "upm branch not found"
+              git subtree split -P "Assets/ClassTypeReference" -b upm
+              git checkout upm
+              if [[ -d "Samples" ]]; then
+                git mv Samples Samples~
+                rm -f Samples.meta
+                git config --global user.name 'bitbucket-bot'
+                git config --global user.email 'bitbucket-bot@users.noreply.bitbucket.org'
+                git commit -am "Fix Samples folder"
+              fi
+              git push -f -u origin upm
