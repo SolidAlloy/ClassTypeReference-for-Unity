@@ -11,6 +11,14 @@ contribution agreement.
 
 Whilst we have not encountered any platform specific issues yet, the source code in this repository *might* not necessarily work for all of Unity's platforms or build configurations. It would be greatly appreciated if people would report issues using the [issue tracker](https://bitbucket.org/rotorz/classtypereference-for-unity/issues).
 
+## Install via Git URL
+
+Project supports Unity Package Manager. To install the project as a Git package do the following:
+
+1. In Unity, open **Window** -> **Package Manager**.
+2. Press the **+** button, choose "**Add package from git URL...**"
+3. Enter "https://bitbucket.org/rotorz/classtypereference-for-unity.git#upm" and press **Add**.
+
 Usage Examples
 --------------
 
