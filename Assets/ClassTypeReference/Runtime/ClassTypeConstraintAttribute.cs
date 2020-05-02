@@ -34,10 +34,17 @@ namespace TypeReferences {
 	/// Base class for class selection constraints that can be applied when selecting
 	/// a <see cref="ClassTypeReference"/> with the Unity inspector.
 	/// </summary>
-	public abstract class ClassTypeConstraintAttribute : PropertyAttribute {
+	public class ClassTypeConstraintAttribute : PropertyAttribute {
 
 		private ClassGrouping _grouping = ClassGrouping.ByNamespaceFlat;
 		private bool _allowAbstract = false;
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="ClassTypeConstraintAttribute"/> class.
+		/// </summary>
+		public ClassTypeConstraintAttribute()
+		{
+		}
 
 		/// <summary>
 		/// Gets or sets grouping of selectable classes. Defaults to <see cref="ClassGrouping.ByNamespaceFlat"/>
