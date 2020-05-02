@@ -255,7 +255,8 @@ namespace TypeReferences {
 		}
 
 		public override void OnGUI(Rect position, SerializedProperty property, GUIContent label) {
-			DrawTypeSelectionControl(position, property.FindPropertyRelative("_classRef"), label, attribute as ClassTypeConstraintAttribute);
+			var constraintAttribute = attribute as ClassTypeConstraintAttribute ?? new ClassTypeConstraintAttribute();
+			DrawTypeSelectionControl(position, property.FindPropertyRelative("_classRef"), label, constraintAttribute);
 		}
 
 	}
