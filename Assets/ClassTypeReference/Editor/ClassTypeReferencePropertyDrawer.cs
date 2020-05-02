@@ -60,7 +60,7 @@ namespace TypeReferences {
 
 			var excludedTypes = (ExcludedTypeCollectionGetter != null ? ExcludedTypeCollectionGetter() : null);
 
-			var assembly = Assembly.GetExecutingAssembly();
+			var assembly = fieldInfo.DeclaringType.Assembly;
 			FilterTypes(assembly, filter, excludedTypes, types);
 
 			foreach (var referencedAssembly in assembly.GetReferencedAssemblies())
