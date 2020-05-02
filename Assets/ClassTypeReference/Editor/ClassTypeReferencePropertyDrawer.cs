@@ -53,9 +53,9 @@ namespace TypeReferences {
 		/// }
 		/// ]]></code>
 		/// </example>
-		public static Func<ICollection<Type>> ExcludedTypeCollectionGetter { get; set; }
+		public Func<ICollection<Type>> ExcludedTypeCollectionGetter { get; set; }
 
-		private static List<Type> GetFilteredTypes(ClassTypeConstraintAttribute filter) {
+		private List<Type> GetFilteredTypes(ClassTypeConstraintAttribute filter) {
 			var types = new List<Type>();
 
 			var excludedTypes = (ExcludedTypeCollectionGetter != null ? ExcludedTypeCollectionGetter() : null);
@@ -108,7 +108,7 @@ namespace TypeReferences {
 		private static readonly int s_ControlHint = typeof(ClassTypeReferencePropertyDrawer).GetHashCode();
 		private static GUIContent s_TempContent = new GUIContent();
 
-		private static string DrawTypeSelectionControl(Rect position, GUIContent label, string classRef, ClassTypeConstraintAttribute filter) {
+		private string DrawTypeSelectionControl(Rect position, GUIContent label, string classRef, ClassTypeConstraintAttribute filter) {
 			if (label != null && label != GUIContent.none)
 				position = EditorGUI.PrefixLabel(position, label);
 
@@ -173,7 +173,7 @@ namespace TypeReferences {
 			return classRef;
 		}
 
-		private static void DrawTypeSelectionControl(Rect position, SerializedProperty property, GUIContent label, ClassTypeConstraintAttribute filter) {
+		private void DrawTypeSelectionControl(Rect position, SerializedProperty property, GUIContent label, ClassTypeConstraintAttribute filter) {
 			try {
 				bool restoreShowMixedValue = EditorGUI.showMixedValue;
 				EditorGUI.showMixedValue = property.hasMultipleDifferentValues;
