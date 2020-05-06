@@ -15,7 +15,7 @@ Project supports Unity Package Manager. To install the project as a Git package 
 
 1. In Unity, open **Window** -> **Package Manager**.
 2. Press the **+** button, choose "**Add package from git URL...**"
-3. Enter "https://bitbucket.org/rotorz/classtypereference-for-unity.git#upm" and press **Add**.
+3. Enter "https://github.com/SolidAlloy/ClassTypeReference-for-Unity.git#upm" and press **Add**.
 
 Usage Examples
 --------------
@@ -99,10 +99,11 @@ public class ExampleBehaviour : MonoBehaviour {
 }
 ```
 
-Useful links
+Credits
 ------------
 
-- [Website of the original creator](<http://rotorz.com>)
+- [Original creator of the repo](https://bitbucket.org/rotorz)
+- GitHub action to split the upm branch was created by [rfadeev](https://github.com/rfadeev)
 
 Contribution Agreement
 ----------------------
