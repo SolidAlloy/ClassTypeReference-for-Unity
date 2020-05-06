@@ -1,5 +1,5 @@
 {
-  "name": "com.rotorz.type.references",
+  "name": "com.solidalloy.type.references",
   "version": "1.0.0",
   "displayName": "Type References",
   "description": "Property Drawer that allows class selection from drop-down.",
@@ -12,8 +12,8 @@
     "system.type"
   ],
   "author": {
-    "name": "Rotorz",
-    "url": "https://bitbucket.org/rotorz/"
+    "name": "SolidAlloy",
+    "url": "https://github.com/SolidAlloy/"
   },
   "samples": [
    {
