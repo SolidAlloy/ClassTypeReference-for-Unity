@@ -3,13 +3,11 @@ README
 
 A class which provides serializable references to `System.Type` of classes with an accompanying custom property drawer which allows class selection from drop-down.
 
-Licensed under the MIT license. See LICENSE file in the project root for full license
-information. DO NOT contribute to this project unless you accept the terms of the
-contribution agreement.
-
 ![screenshot](https://bitbucket.org/rotorz/classtypereference-for-unity/raw/master/screenshot.png)
 
-Whilst we have not encountered any platform specific issues yet, the source code in this repository *might* not necessarily work for all of Unity's platforms or build configurations. It would be greatly appreciated if people would report issues using the [issue tracker](https://bitbucket.org/rotorz/classtypereference-for-unity/issues).
+Whilst we have not encountered any platform specific issues yet, the source code in this repository *might* not necessarily work for all of Unity's platforms or build configurations. It would be greatly appreciated if people would report issues using the [issue tracker](https://github.com/SolidAlloy/ClassTypeReference-for-Unity/issues).
+
+This is a fork of the currently inactive project by Rotorz: [ClassTypeReference for Unity](https://bitbucket.org/rotorz/classtypereference-for-unity/src/master/)
 
 ## Install via Git URL
 
@@ -104,7 +102,7 @@ public class ExampleBehaviour : MonoBehaviour {
 Useful links
 ------------
 
-- [Rotorz Website](<http://rotorz.com>)
+- [Website of the original creator](<http://rotorz.com>)
 
 Contribution Agreement
 ----------------------
@@ -124,3 +122,4 @@ must be met:
 - The act of submitting a contribution indicates that the contributor agrees
   with this agreement. This includes (but is not limited to) pull requests, issues,
   tickets, e-mails, newsgroups, blogs, forums, etc.
+
