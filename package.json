@@ -1,0 +1,25 @@
+{
+  "name": "com.solidalloy.type.references",
+  "version": "1.0.0",
+  "displayName": "Type References",
+  "description": "Property Drawer that allows class selection from drop-down.",
+ "keywords": [
+    "dropdown",
+    "class",
+    "type",
+    "drop-down",
+    "reference",
+    "system.type"
+  ],
+  "author": {
+    "name": "SolidAlloy",
+    "url": "https://github.com/SolidAlloy/"
+  },
+  "samples": [
+   {
+     "displayName": "Demo",
+     "description": "Demo scene with a MonoBehaviour that has a class types drop-down in Inspector.",
+     "path": "Samples~/Demo"
+   }
+ ]
+}
