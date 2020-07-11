@@ -4,6 +4,7 @@
 namespace TypeReferences
 {
     using System;
+    using System.Linq;
     using UnityEngine;
 
     /// <summary>
@@ -40,28 +41,17 @@ namespace TypeReferences
     /// </summary>
     public class ClassTypeConstraintAttribute : PropertyAttribute
     {
-        private ClassGrouping _grouping = ClassGrouping.ByNamespaceFlat;
-        private bool _allowAbstract = false;
-
         /// <summary>
         /// Gets or sets grouping of selectable classes. Defaults to <see cref="ClassGrouping.ByNamespaceFlat"/>
         /// unless explicitly specified.
         /// </summary>
-        public ClassGrouping Grouping
-        {
-            get { return _grouping; }
-            set { _grouping = value; }
-        }
+        public ClassGrouping Grouping { get; set; } = ClassGrouping.ByNamespaceFlat;
 
         /// <summary>
         /// Gets or sets whether abstract classes can be selected from drop-down.
         /// Defaults to a value of <c>false</c> unless explicitly specified.
         /// </summary>
-        public bool AllowAbstract
-        {
-            get { return _allowAbstract; }
-            set { _allowAbstract = value; }
-        }
+        public bool AllowAbstract { get; set; } = false;
 
         /// <summary>
         /// Determines whether the specified <see cref="Type"/> satisfies filter constraint.
@@ -81,7 +71,7 @@ namespace TypeReferences
     /// Constraint that allows selection of classes that extend a specific class when
     /// selecting a <see cref="ClassTypeReference"/> with the Unity inspector.
     /// </summary>
-    [AttributeUsage(AttributeTargets.Field, AllowMultiple = false)]
+    [AttributeUsage(AttributeTargets.Field)]
     public sealed class ClassExtendsAttribute : ClassTypeConstraintAttribute
     {
         /// <summary>
@@ -115,7 +105,7 @@ namespace TypeReferences
     /// Constraint that allows selection of classes that implement a specific interface
     /// when selecting a <see cref="ClassTypeReference"/> with the Unity inspector.
     /// </summary>
-    [AttributeUsage(AttributeTargets.Field, AllowMultiple = false)]
+    [AttributeUsage(AttributeTargets.Field)]
     public sealed class ClassImplementsAttribute : ClassTypeConstraintAttribute
     {
         /// <summary>
@@ -140,18 +130,13 @@ namespace TypeReferences
         /// <inheritdoc/>
         public override bool IsConstraintSatisfied(Type type)
         {
-            if (base.IsConstraintSatisfied(type))
-            {
-                foreach (var interfaceType in type.GetInterfaces())
-                {
-                    if (interfaceType == InterfaceType)
-                    {
-                        return true;
-                    }
-                }
-            }
+            if (!base.IsConstraintSatisfied(type))
+                return false;
 
-            return false;
+            bool specifiedTypeIsInCollection = type.GetInterfaces()
+                .Any(interfaceType => interfaceType == InterfaceType);
+
+            return specifiedTypeIsInCollection;
         }
     }
 }
