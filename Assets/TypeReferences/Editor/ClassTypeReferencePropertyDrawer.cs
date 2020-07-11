@@ -55,26 +55,20 @@ namespace TypeReferences.Editor
         /// }
         /// ]]></code>
         /// </example>
-        public Func<ICollection<Type>> ExcludedTypeCollectionGetter { get; set; }
+        private Func<ICollection<Type>> ExcludedTypeCollectionGetter { get; set; }
 
         private static void FilterTypes(Assembly assembly, ClassTypeConstraintAttribute filter, ICollection<Type> excludedTypes, List<Type> output)
         {
             foreach (var type in assembly.GetTypes())
             {
                 if (!type.IsVisible || !type.IsClass)
-                {
                     continue;
-                }
 
                 if (filter != null && !filter.IsConstraintSatisfied(type))
-                {
                     continue;
-                }
 
                 if (excludedTypes != null && excludedTypes.Contains(type))
-                {
                     continue;
-                }
 
                 output.Add(type);
             }
@@ -84,7 +78,7 @@ namespace TypeReferences.Editor
         {
             var types = new List<Type>();
 
-            var excludedTypes = ExcludedTypeCollectionGetter != null ? ExcludedTypeCollectionGetter() : null;
+            var excludedTypes = ExcludedTypeCollectionGetter?.Invoke();
 
             var assembly = fieldInfo.DeclaringType.Assembly;
             FilterTypes(assembly, filter, excludedTypes, types);
@@ -103,14 +97,14 @@ namespace TypeReferences.Editor
 
         #region Type Utility
 
-        private static readonly Dictionary<string, Type> s_TypeMap = new Dictionary<string, Type>();
+        private static readonly Dictionary<string, Type> TypeMap = new Dictionary<string, Type>();
 
         private static Type ResolveType(string classRef)
         {
-            if (!s_TypeMap.TryGetValue(classRef, out Type type))
+            if (!TypeMap.TryGetValue(classRef, out Type type))
             {
                 type = !string.IsNullOrEmpty(classRef) ? Type.GetType(classRef) : null;
-                s_TypeMap[classRef] = type;
+                TypeMap[classRef] = type;
             }
 
             return type;
@@ -120,31 +114,32 @@ namespace TypeReferences.Editor
 
         #region Control Drawing / Event Handling
 
-        private static readonly int s_ControlHint = typeof(ClassTypeReferencePropertyDrawer).GetHashCode();
-        private static readonly GUIContent s_TempContent = new GUIContent();
-        private static readonly GenericMenu.MenuFunction2 s_OnSelectedTypeName = OnSelectedTypeName;
-        private static int s_SelectionControlID;
-        private static string s_SelectedClassRef;
+        private const string ReferenceUpdatedCommandName = "TypeReferenceUpdated";
+        private static readonly int ControlHint = typeof(ClassTypeReferencePropertyDrawer).GetHashCode();
+        private static readonly GUIContent TempContent = new GUIContent();
+        private static readonly GenericMenu.MenuFunction2 SelectedTypeName = OnSelectedTypeName;
+        private static int _selectionControlID;
+        private static string _selectedClassRef;
 
         private static void DisplayDropDown(Rect position, List<Type> types, Type selectedType, ClassGrouping grouping)
         {
             var menu = new GenericMenu();
 
-            menu.AddItem(new GUIContent("(None)"), selectedType == null, s_OnSelectedTypeName, null);
+            menu.AddItem(new GUIContent("(None)"), selectedType == null, SelectedTypeName, null);
             menu.AddSeparator(string.Empty);
 
-            for (int i = 0; i < types.Count; ++i)
+            for (var i = 0; i < types.Count; ++i)
             {
                 var type = types[i];
 
-                string menuLabel = FormatGroupedTypeName(type, grouping);
+                var menuLabel = FormatGroupedTypeName(type, grouping);
                 if (string.IsNullOrEmpty(menuLabel))
                 {
                     continue;
                 }
 
                 var content = new GUIContent(menuLabel);
-                menu.AddItem(content, type == selectedType, s_OnSelectedTypeName, type);
+                menu.AddItem(content, type == selectedType, SelectedTypeName, type);
             }
 
             menu.DropDown(position);
@@ -152,19 +147,18 @@ namespace TypeReferences.Editor
 
         private static string FormatGroupedTypeName(Type type, ClassGrouping grouping)
         {
-            string name = type.FullName;
+            var name = type.FullName;
 
             switch (grouping)
             {
                 default:
-                case ClassGrouping.None:
                     return name;
 
                 case ClassGrouping.ByNamespace:
                     return name.Replace('.', '/');
 
                 case ClassGrouping.ByNamespaceFlat:
-                    int lastPeriodIndex = name.LastIndexOf('.');
+                    var lastPeriodIndex = name.LastIndexOf('.');
                     if (lastPeriodIndex != -1)
                     {
                         name = name.Substring(0, lastPeriodIndex) + "/" + name.Substring(lastPeriodIndex + 1);
@@ -187,8 +181,8 @@ namespace TypeReferences.Editor
         {
             var selectedType = userData as Type;
 
-            s_SelectedClassRef = ClassTypeReference.GetClassRef(selectedType);
-            var typeReferenceUpdatedEvent = EditorGUIUtility.CommandEvent("TypeReferenceUpdated");
+            _selectedClassRef = ClassTypeReference.GetClassRef(selectedType);
+            var typeReferenceUpdatedEvent = EditorGUIUtility.CommandEvent(ReferenceUpdatedCommandName);
             EditorWindow.focusedWindow.SendEvent(typeReferenceUpdatedEvent);
         }
 
@@ -199,25 +193,25 @@ namespace TypeReferences.Editor
                 position = EditorGUI.PrefixLabel(position, label);
             }
 
-            int controlID = GUIUtility.GetControlID(s_ControlHint, FocusType.Keyboard, position);
+            var controlID = GUIUtility.GetControlID(ControlHint, FocusType.Keyboard, position);
 
-            bool triggerDropDown = false;
+            var triggerDropDown = false;
 
             switch (Event.current.GetTypeForControl(controlID))
             {
                 case EventType.ExecuteCommand:
-                    if (Event.current.commandName == "TypeReferenceUpdated")
+                    if (Event.current.commandName == ReferenceUpdatedCommandName)
                     {
-                        if (s_SelectionControlID == controlID)
+                        if (_selectionControlID == controlID)
                         {
-                            if (classRef != s_SelectedClassRef)
+                            if (classRef != _selectedClassRef)
                             {
-                                classRef = s_SelectedClassRef;
+                                classRef = _selectedClassRef;
                                 GUI.changed = true;
                             }
 
-                            s_SelectionControlID = 0;
-                            s_SelectedClassRef = null;
+                            _selectionControlID = 0;
+                            _selectedClassRef = null;
                         }
                     }
 
@@ -249,28 +243,28 @@ namespace TypeReferences.Editor
                     // Remove assembly name from content of popup control.
                     var classRefParts = classRef.Split(',');
 
-                    s_TempContent.text = classRefParts[0].Trim();
-                    if (s_TempContent.text == string.Empty)
+                    TempContent.text = classRefParts[0].Trim();
+                    if (TempContent.text == string.Empty)
                     {
-                        s_TempContent.text = "(None)";
+                        TempContent.text = "(None)";
                     }
                     else if (ResolveType(classRef) == null)
                     {
-                        s_TempContent.text += " {Missing}";
+                        TempContent.text += " {Missing}";
                     }
 
-                    EditorStyles.popup.Draw(position, s_TempContent, controlID);
+                    EditorStyles.popup.Draw(position, TempContent, controlID);
                     break;
             }
 
-            if (triggerDropDown)
-            {
-                s_SelectionControlID = controlID;
-                s_SelectedClassRef = classRef;
+            if (!triggerDropDown)
+                return classRef;
 
-                var filteredTypes = GetFilteredTypes(filter);
-                DisplayDropDown(position, filteredTypes, ResolveType(classRef), filter.Grouping);
-            }
+            _selectionControlID = controlID;
+            _selectedClassRef = classRef;
+
+            var filteredTypes = GetFilteredTypes(filter);
+            DisplayDropDown(position, filteredTypes, ResolveType(classRef), filter.Grouping);
 
             return classRef;
         }
@@ -279,7 +273,7 @@ namespace TypeReferences.Editor
         {
             try
             {
-                bool restoreShowMixedValue = EditorGUI.showMixedValue;
+                var restoreShowMixedValue = EditorGUI.showMixedValue;
                 EditorGUI.showMixedValue = property.hasMultipleDifferentValues;
 
                 property.stringValue = DrawTypeSelectionControl(position, label, property.stringValue, filter);
