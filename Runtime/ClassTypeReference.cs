@@ -13,6 +13,7 @@ namespace TypeReferences
     public sealed class ClassTypeReference : ISerializationCallbackReceiver
     {
         [SerializeField] private string _classRef;
+        private Type _type;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ClassTypeReference"/> class.
@@ -42,38 +43,6 @@ namespace TypeReferences
             Type = type;
         }
 
-        public static string GetClassRef(Type type)
-        {
-            return type != null
-                ? type.FullName + ", " + type.Assembly.GetName().Name
-                : string.Empty;
-        }
-
-        #region ISerializationCallbackReceiver Members
-
-        void ISerializationCallbackReceiver.OnAfterDeserialize()
-        {
-            if (!string.IsNullOrEmpty(_classRef))
-            {
-                _type = System.Type.GetType(_classRef);
-
-                if (_type == null)
-                {
-                    Debug.LogWarningFormat("'{0}' was referenced but class type was not found.", _classRef);
-                }
-            }
-            else
-            {
-                _type = null;
-            }
-        }
-
-        void ISerializationCallbackReceiver.OnBeforeSerialize() { }
-
-        #endregion
-
-        private Type _type;
-
         /// <summary>
         /// Gets or sets type of class reference.
         /// </summary>
@@ -82,19 +51,12 @@ namespace TypeReferences
         /// </exception>
         public Type Type
         {
-            get
-            {
-                return _type;
-            }
+            get => _type;
 
             set
             {
                 if (value != null && !value.IsClass)
-                {
-                    throw new ArgumentException(
-                        string.Format("'{0}' is not a class type.", value.FullName),
-                        "value");
-                }
+                    throw new ArgumentException($"'{value.FullName}' is not a class type.", nameof(value));
 
                 _type = value;
                 _classRef = GetClassRef(value);
@@ -116,9 +78,37 @@ namespace TypeReferences
             return new ClassTypeReference(type);
         }
 
+        public static string GetClassRef(Type type)
+        {
+            return type != null
+                ? type.FullName + ", " + type.Assembly.GetName().Name
+                : string.Empty;
+        }
+
         public override string ToString()
         {
             return Type != null ? Type.FullName : "(None)";
         }
+
+        #region ISerializationCallbackReceiver Members
+
+        void ISerializationCallbackReceiver.OnAfterDeserialize()
+        {
+            if (!string.IsNullOrEmpty(_classRef))
+            {
+                _type = Type.GetType(_classRef);
+
+                if (_type == null)
+                    Debug.LogWarningFormat("'{0}' was referenced but class type was not found.", _classRef);
+            }
+            else
+            {
+                _type = null;
+            }
+        }
+
+        void ISerializationCallbackReceiver.OnBeforeSerialize() { }
+
+        #endregion
     }
 }

@@ -44,11 +44,6 @@ namespace TypeReferences
         private bool _allowAbstract = false;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="ClassTypeConstraintAttribute"/> class.
-        /// </summary>
-        public ClassTypeConstraintAttribute() { }
-
-        /// <summary>
         /// Gets or sets grouping of selectable classes. Defaults to <see cref="ClassGrouping.ByNamespaceFlat"/>
         /// unless explicitly specified.
         /// </summary>
