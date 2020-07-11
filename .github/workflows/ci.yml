@@ -25,4 +25,4 @@ jobs:
         fi
         git push -f -u origin upm
       env:
-        PKG_ROOT: Assets/ClassTypeReference
+        PKG_ROOT: Assets/TypeReferences
