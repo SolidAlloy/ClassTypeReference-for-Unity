@@ -1,7 +1,7 @@
 // Copyright ClassTypeReference Contributors. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root.
 
-namespace TypeReferences
+namespace TypeReferences.Editor
 {
     using System;
     using System.Collections.Generic;
