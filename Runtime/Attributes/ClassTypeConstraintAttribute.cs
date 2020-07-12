@@ -31,7 +31,7 @@ namespace TypeReferences
 
         /// <summary>
         /// Removes (None) from the dropdown and disallows setting Type to null in Inspector.
-        /// Note that the type can still be null.
+        /// Note that the type can still be null by default or if set through code.
         /// Defaults to <c>false</c> unless explicitly specified.
         /// </summary>
         public bool ExcludeNone { get; set; } = false;
