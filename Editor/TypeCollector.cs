@@ -21,26 +21,23 @@
 
         public static List<Type> GetFilteredTypesFromAssemblies(
             IEnumerable<Assembly> assemblies,
-            ClassTypeConstraintAttribute filter,
-            ICollection<Type> excludedTypes)
+            ClassTypeConstraintAttribute filter)
         {
             var types = new List<Type>();
 
             foreach (var assembly in assemblies)
-                types.AddRange(GetFilteredTypesInAssembly(assembly, filter, excludedTypes));
+                types.AddRange(GetFilteredTypesInAssembly(assembly, filter));
 
             return types;
         }
 
         private static IEnumerable<Type> GetFilteredTypesInAssembly(
             Assembly assembly,
-            ClassTypeConstraintAttribute filter,
-            ICollection<Type> excludedTypes)
+            ClassTypeConstraintAttribute filter)
         {
             return from type in assembly.GetTypes()
                 where type.IsVisible && type.IsClass
                 where FilterConstraintIsSatisfied(filter, type)
-                where TypeIsNotExcluded(type, excludedTypes)
                 select type;
         }
 
@@ -50,14 +47,6 @@
                 return true;
 
             return filter.IsConstraintSatisfied(type);
-        }
-
-        private static bool TypeIsNotExcluded(Type type, ICollection<Type> excludedTypes)
-        {
-            if (excludedTypes == null)
-                return true;
-
-            return ! excludedTypes.Contains(type);
         }
     }
 }

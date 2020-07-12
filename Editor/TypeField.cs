@@ -25,17 +25,10 @@
 
         public void Draw()
         {
-            try
-            {
-                var valueToRestore = EditorGUI.showMixedValue;
-                EditorGUI.showMixedValue = _property.hasMultipleDifferentValues;
-                DrawTypeSelectionControl();
-                EditorGUI.showMixedValue = valueToRestore;
-            }
-            finally
-            {
-                _dropDown.ExcludedTypeCollectionGetter = null;
-            }
+            var valueToRestore = EditorGUI.showMixedValue;
+            EditorGUI.showMixedValue = _property.hasMultipleDifferentValues;
+            DrawTypeSelectionControl();
+            EditorGUI.showMixedValue = valueToRestore;
         }
 
         private static string GetTypeNameForField(string classRef)
