@@ -13,6 +13,11 @@ namespace TypeReferences
     public class ClassTypeConstraintAttribute : PropertyAttribute
     {
         /// <summary>
+        /// Default grouping of selectable classes.
+        /// </summary>
+        public const ClassGrouping DefaultGrouping = ClassGrouping.ByNamespaceFlat;
+
+        /// <summary>
         /// Gets or sets grouping of selectable classes. Defaults to <see cref="ClassGrouping.ByNamespaceFlat"/>
         /// unless explicitly specified.
         /// </summary>
