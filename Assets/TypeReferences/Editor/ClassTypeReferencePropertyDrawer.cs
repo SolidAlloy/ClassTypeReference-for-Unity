@@ -54,6 +54,17 @@ namespace TypeReferences.Editor
         /// </example>
         private Func<ICollection<Type>> ExcludedTypeCollectionGetter { get; set; }
 
+        public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
+        {
+            return EditorStyles.popup.CalcHeight(GUIContent.none, 0);
+        }
+
+        public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
+        {
+            var constraintAttribute = attribute as ClassTypeConstraintAttribute;
+            DrawTypeSelectionControl(position, property.FindPropertyRelative("_classRef"), label, constraintAttribute);
+        }
+
         private List<Type> GetFilteredTypes(ClassTypeConstraintAttribute filter)
         {
             var excludedTypes = ExcludedTypeCollectionGetter?.Invoke();
@@ -238,7 +249,8 @@ namespace TypeReferences.Editor
             _selectedClassRef = classRef;
 
             var filteredTypes = GetFilteredTypes(filter);
-            DisplayDropDown(position, filteredTypes, ResolveType(classRef), filter.Grouping);
+            var classGrouping = filter?.Grouping ?? ClassTypeConstraintAttribute.DefaultGrouping;
+            DisplayDropDown(position, filteredTypes, CacheAndGetType(classRef), classGrouping);
 
             return classRef;
         }
@@ -261,16 +273,5 @@ namespace TypeReferences.Editor
         }
 
         #endregion
-
-        public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
-        {
-            return EditorStyles.popup.CalcHeight(GUIContent.none, 0);
-        }
-
-        public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
-        {
-            var constraintAttribute = attribute as ClassTypeConstraintAttribute ?? new ClassTypeConstraintAttribute();
-            DrawTypeSelectionControl(position, property.FindPropertyRelative("_classRef"), label, constraintAttribute);
-        }
     }
 }
