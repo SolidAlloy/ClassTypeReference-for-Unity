@@ -26,7 +26,8 @@ Type references can be made using the inspector simply by using `ClassTypeRefere
 using UnityEngine;
 using TypeReferences;
 
-public class ExampleBehaviour : MonoBehaviour {
+public class ExampleBehaviour : MonoBehaviour
+{
     public ClassTypeReference greetingLoggerType;
 }
 ```
@@ -43,7 +44,8 @@ You can apply one of two attributes to drastically reduce the number of types pr
 using UnityEngine;
 using TypeReferences;
 
-public class ExampleBehaviour : MonoBehaviour {
+public class ExampleBehaviour : MonoBehaviour
+{
     // Allow selection of classes that implement an interface.
     [ClassImplements(typeof(IGreetingLogger))]
     public ClassTypeReference greetingLoggerType;
@@ -61,15 +63,19 @@ using System;
 using UnityEngine;
 using TypeReferences;
 
-public class ExampleBehaviour : MonoBehaviour {
+public class ExampleBehaviour : MonoBehaviour
+{
     [ClassImplements(typeof(IGreetingLogger))]
     public ClassTypeReference greetingLoggerType = typeof(DefaultGreetingLogger);
 
-    private void Start() {
-        if (greetingLoggerType.Type == null) {
+    private void Start()
+    {
+        if (greetingLoggerType.Type == null)
+        {
             Debug.LogWarning("No type of greeting logger was specified.");
         }
-        else {
+        else
+        {
             var greetingLogger = Activator.CreateInstance(greetingLoggerType) as IGreetingLogger;
             greetingLogger.LogGreeting();
         }
@@ -93,7 +99,8 @@ For instance,
 using UnityEngine;
 using TypeReferences;
 
-public class ExampleBehaviour : MonoBehaviour {
+public class ExampleBehaviour : MonoBehaviour
+{
     [ClassImplements(typeof(IGreetingLogger), Grouping = ClassGrouping.ByAddComponentMenu)]
     public ClassTypeReference greetingLoggerType;
 }
@@ -107,7 +114,8 @@ You can exclude **(None)** so that no one can choose it from the dropdown. Use i
 using UnityEngine;
 using TypeReferences;
 
-public class ExampleBehaviour : MonoBehaviour {
+public class ExampleBehaviour : MonoBehaviour
+{
     [ClassTypeConstraint(ExcludeNone = true)]
     public ClassTypeReference someTypeExample;
 }
