@@ -77,7 +77,7 @@ public class ExampleBehaviour : MonoBehaviour {
 }
 ```
 
-Presentation of drop-down list can be customized by supplying a `ClassGrouping` value to either of the attributes `ClassImplements` or `ClassExtends`.
+Presentation of drop-down list can be customized by supplying a `ClassGrouping` value to any of the attributes: `ClassTypeConstraint`,  `ClassImplements` or `ClassExtends`.
 
 - **ClassGrouping.None** - No grouping, just show type names in a list; for instance, "Some.Nested.Namespace.SpecialClass".
 
@@ -98,6 +98,22 @@ public class ExampleBehaviour : MonoBehaviour {
     public ClassTypeReference greetingLoggerType;
 }
 ```
+
+
+
+You can exclude **(None)** so that no one can choose it from the dropdown. Use it with any of the attributes like this:
+
+```csharp
+using UnityEngine;
+using TypeReferences;
+
+public class ExampleBehaviour : MonoBehaviour {
+    [ClassTypeConstraint(ExcludeNone = true)]
+    public ClassTypeReference someTypeExample;
+}
+```
+
+Note that the type can still be null by default or if set through code.
 
 Credits
 ------------
