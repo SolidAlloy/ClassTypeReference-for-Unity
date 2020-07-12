@@ -12,11 +12,6 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="ClassExtendsAttribute"/> class.
         /// </summary>
-        public ClassExtendsAttribute() { }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="ClassExtendsAttribute"/> class.
-        /// </summary>
         /// <param name="baseType">Type of class that selectable classes must derive from.</param>
         public ClassExtendsAttribute(Type baseType)
         {
