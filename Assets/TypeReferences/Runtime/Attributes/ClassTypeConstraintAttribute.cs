@@ -30,6 +30,13 @@ namespace TypeReferences
         public bool AllowAbstract { get; set; } = false;
 
         /// <summary>
+        /// Removes (None) from the dropdown and disallows setting Type to null in Inspector.
+        /// Note that the type can still be null by default or if set through code.
+        /// Defaults to <c>false</c> unless explicitly specified.
+        /// </summary>
+        public bool ExcludeNone { get; set; } = false;
+
+        /// <summary>
         /// Determines whether the specified <see cref="Type"/> satisfies filter constraint.
         /// </summary>
         /// <param name="type">Type to test.</param>
