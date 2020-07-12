@@ -16,6 +16,11 @@ namespace TypeReferences.Editor
     public sealed class ClassTypeReferencePropertyDrawer : PropertyDrawer
     {
         /// <summary>
+        /// Improves performance by avoiding extensive number of <see cref="M:Type.GetType"/> calls.
+        /// </summary>
+        private static readonly Dictionary<string, Type> TypeCache = new Dictionary<string, Type>();
+
+        /// <summary>
         /// Gets or sets a function that returns a collection of types that are
         /// to be excluded from drop-down. A value of <c>null</c> specifies that
         /// no types are to be excluded.
@@ -65,6 +70,16 @@ namespace TypeReferences.Editor
             DrawTypeSelectionControl(position, property.FindPropertyRelative("_classRef"), label, constraintAttribute);
         }
 
+        private static Type CacheAndGetType(string typeName)
+        {
+            if (TypeCache.TryGetValue(typeName, out Type type))
+                return type;
+
+            type = ! string.IsNullOrEmpty(typeName) ? Type.GetType(typeName) : null;
+            TypeCache[typeName] = type;
+            return type;
+        }
+
         private List<Type> GetFilteredTypes(ClassTypeConstraintAttribute filter)
         {
             var excludedTypes = ExcludedTypeCollectionGetter?.Invoke();
@@ -80,30 +95,18 @@ namespace TypeReferences.Editor
             return filteredTypes;
         }
 
-        #region Type Utility
-
-        private static readonly Dictionary<string, Type> TypeMap = new Dictionary<string, Type>();
-
-        private static Type ResolveType(string classRef)
-        {
-            if (!TypeMap.TryGetValue(classRef, out Type type))
-            {
-                type = !string.IsNullOrEmpty(classRef) ? Type.GetType(classRef) : null;
-                TypeMap[classRef] = type;
-            }
-
-            return type;
-        }
-
-        #endregion
-
         #region Control Drawing / Event Handling
 
         private const string ReferenceUpdatedCommandName = "TypeReferenceUpdated";
+
         private static readonly int ControlHint = typeof(ClassTypeReferencePropertyDrawer).GetHashCode();
+
         private static readonly GUIContent TempContent = new GUIContent();
+
         private static readonly GenericMenu.MenuFunction2 SelectedTypeName = OnSelectedTypeName;
+
         private static int _selectionControlID;
+
         private static string _selectedClassRef;
 
         private static void DisplayDropDown(Rect position, List<Type> types, Type selectedType, ClassGrouping grouping)
@@ -113,10 +116,8 @@ namespace TypeReferences.Editor
             menu.AddItem(new GUIContent("(None)"), selectedType == null, SelectedTypeName, null);
             menu.AddSeparator(string.Empty);
 
-            for (var i = 0; i < types.Count; ++i)
+            foreach (var type in types)
             {
-                var type = types[i];
-
                 var menuLabel = FormatGroupedTypeName(type, grouping);
                 if (string.IsNullOrEmpty(menuLabel))
                 {
@@ -171,12 +172,14 @@ namespace TypeReferences.Editor
             EditorWindow.focusedWindow.SendEvent(typeReferenceUpdatedEvent);
         }
 
-        private string DrawTypeSelectionControl(Rect position, GUIContent label, string classRef, ClassTypeConstraintAttribute filter)
+        private string DrawTypeSelectionControl(
+            Rect position,
+            GUIContent label,
+            string classRef,
+            ClassTypeConstraintAttribute filter)
         {
             if (label != null && label != GUIContent.none)
-            {
                 position = EditorGUI.PrefixLabel(position, label);
-            }
 
             var controlID = GUIUtility.GetControlID(ControlHint, FocusType.Keyboard, position);
 
@@ -233,7 +236,7 @@ namespace TypeReferences.Editor
                     {
                         TempContent.text = "(None)";
                     }
-                    else if (ResolveType(classRef) == null)
+                    else if (CacheAndGetType(classRef) == null)
                     {
                         TempContent.text += " {Missing}";
                     }
