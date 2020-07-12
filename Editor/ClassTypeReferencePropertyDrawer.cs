@@ -5,7 +5,6 @@ namespace TypeReferences.Editor
 {
     using System;
     using System.Collections.Generic;
-    using System.Reflection;
     using UnityEditor;
     using UnityEngine;
 
@@ -16,8 +15,6 @@ namespace TypeReferences.Editor
     [CustomPropertyDrawer(typeof(ClassTypeConstraintAttribute), true)]
     public sealed class ClassTypeReferencePropertyDrawer : PropertyDrawer
     {
-        #region Type Filtering
-
         /// <summary>
         /// Gets or sets a function that returns a collection of types that are
         /// to be excluded from drop-down. A value of <c>null</c> specifies that
@@ -25,8 +22,8 @@ namespace TypeReferences.Editor
         /// </summary>
         /// <remarks>
         /// <para>This property must be set immediately before presenting a class
-        /// type reference property field using <see cref="EditorGUI.PropertyField"/>
-        /// or <see cref="EditorGUILayout.PropertyField"/> since the value of this
+        /// type reference property field using <see cref="M:EditorGUI.PropertyField"/>
+        /// or <see cref="M:EditorGUILayout.PropertyField"/> since the value of this
         /// property is reset to <c>null</c> each time the control is drawn.</para>
         /// <para>Since filtering makes extensive use of <see cref="ICollection{Type}.Contains"/>
         /// it is recommended to use a collection that is optimized for fast
@@ -57,43 +54,20 @@ namespace TypeReferences.Editor
         /// </example>
         private Func<ICollection<Type>> ExcludedTypeCollectionGetter { get; set; }
 
-        private static void FilterTypes(Assembly assembly, ClassTypeConstraintAttribute filter, ICollection<Type> excludedTypes, List<Type> output)
-        {
-            foreach (var type in assembly.GetTypes())
-            {
-                if (!type.IsVisible || !type.IsClass)
-                    continue;
-
-                if (filter != null && !filter.IsConstraintSatisfied(type))
-                    continue;
-
-                if (excludedTypes != null && excludedTypes.Contains(type))
-                    continue;
-
-                output.Add(type);
-            }
-        }
-
         private List<Type> GetFilteredTypes(ClassTypeConstraintAttribute filter)
         {
-            var types = new List<Type>();
-
             var excludedTypes = ExcludedTypeCollectionGetter?.Invoke();
+            var typeRelatedAssemblies = TypeCollector.GetTypeRelatedAssemblies(fieldInfo.DeclaringType);
 
-            var assembly = fieldInfo.DeclaringType.Assembly;
-            FilterTypes(assembly, filter, excludedTypes, types);
+            var filteredTypes = TypeCollector.GetFilteredTypesFromAssemblies(
+                typeRelatedAssemblies,
+                filter,
+                excludedTypes);
 
-            foreach (var referencedAssembly in assembly.GetReferencedAssemblies())
-            {
-                FilterTypes(Assembly.Load(referencedAssembly), filter, excludedTypes, types);
-            }
+            filteredTypes.Sort((a, b) => a.FullName.CompareTo(b.FullName));
 
-            types.Sort((a, b) => a.FullName.CompareTo(b.FullName));
-
-            return types;
+            return filteredTypes;
         }
-
-        #endregion
 
         #region Type Utility
 
