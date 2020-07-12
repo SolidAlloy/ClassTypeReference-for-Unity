@@ -26,9 +26,9 @@ namespace TypeReferences
         /// <param name="assemblyQualifiedClassName">Assembly qualified class name.</param>
         public ClassTypeReference(string assemblyQualifiedClassName)
         {
-            Type = !string.IsNullOrEmpty(assemblyQualifiedClassName)
-                ? Type.GetType(assemblyQualifiedClassName)
-                : null;
+            Type = string.IsNullOrEmpty(assemblyQualifiedClassName)
+                ? null
+                : Type.GetType(assemblyQualifiedClassName);
         }
 
         /// <summary>
@@ -55,9 +55,7 @@ namespace TypeReferences
 
             set
             {
-                if (value != null && !value.IsClass)
-                    throw new ArgumentException($"'{value.FullName}' is not a class type.", nameof(value));
-
+                MakeSureValueIsClassType(value);
                 _type = value;
                 _classRef = GetClassRef(value);
             }
@@ -90,8 +88,6 @@ namespace TypeReferences
             return Type != null ? Type.FullName : "(None)";
         }
 
-        #region ISerializationCallbackReceiver Members
-
         void ISerializationCallbackReceiver.OnAfterDeserialize()
         {
             if (!string.IsNullOrEmpty(_classRef))
@@ -109,6 +105,10 @@ namespace TypeReferences
 
         void ISerializationCallbackReceiver.OnBeforeSerialize() { }
 
-        #endregion
+        private static void MakeSureValueIsClassType(Type value)
+        {
+            if (value != null && !value.IsClass)
+                throw new ArgumentException($"'{value.FullName}' is not a class type.", nameof(value));
+        }
     }
 }
