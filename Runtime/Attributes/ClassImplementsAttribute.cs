@@ -13,11 +13,6 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="ClassImplementsAttribute"/> class.
         /// </summary>
-        public ClassImplementsAttribute() { }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="ClassImplementsAttribute"/> class.
-        /// </summary>
         /// <param name="interfaceType">Type of interface that selectable classes must implement.</param>
         public ClassImplementsAttribute(Type interfaceType)
         {
