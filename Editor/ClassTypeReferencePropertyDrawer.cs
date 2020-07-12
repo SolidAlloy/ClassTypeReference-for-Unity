@@ -99,6 +99,8 @@ namespace TypeReferences.Editor
 
         private const string ReferenceUpdatedCommandName = "TypeReferenceUpdated";
 
+        private const string NoneElementName = "(None)";
+
         private static readonly int ControlHint = typeof(ClassTypeReferencePropertyDrawer).GetHashCode();
 
         private static readonly GUIContent TempContent = new GUIContent();
@@ -109,26 +111,38 @@ namespace TypeReferences.Editor
 
         private static string _selectedClassRef;
 
-        private static void DisplayDropDown(Rect position, List<Type> types, Type selectedType, ClassGrouping grouping)
+        private static void DisplayDropDown(
+            Rect position,
+            IEnumerable<Type> types,
+            Type selectedType,
+            ClassGrouping grouping,
+            bool excludeNone)
         {
             var menu = new GenericMenu();
 
-            menu.AddItem(new GUIContent("(None)"), selectedType == null, SelectedTypeName, null);
-            menu.AddSeparator(string.Empty);
+            AddNoneElementIfNotExcluded(selectedType, menu, excludeNone);
 
             foreach (var type in types)
             {
                 var menuLabel = FormatGroupedTypeName(type, grouping);
+
                 if (string.IsNullOrEmpty(menuLabel))
-                {
                     continue;
-                }
 
                 var content = new GUIContent(menuLabel);
                 menu.AddItem(content, type == selectedType, SelectedTypeName, type);
             }
 
             menu.DropDown(position);
+        }
+
+        private static void AddNoneElementIfNotExcluded(Type selectedType, GenericMenu menu, bool excludeNone)
+        {
+            if (excludeNone)
+                return;
+
+            menu.AddItem(new GUIContent(NoneElementName), selectedType == null, SelectedTypeName, null);
+            menu.AddSeparator(string.Empty);
         }
 
         private static string FormatGroupedTypeName(Type type, ClassGrouping grouping)
@@ -234,7 +248,7 @@ namespace TypeReferences.Editor
                     TempContent.text = classRefParts[0].Trim();
                     if (TempContent.text == string.Empty)
                     {
-                        TempContent.text = "(None)";
+                        TempContent.text = NoneElementName;
                     }
                     else if (CacheAndGetType(classRef) == null)
                     {
@@ -253,12 +267,17 @@ namespace TypeReferences.Editor
 
             var filteredTypes = GetFilteredTypes(filter);
             var classGrouping = filter?.Grouping ?? ClassTypeConstraintAttribute.DefaultGrouping;
-            DisplayDropDown(position, filteredTypes, CacheAndGetType(classRef), classGrouping);
+            var excludeNone = filter?.ExcludeNone ?? false;
+            DisplayDropDown(position, filteredTypes, CacheAndGetType(classRef), classGrouping, excludeNone);
 
             return classRef;
         }
 
-        private void DrawTypeSelectionControl(Rect position, SerializedProperty property, GUIContent label, ClassTypeConstraintAttribute filter)
+        private void DrawTypeSelectionControl(
+            Rect position,
+            SerializedProperty property,
+            GUIContent label,
+            ClassTypeConstraintAttribute filter)
         {
             try
             {
