@@ -95,13 +95,16 @@
 
         private void OnKeyDown(int controlID)
         {
-            if (GUI.enabled && GUIUtility.keyboardControl == controlID)
+            var keyboardFocusIsOnElement = GUI.enabled && GUIUtility.keyboardControl == controlID;
+
+            var necessaryKeyIsDown =
+                Event.current.keyCode == KeyCode.Return
+                || Event.current.keyCode == KeyCode.Space;
+
+            if (keyboardFocusIsOnElement && necessaryKeyIsDown)
             {
-                if (Event.current.keyCode == KeyCode.Return || Event.current.keyCode == KeyCode.Space)
-                {
-                    _triggerDropDown = true;
-                    Event.current.Use();
-                }
+                _triggerDropDown = true;
+                Event.current.Use();
             }
         }
 
