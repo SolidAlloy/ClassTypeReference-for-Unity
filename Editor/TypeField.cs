@@ -1,26 +1,20 @@
 ﻿namespace TypeReferences.Editor
 {
-    using System;
     using UnityEditor;
     using UnityEngine;
 
     internal class TypeField
     {
         private readonly SerializedProperty _property;
-        private readonly TypeDropDown _dropDown;
+        private readonly TypeDropDown _dropDownDrawer;
         private Rect _position;
         private bool _triggerDropDown;
 
-        public TypeField(
-            SerializedProperty property,
-            Rect position,
-            ClassTypeConstraintAttribute filter,
-            Type declaringType)
+        public TypeField(SerializedProperty property, Rect position, TypeDropDown dropDownDrawer)
         {
             _property = property;
             _position = position;
-
-            _dropDown = new TypeDropDown(_property.stringValue, filter, declaringType);
+            _dropDownDrawer = dropDownDrawer;
         }
 
         public void Draw()
@@ -62,7 +56,7 @@
             CachedTypeReference.SelectionControlID = controlID;
             CachedTypeReference.SelectedClassRef = _property.stringValue;
 
-            _dropDown.Display(_position);
+            _dropDownDrawer.Display(_position);
         }
 
         private void ReactToCurrentEvent(int controlID)

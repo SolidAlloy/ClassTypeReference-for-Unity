@@ -20,13 +20,27 @@ namespace TypeReferences.Editor
 
         public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
         {
-            var constraintAttribute = attribute as ClassTypeConstraintAttribute;
+            position = MovePositionToLabelIfPossible(position, label);
+            DrawTypeReferenceField(position, property);
+        }
 
+        private static Rect MovePositionToLabelIfPossible(Rect position, GUIContent label)
+        {
             if (label != null && label != GUIContent.none)
                 position = EditorGUI.PrefixLabel(position, label);
 
+            return position;
+        }
+
+        private void DrawTypeReferenceField(Rect position, SerializedProperty property)
+        {
+            var constraintAttribute = attribute as ClassTypeConstraintAttribute;
             var classRefProperty = property.FindPropertyRelative("_classRef");
-            var typeField = new TypeField(classRefProperty, position, constraintAttribute, fieldInfo.DeclaringType);
+            var classRef = classRefProperty.stringValue;
+
+            var dropDown = new TypeDropDown(classRef, constraintAttribute, fieldInfo.DeclaringType);
+            var typeField = new TypeField(classRefProperty, position, dropDown);
+
             typeField.Draw();
         }
     }
