@@ -19,7 +19,7 @@
             _declaringType = declaringType;
         }
 
-        public void Display(Rect position)
+        public void Draw(Rect position)
         {
             _menu = new GenericMenu();
 
