@@ -33,7 +33,7 @@
 
             if (typeName == string.Empty)
             {
-                typeName = CachedTypeReference.NoneElement;
+                typeName = ClassTypeReference.NoneElement;
             }
             else if (CachedTypeReference.GetType(classRef) == null)
             {

@@ -7,7 +7,6 @@
 
     internal static class CachedTypeReference
     {
-        public const string NoneElement = "(None)";
         public const string ReferenceUpdatedCommandName = "TypeReferenceUpdated";
         public static readonly int ControlHint = typeof(ClassTypeReferencePropertyDrawer).GetHashCode();
         public static readonly GUIContent FieldContent = new GUIContent();
