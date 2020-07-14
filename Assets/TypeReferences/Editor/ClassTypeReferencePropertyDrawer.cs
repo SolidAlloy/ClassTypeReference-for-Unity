@@ -38,10 +38,10 @@ namespace TypeReferences.Editor
             var classRefProperty = property.FindPropertyRelative("_classRef");
             var classRef = classRefProperty.stringValue;
 
-            var dropDown = new TypeDropDown(classRef, constraintAttribute, fieldInfo.DeclaringType);
-            var typeField = new TypeField(classRefProperty, position, dropDown);
+            var dropDown = new TypeDropDownDrawer(classRef, constraintAttribute, fieldInfo.DeclaringType);
+            var fieldDrawer = new TypeFieldDrawer(classRefProperty, position, dropDown);
 
-            typeField.Draw();
+            fieldDrawer.Draw();
         }
     }
 }
