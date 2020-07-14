@@ -56,7 +56,7 @@
             CachedTypeReference.SelectionControlID = controlID;
             CachedTypeReference.SelectedClassRef = _property.stringValue;
 
-            _dropDownDrawer.Display(_position);
+            _dropDownDrawer.Draw(_position);
         }
 
         private void ReactToCurrentEvent(int controlID)
