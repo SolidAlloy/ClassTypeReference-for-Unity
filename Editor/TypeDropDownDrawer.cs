@@ -43,7 +43,7 @@
                 return;
 
             _menu.AddItem(
-                new GUIContent(CachedTypeReference.NoneElement),
+                new GUIContent(ClassTypeReference.NoneElement),
                 _selectedType == null,
                 CachedTypeReference.SelectedTypeName,
                 null);

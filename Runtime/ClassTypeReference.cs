@@ -12,6 +12,8 @@ namespace TypeReferences
     [Serializable]
     public sealed class ClassTypeReference : ISerializationCallbackReceiver
     {
+        public const string NoneElement = "(None)";
+
         [SerializeField] private string _classRef;
         private Type _type;
 
@@ -26,9 +28,9 @@ namespace TypeReferences
         /// <param name="assemblyQualifiedClassName">Assembly qualified class name.</param>
         public ClassTypeReference(string assemblyQualifiedClassName)
         {
-            Type = string.IsNullOrEmpty(assemblyQualifiedClassName)
-                ? null
-                : Type.GetType(assemblyQualifiedClassName);
+            Type = IsNotEmpty(assemblyQualifiedClassName)
+                ? Type.GetType(assemblyQualifiedClassName)
+                : null;
         }
 
         /// <summary>
@@ -85,12 +87,17 @@ namespace TypeReferences
 
         public override string ToString()
         {
-            return Type != null ? Type.FullName : "(None)";
+            return Type != null ? Type.FullName : NoneElement;
+        }
+
+        private static bool IsNotEmpty(string value)
+        {
+            return ! string.IsNullOrEmpty(value);
         }
 
         void ISerializationCallbackReceiver.OnAfterDeserialize()
         {
-            if (!string.IsNullOrEmpty(_classRef))
+            if (IsNotEmpty(_classRef))
             {
                 _type = Type.GetType(_classRef);
 
