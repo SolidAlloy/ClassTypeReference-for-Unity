@@ -36,22 +36,23 @@
             Assembly assembly,
             ClassTypeConstraintAttribute filter)
         {
-            Type[] types;
-
-            try
-            {
-                types = assembly.GetTypes();
-            }
-            catch (ReflectionTypeLoadException e)
-            {
-                Debug.Log($"Types could not be extracted from assembly {assembly}: {e.Message}");
-                return Enumerable.Empty<Type>();
-            }
-
-            return from type in types
+            return from type in GetTypesFromAssembly(assembly)
                 where type.IsVisible && type.IsClass
                 where FilterConstraintIsSatisfied(filter, type)
                 select type;
+        }
+
+        private static Type[] GetTypesFromAssembly(Assembly assembly)
+        {
+            try
+            {
+                return assembly.GetTypes();
+            }
+            catch (ReflectionTypeLoadException e)
+            {
+                Debug.LogError($"Types could not be extracted from assembly {assembly}: {e.Message}");
+                return new Type[0];
+            }
         }
 
         private static bool FilterConstraintIsSatisfied(ClassTypeConstraintAttribute filter, Type type)
