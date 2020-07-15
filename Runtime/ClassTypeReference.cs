@@ -12,6 +12,9 @@ namespace TypeReferences
     [Serializable]
     public sealed class ClassTypeReference : ISerializationCallbackReceiver
     {
+        /// <summary>
+        /// Name of the element in the drop-down list choosing of which will set the type to null.
+        /// </summary>
         public const string NoneElement = "(None)";
 
         [SerializeField] private string _classRef;
@@ -63,11 +66,6 @@ namespace TypeReferences
             }
         }
 
-        public static implicit operator string(ClassTypeReference typeReference)
-        {
-            return typeReference._classRef;
-        }
-
         public static implicit operator Type(ClassTypeReference typeReference)
         {
             return typeReference.Type;
@@ -90,11 +88,6 @@ namespace TypeReferences
             return Type != null ? Type.FullName : NoneElement;
         }
 
-        private static bool IsNotEmpty(string value)
-        {
-            return ! string.IsNullOrEmpty(value);
-        }
-
         void ISerializationCallbackReceiver.OnAfterDeserialize()
         {
             if (IsNotEmpty(_classRef))
@@ -111,6 +104,11 @@ namespace TypeReferences
         }
 
         void ISerializationCallbackReceiver.OnBeforeSerialize() { }
+
+        private static bool IsNotEmpty(string value)
+        {
+            return ! string.IsNullOrEmpty(value);
+        }
 
         private static void MakeSureValueIsClassType(Type value)
         {
