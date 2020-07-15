@@ -4,6 +4,7 @@
     using System.Collections.Generic;
     using System.Linq;
     using System.Reflection;
+    using UnityEngine;
 
     internal static class TypeCollector
     {
@@ -35,7 +36,19 @@
             Assembly assembly,
             ClassTypeConstraintAttribute filter)
         {
-            return from type in assembly.GetTypes()
+            Type[] types;
+
+            try
+            {
+                types = assembly.GetTypes();
+            }
+            catch (ReflectionTypeLoadException e)
+            {
+                Debug.Log($"Types could not be extracted from assembly {assembly}: {e.Message}");
+                return Enumerable.Empty<Type>();
+            }
+
+            return from type in types
                 where type.IsVisible && type.IsClass
                 where FilterConstraintIsSatisfied(filter, type)
                 select type;
