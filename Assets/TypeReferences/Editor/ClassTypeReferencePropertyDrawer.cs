@@ -34,11 +34,11 @@ namespace TypeReferences.Editor
 
         private void DrawTypeReferenceField(Rect position, SerializedProperty property)
         {
-            var constraintAttribute = attribute as ClassTypeConstraintAttribute;
+            var constraints = attribute as ClassTypeConstraintAttribute;
             var classRefProperty = property.FindPropertyRelative("_classRef");
             var classRef = classRefProperty.stringValue;
 
-            var dropDown = new TypeDropDownDrawer(classRef, constraintAttribute, fieldInfo.DeclaringType);
+            var dropDown = new TypeDropDownDrawer(classRef, constraints, fieldInfo.DeclaringType);
             var fieldDrawer = new TypeFieldDrawer(classRefProperty, position, dropDown);
 
             fieldDrawer.Draw();

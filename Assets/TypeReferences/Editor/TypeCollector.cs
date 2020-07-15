@@ -10,11 +10,11 @@
     {
         public static IEnumerable<Assembly> GetTypeRelatedAssemblies(Type type)
         {
-            var declaringTypeAssembly = type.Assembly;
-            var assemblies = new List<Assembly> { declaringTypeAssembly };
+            var typeAssembly = type.Assembly;
+            var assemblies = new List<Assembly> { typeAssembly };
 
             assemblies.AddRange(
-                declaringTypeAssembly.GetReferencedAssemblies()
+                typeAssembly.GetReferencedAssemblies()
                     .Select(Assembly.Load));
 
             return assemblies;

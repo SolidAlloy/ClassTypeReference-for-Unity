@@ -8,14 +8,14 @@
     public class TypeDropDownDrawer
     {
         private readonly Type _selectedType;
-        private readonly ClassTypeConstraintAttribute _filter;
+        private readonly ClassTypeConstraintAttribute _constraints;
         private readonly Type _declaringType;
         private GenericMenu _menu;
 
-        public TypeDropDownDrawer(string classRef, ClassTypeConstraintAttribute filter, Type declaringType)
+        public TypeDropDownDrawer(string classRef, ClassTypeConstraintAttribute constraints, Type declaringType)
         {
             _selectedType = CachedTypeReference.GetType(classRef);
-            _filter = filter;
+            _constraints = constraints;
             _declaringType = declaringType;
         }
 
@@ -25,7 +25,7 @@
 
             AddNoneElementIfNotExcluded();
 
-            var classGrouping = _filter?.Grouping ?? ClassTypeConstraintAttribute.DefaultGrouping;
+            var classGrouping = _constraints?.Grouping ?? ClassTypeConstraintAttribute.DefaultGrouping;
 
             foreach (var type in GetFilteredTypes())
             {
@@ -38,7 +38,7 @@
 
         private void AddNoneElementIfNotExcluded()
         {
-            var excludeNone = _filter?.ExcludeNone ?? false;
+            var excludeNone = _constraints?.ExcludeNone ?? false;
             if (excludeNone)
                 return;
 
@@ -57,7 +57,7 @@
 
             var filteredTypes = TypeCollector.GetFilteredTypesFromAssemblies(
                 typeRelatedAssemblies,
-                _filter);
+                _constraints);
 
             filteredTypes.Sort((a, b) => a.FullName.CompareTo(b.FullName));
 
