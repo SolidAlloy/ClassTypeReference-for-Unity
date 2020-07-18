@@ -34,8 +34,8 @@
             var selectedType = userData as Type;
 
             SelectedClassRef = ClassTypeReference.GetClassRef(selectedType);
-            var typeReferenceUpdatedEvent = EditorGUIUtility.CommandEvent(ReferenceUpdatedCommandName);
-            EditorWindow.focusedWindow.SendEvent(typeReferenceUpdatedEvent);
+            Event typeReferenceUpdated = EditorGUIUtility.CommandEvent(ReferenceUpdatedCommandName);
+            EditorWindow.focusedWindow.SendEvent(typeReferenceUpdated);
         }
     }
 }
