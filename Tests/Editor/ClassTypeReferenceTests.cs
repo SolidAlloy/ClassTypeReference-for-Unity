@@ -1,4 +1,4 @@
-﻿namespace TypeReferences.Tests
+﻿namespace TypeReferences.Tests.Editor
 {
     using System;
     using NUnit.Framework;
