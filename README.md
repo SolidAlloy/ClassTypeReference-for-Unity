@@ -3,7 +3,7 @@ README
 
 A class which provides serializable references to `System.Type` of classes with an accompanying custom property drawer which allows class selection from drop-down.
 
-![screenshot](https://bitbucket.org/rotorz/classtypereference-for-unity/raw/master/screenshot.png)
+![screenshot](https://raw.githubusercontent.com/SolidAlloy/ClassTypeReference-for-Unity/master/.screenshot.png)
 
 Whilst we have not encountered any platform specific issues yet, the source code in this repository *might* not necessarily work for all of Unity's platforms or build configurations. It would be greatly appreciated if people would report issues using the [issue tracker](https://github.com/SolidAlloy/ClassTypeReference-for-Unity/issues).
 
@@ -15,7 +15,7 @@ Project supports Unity Package Manager. To install the project as a Git package 
 
 1. In Unity, open **Window** -> **Package Manager**.
 2. Press the **+** button, choose "**Add package from git URL...**"
-3. Enter "https://github.com/SolidAlloy/ClassTypeReference-for-Unity.git#upm" and press **Add**.
+3. Enter "https://github.com/SolidAlloy/ClassTypeReference-for-Unity.git" and press **Add**.
 
 Usage Examples
 --------------
@@ -122,12 +122,6 @@ public class ExampleBehaviour : MonoBehaviour
 ```
 
 Note that the type can still be null by default or if set through code.
-
-Credits
-------------
-
-- [Original creator of the repo](https://bitbucket.org/rotorz)
-- GitHub action to split the upm branch was created by [rfadeev](https://github.com/rfadeev)
 
 Contribution Agreement
 ----------------------
