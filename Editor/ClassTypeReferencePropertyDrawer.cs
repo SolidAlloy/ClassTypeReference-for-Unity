@@ -36,10 +36,10 @@ namespace TypeReferences.Editor
         {
             var constraints = attribute as ClassTypeConstraintAttribute;
             var classRefProperty = property.FindPropertyRelative("_classRef");
-            var classRef = classRefProperty.stringValue;
+            var classRefAccessor = new ClassRefAccessor(classRefProperty);
 
-            var dropDown = new TypeDropDownDrawer(classRef, constraints, fieldInfo.DeclaringType);
-            var fieldDrawer = new TypeFieldDrawer(classRefProperty, position, dropDown);
+            var dropDown = new TypeDropDownDrawer(classRefAccessor.Value, constraints, fieldInfo.DeclaringType);
+            var fieldDrawer = new TypeFieldDrawer(classRefAccessor, position, dropDown);
 
             fieldDrawer.Draw();
         }

@@ -5,14 +5,14 @@
 
     internal class TypeFieldDrawer
     {
-        private readonly SerializedProperty _property;
+        private readonly ClassRefAccessor _classRefAccessor;
         private readonly TypeDropDownDrawer _dropDownDrawer;
         private Rect _position;
         private bool _triggerDropDown;
 
-        public TypeFieldDrawer(SerializedProperty property, Rect position, TypeDropDownDrawer dropDownDrawer)
+        public TypeFieldDrawer(ClassRefAccessor classRefAccessor, Rect position, TypeDropDownDrawer dropDownDrawer)
         {
-            _property = property;
+            _classRefAccessor = classRefAccessor;
             _position = position;
             _dropDownDrawer = dropDownDrawer;
         }
@@ -20,7 +20,7 @@
         public void Draw()
         {
             var valueToRestore = EditorGUI.showMixedValue;
-            EditorGUI.showMixedValue = _property.hasMultipleDifferentValues;
+            EditorGUI.showMixedValue = _classRefAccessor.HasMultipleDifferentValues;
             DrawTypeSelectionControl();
             EditorGUI.showMixedValue = valueToRestore;
         }
@@ -54,7 +54,7 @@
                 return;
 
             CachedTypeReference.SelectionControlID = controlID;
-            CachedTypeReference.SelectedClassRef = _property.stringValue;
+            CachedTypeReference.SelectedClassRef = _classRefAccessor.Value;
 
             _dropDownDrawer.Draw(_position);
         }
@@ -110,7 +110,7 @@
 
         private void DrawFieldContent(int controlID)
         {
-            CachedTypeReference.FieldContent.text = GetTypeNameForField(_property.stringValue);
+            CachedTypeReference.FieldContent.text = GetTypeNameForField(_classRefAccessor.Value);
             EditorStyles.popup.Draw(_position, CachedTypeReference.FieldContent, controlID);
         }
 
@@ -119,9 +119,9 @@
             if (CachedTypeReference.SelectionControlID != controlID)
                 return;
 
-            if (_property.stringValue != CachedTypeReference.SelectedClassRef)
+            if (_classRefAccessor.Value != CachedTypeReference.SelectedClassRef)
             {
-                _property.stringValue = CachedTypeReference.SelectedClassRef;
+                _classRefAccessor.Value = CachedTypeReference.SelectedClassRef;
                 GUI.changed = true;
             }
 
