@@ -20,8 +20,7 @@
             [Test]
             public void When_null_type_is_passed_creates_instance_with_null_type()
             {
-                Type type = null;
-                var typeRef = new ClassTypeReference(type);
+                var typeRef = new ClassTypeReference( (Type)null );
                 Assert.That(typeRef.Type, Is.Null);
             }
 
@@ -47,8 +46,7 @@
             [Test]
             public void When_null_string_is_passed_creates_instance_with_null_type()
             {
-                string nullString = null;
-                var typeRef = new ClassTypeReference(nullString);
+                var typeRef = new ClassTypeReference( (string)null );
                 Assert.That(typeRef.Type, Is.Null);
             }
 
@@ -134,6 +132,43 @@
                 Type classType = typeof(ClassExample);
                 _typeRef.Type = classType;
                 Assert.That(_typeRef.Type, Is.EqualTo(classType));
+            }
+        }
+
+        internal class TheGetClassRefMethod
+        {
+            [Test]
+            public void When_null_is_passed_returns_empty_string()
+            {
+                string classRef = ClassTypeReference.GetClassRef(null);
+                Assert.That(classRef, Is.EqualTo(string.Empty));
+            }
+
+            [Test]
+            public void When_type_is_passed_returns_string_that_contains_full_type_name_and_assembly_name()
+            {
+                Type exampleType = typeof(ClassExample);
+                string classRef = ClassTypeReference.GetClassRef(exampleType);
+                Assert.That(classRef.Contains(exampleType.FullName));
+                Assert.That(classRef.Contains(exampleType.Assembly.GetName().Name));
+            }
+        }
+
+        internal class ToStringMethod
+        {
+            [Test]
+            public void When_type_is_null_returns_NoneElement()
+            {
+                var nullTypeRef = new ClassTypeReference( (Type)null );
+                Assert.That(nullTypeRef.ToString(), Is.EqualTo(ClassTypeReference.NoneElement));
+            }
+
+            [Test]
+            public void When_type_is_not_null_returns_its_full_name()
+            {
+                Type exampleType = typeof(ClassExample);
+                var typeRef = new ClassTypeReference(exampleType);
+                Assert.That(typeRef.ToString(), Is.EqualTo(exampleType.FullName));
             }
         }
     }
