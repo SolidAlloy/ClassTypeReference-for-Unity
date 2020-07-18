@@ -1,7 +1,7 @@
 README
 ======
 
-A class which provides serializable references to `System.Type` of classes with an accompanying custom property drawer which allows class selection from drop-down.
+A class that provides serializable references to `System.Type` of classes with an accompanying custom property drawer which allows class selection from drop-down.
 
 ![screenshot](https://raw.githubusercontent.com/SolidAlloy/ClassTypeReference-for-Unity/master/.screenshot.png)
 
