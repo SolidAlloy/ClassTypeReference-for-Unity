@@ -14,7 +14,7 @@ namespace TypeReferences
     public sealed class ClassTypeReference : ISerializationCallbackReceiver
     {
         /// <summary>
-        /// Name of the element in the drop-down list choosing of which will set the type to null.
+        /// Name of the element in the drop-down list choosing which will set the type to null.
         /// </summary>
         public const string NoneElement = "(None)";
 
