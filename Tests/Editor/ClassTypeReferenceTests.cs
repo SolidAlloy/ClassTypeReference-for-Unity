@@ -135,22 +135,22 @@
             }
         }
 
-        internal class TheGetClassRefMethod
+        internal class TheGetTypeNameAndAssemblyMethod
         {
             [Test]
             public void When_null_is_passed_returns_empty_string()
             {
-                string classRef = ClassTypeReference.GetClassRef(null);
-                Assert.That(classRef, Is.EqualTo(string.Empty));
+                string typeAndAssembly = ClassTypeReference.GetTypeNameAndAssembly(null);
+                Assert.That(typeAndAssembly, Is.EqualTo(string.Empty));
             }
 
             [Test]
             public void When_type_is_passed_returns_string_that_contains_full_type_name_and_assembly_name()
             {
                 Type exampleType = typeof(ClassExample);
-                string classRef = ClassTypeReference.GetClassRef(exampleType);
-                Assert.That(classRef.Contains(exampleType.FullName));
-                Assert.That(classRef.Contains(exampleType.Assembly.GetName().Name));
+                string typeAndAssembly = ClassTypeReference.GetTypeNameAndAssembly(exampleType);
+                Assert.That(typeAndAssembly.Contains(exampleType.FullName));
+                Assert.That(typeAndAssembly.Contains(exampleType.Assembly.GetName().Name));
             }
         }
 

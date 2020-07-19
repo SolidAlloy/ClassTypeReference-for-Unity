@@ -12,7 +12,7 @@
         public static readonly GUIContent FieldContent = new GUIContent();
         public static readonly GenericMenu.MenuFunction2 SelectedTypeName = OnSelectedTypeName;
         public static int SelectionControlID;
-        public static string SelectedClassRef;
+        public static string SelectedTypeNameAndAssembly;
 
         /// <summary>
         /// Improves performance by avoiding extensive number of <see cref="M:Type.GetType"/> calls.
@@ -33,7 +33,7 @@
         {
             var selectedType = userData as Type;
 
-            SelectedClassRef = ClassTypeReference.GetClassRef(selectedType);
+            SelectedTypeNameAndAssembly = ClassTypeReference.GetTypeNameAndAssembly(selectedType);
             Event typeReferenceUpdated = EditorGUIUtility.CommandEvent(ReferenceUpdatedCommandName);
             EditorWindow.focusedWindow.SendEvent(typeReferenceUpdated);
         }

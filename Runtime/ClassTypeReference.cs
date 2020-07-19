@@ -4,6 +4,7 @@
 namespace TypeReferences
 {
     using System;
+    using UnityEditor;
     using UnityEngine;
 
     /// <summary>
@@ -17,16 +18,21 @@ namespace TypeReferences
         /// </summary>
         public const string NoneElement = "(None)";
 
-        [SerializeField] private string _classRef;
+        public const string NameOfTypeNameField = nameof(_typeNameAndAssembly);
+        public const string NameOfGuidField = nameof(_guid);
+
+        [SerializeField] private string _typeNameAndAssembly;
+        [SerializeField] private string _guid;
         private Type _type;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="ClassTypeReference"/> class.
+        /// Initializes a new instance of the <see cref="ClassTypeReference"/> class with Type equal to null.
         /// </summary>
         public ClassTypeReference() { }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="ClassTypeReference"/> class.
+        /// Initializes a new instance of the <see cref="ClassTypeReference"/> class
+        /// with Type equal to the type of the passed class.
         /// </summary>
         /// <param name="assemblyQualifiedClassName">Assembly qualified class name.</param>
         public ClassTypeReference(string assemblyQualifiedClassName)
@@ -37,7 +43,8 @@ namespace TypeReferences
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="ClassTypeReference"/> class.
+        /// Initializes a new instance of the <see cref="ClassTypeReference"/> class
+        /// with Type equal to the passed class type.
         /// </summary>
         /// <param name="type">Class type.</param>
         /// <exception cref="System.ArgumentException">
@@ -62,7 +69,8 @@ namespace TypeReferences
             {
                 MakeSureValueIsClassType(value);
                 _type = value;
-                _classRef = GetClassRef(value);
+                _typeNameAndAssembly = GetTypeNameAndAssembly(value);
+                _guid = GetClassGuid(value);
             }
         }
 
@@ -76,11 +84,29 @@ namespace TypeReferences
             return new ClassTypeReference(type);
         }
 
-        public static string GetClassRef(Type type)
+        public static string GetTypeNameAndAssembly(Type type)
         {
             return type != null
                 ? type.FullName + ", " + type.Assembly.GetName().Name
                 : string.Empty;
+        }
+
+        public static string GetClassGuid(Type type)
+        {
+            if (type == null || type.FullName == null)
+                return string.Empty;
+
+            var guids = AssetDatabase.FindAssets(type.FullName);
+            if (guids.Length == 1)
+            {
+                Debug.Log($"GUID: {guids[0]}");
+                return guids[0];
+            }
+            else
+            {
+                Debug.Log($"guids length: {guids.Length}");
+                return string.Empty;
+            }
         }
 
         public override string ToString()
@@ -90,12 +116,12 @@ namespace TypeReferences
 
         void ISerializationCallbackReceiver.OnAfterDeserialize()
         {
-            if (IsNotEmpty(_classRef))
+            if (IsNotEmpty(_typeNameAndAssembly))
             {
-                _type = Type.GetType(_classRef);
+                _type = Type.GetType(_typeNameAndAssembly);
 
                 if (_type == null)
-                    Debug.LogWarningFormat("'{0}' was referenced but class type was not found.", _classRef);
+                    Debug.LogWarningFormat("'{0}' was referenced but class type was not found.", _typeNameAndAssembly);
             }
             else
             {

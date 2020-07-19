@@ -35,11 +35,14 @@ namespace TypeReferences.Editor
         private void DrawTypeReferenceField(Rect position, SerializedProperty property)
         {
             var constraints = attribute as ClassTypeConstraintAttribute;
-            var classRefProperty = property.FindPropertyRelative("_classRef");
-            var classRefAccessor = new ClassRefAccessor(classRefProperty);
+            var serializedTypeRef = new SerializedClassTypeReference(property);
 
-            var dropDown = new TypeDropDownDrawer(classRefAccessor.Value, constraints, fieldInfo.DeclaringType);
-            var fieldDrawer = new TypeFieldDrawer(classRefAccessor, position, dropDown);
+            var dropDown = new TypeDropDownDrawer(
+                serializedTypeRef.TypeNameAndAssembly,
+                constraints,
+                fieldInfo.DeclaringType);
+
+            var fieldDrawer = new TypeFieldDrawer(serializedTypeRef, position, dropDown);
 
             fieldDrawer.Draw();
         }

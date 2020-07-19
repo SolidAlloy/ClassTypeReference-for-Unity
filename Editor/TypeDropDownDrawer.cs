@@ -12,9 +12,9 @@
         private readonly Type _declaringType;
         private GenericMenu _menu;
 
-        public TypeDropDownDrawer(string classRef, ClassTypeConstraintAttribute constraints, Type declaringType)
+        public TypeDropDownDrawer(string typeName, ClassTypeConstraintAttribute constraints, Type declaringType)
         {
-            _selectedType = CachedTypeReference.GetType(classRef);
+            _selectedType = CachedTypeReference.GetType(typeName);
             _constraints = constraints;
             _declaringType = declaringType;
         }
