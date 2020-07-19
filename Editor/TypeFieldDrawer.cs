@@ -5,17 +5,17 @@
 
     internal class TypeFieldDrawer
     {
-        private readonly SerializedClassTypeReference _serializedClassTypeReference;
+        private readonly SerializedClassTypeReference _serializedTypeRef;
         private readonly TypeDropDownDrawer _dropDownDrawer;
         private Rect _position;
         private bool _triggerDropDown;
 
         public TypeFieldDrawer(
-            SerializedClassTypeReference serializedClassTypeReference,
+            SerializedClassTypeReference serializedTypeRef,
             Rect position,
             TypeDropDownDrawer dropDownDrawer)
         {
-            _serializedClassTypeReference = serializedClassTypeReference;
+            _serializedTypeRef = serializedTypeRef;
             _position = position;
             _dropDownDrawer = dropDownDrawer;
         }
@@ -23,24 +23,27 @@
         public void Draw()
         {
             var valueToRestore = EditorGUI.showMixedValue;
-            EditorGUI.showMixedValue = _serializedClassTypeReference.TypeNameHasMultipleDifferentValues;
+            EditorGUI.showMixedValue = _serializedTypeRef.TypeNameHasMultipleDifferentValues;
             DrawTypeSelectionControl();
             EditorGUI.showMixedValue = valueToRestore;
         }
 
-        private static string GetTypeNameForField(string typeNameAndAssembly)
+        private string GetTypeNameForField()
         {
             // Remove assembly name and leave only type name.
-            var typeParts = typeNameAndAssembly.Split(',');
+            var typeParts = _serializedTypeRef.TypeNameAndAssembly.Split(',');
             var typeName = typeParts[0].Trim();
 
             if (typeName == string.Empty)
             {
                 typeName = ClassTypeReference.NoneElement;
             }
-            else if (CachedTypeReference.GetType(typeNameAndAssembly) == null)
+            else if (CachedTypeReference.GetType(_serializedTypeRef.TypeNameAndAssembly) == null)
             {
-                typeName += " {Missing}";
+                _serializedTypeRef.TryUpdateTypeUsingGUID();
+
+                if (CachedTypeReference.GetType(_serializedTypeRef.TypeNameAndAssembly) == null)
+                    typeName += " {Missing}";
             }
 
             return typeName;
@@ -61,7 +64,7 @@
                 return;
 
             CachedTypeReference.SelectionControlID = controlID;
-            CachedTypeReference.SelectedTypeNameAndAssembly = _serializedClassTypeReference.TypeNameAndAssembly;
+            CachedTypeReference.SelectedTypeNameAndAssembly = _serializedTypeRef.TypeNameAndAssembly;
 
             _dropDownDrawer.Draw(_position);
         }
@@ -117,7 +120,7 @@
 
         private void DrawFieldContent(int controlID)
         {
-            CachedTypeReference.FieldContent.text = GetTypeNameForField(_serializedClassTypeReference.TypeNameAndAssembly);
+            CachedTypeReference.FieldContent.text = GetTypeNameForField();
             EditorStyles.popup.Draw(_position, CachedTypeReference.FieldContent, controlID);
         }
 
@@ -126,9 +129,9 @@
             if (CachedTypeReference.SelectionControlID != controlID)
                 return;
 
-            if (_serializedClassTypeReference.TypeNameAndAssembly != CachedTypeReference.SelectedTypeNameAndAssembly)
+            if (_serializedTypeRef.TypeNameAndAssembly != CachedTypeReference.SelectedTypeNameAndAssembly)
             {
-                _serializedClassTypeReference.TypeNameAndAssembly = CachedTypeReference.SelectedTypeNameAndAssembly;
+                _serializedTypeRef.TypeNameAndAssembly = CachedTypeReference.SelectedTypeNameAndAssembly;
                 GUI.changed = true;
             }
 

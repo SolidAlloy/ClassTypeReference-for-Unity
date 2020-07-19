@@ -6,6 +6,7 @@ namespace TypeReferences
     using System;
     using UnityEditor;
     using UnityEngine;
+    using Object = UnityEngine.Object;
 
     /// <summary>
     /// Reference to a class <see cref="System.Type"/> with support for Unity serialization.
@@ -19,10 +20,12 @@ namespace TypeReferences
         public const string NoneElement = "(None)";
 
         public const string NameOfTypeNameField = nameof(_typeNameAndAssembly);
-        public const string NameOfGuidField = nameof(_guid);
+        public const string NameOfGuidField = nameof(_GUID);
+        public const string NameOfAssetPath = nameof(_assetPath);
 
         [SerializeField] private string _typeNameAndAssembly;
-        [SerializeField] private string _guid;
+        [SerializeField] private string _GUID;
+        [SerializeField] private string _assetPath;
         private Type _type;
 
         /// <summary>
@@ -70,7 +73,7 @@ namespace TypeReferences
                 MakeSureValueIsClassType(value);
                 _type = value;
                 _typeNameAndAssembly = GetTypeNameAndAssembly(value);
-                _guid = GetClassGuid(value);
+                _GUID = GetClassGUID(value);
             }
         }
 
@@ -91,22 +94,13 @@ namespace TypeReferences
                 : string.Empty;
         }
 
-        public static string GetClassGuid(Type type)
+        public static string GetClassGUID(Type type)
         {
             if (type == null || type.FullName == null)
                 return string.Empty;
 
             var guids = AssetDatabase.FindAssets(type.FullName);
-            if (guids.Length == 1)
-            {
-                Debug.Log($"GUID: {guids[0]}");
-                return guids[0];
-            }
-            else
-            {
-                Debug.Log($"guids length: {guids.Length}");
-                return string.Empty;
-            }
+            return guids.Length == 1 ? guids[0] : string.Empty;
         }
 
         public override string ToString()
@@ -116,17 +110,7 @@ namespace TypeReferences
 
         void ISerializationCallbackReceiver.OnAfterDeserialize()
         {
-            if (IsNotEmpty(_typeNameAndAssembly))
-            {
-                _type = Type.GetType(_typeNameAndAssembly);
-
-                if (_type == null)
-                    Debug.LogWarningFormat("'{0}' was referenced but class type was not found.", _typeNameAndAssembly);
-            }
-            else
-            {
-                _type = null;
-            }
+            _type = IsNotEmpty(_typeNameAndAssembly) ? TryGetTypeFromSerializedFields() : null;
         }
 
         void ISerializationCallbackReceiver.OnBeforeSerialize() { }
@@ -140,6 +124,16 @@ namespace TypeReferences
         {
             if (value != null && !value.IsClass)
                 throw new ArgumentException($"'{value.FullName}' is not a class type.", nameof(value));
+        }
+
+        private Type TryGetTypeFromSerializedFields()
+        {
+            var type = Type.GetType(_typeNameAndAssembly);
+
+            if (type == null)
+                Debug.LogWarningFormat("'{0}' was referenced but class type was not found.", _typeNameAndAssembly);
+
+            return type;
         }
     }
 }
