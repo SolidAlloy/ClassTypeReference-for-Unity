@@ -1,10 +1,8 @@
 ﻿namespace TypeReferences.Tests.Editor
 {
     using System;
-    using System.IO;
     using System.Linq;
     using NUnit.Framework;
-    using UnityEditor;
 
     internal class ClassTypeReferenceTests
     {
