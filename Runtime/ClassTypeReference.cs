@@ -6,7 +6,6 @@ namespace TypeReferences
     using System;
     using UnityEditor;
     using UnityEngine;
-    using Object = UnityEngine.Object;
 
     /// <summary>
     /// Reference to a class <see cref="System.Type"/> with support for Unity serialization.
@@ -105,7 +104,14 @@ namespace TypeReferences
 
         public override string ToString()
         {
-            return Type != null ? Type.FullName : NoneElement;
+            if (Type != null && Type.FullName != null)
+            {
+                return Type.FullName;
+            }
+            else
+            {
+                return NoneElement;
+            }
         }
 
         void ISerializationCallbackReceiver.OnAfterDeserialize()
@@ -131,7 +137,11 @@ namespace TypeReferences
             var type = Type.GetType(_typeNameAndAssembly);
 
             if (type == null)
-                Debug.LogWarningFormat("'{0}' was referenced but class type was not found.", _typeNameAndAssembly);
+            {
+                Debug.LogWarningFormat(
+                    "'{0}' was referenced but class type was not found.",
+                    _typeNameAndAssembly);
+            }
 
             return type;
         }

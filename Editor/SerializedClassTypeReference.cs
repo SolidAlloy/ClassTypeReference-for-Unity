@@ -3,19 +3,16 @@
     using System;
     using UnityEditor;
     using UnityEngine;
-    using Object = UnityEngine.Object;
 
     public class SerializedClassTypeReference
     {
         private readonly SerializedProperty _typeNameProperty;
         private readonly SerializedProperty _guidProperty;
-        private readonly SerializedProperty _assetPathProperty;
 
         public SerializedClassTypeReference(SerializedProperty classTypeReferenceProperty)
         {
             _typeNameProperty = classTypeReferenceProperty.FindPropertyRelative(ClassTypeReference.NameOfTypeNameField);
             _guidProperty = classTypeReferenceProperty.FindPropertyRelative(ClassTypeReference.NameOfGuidField);
-            _assetPathProperty = classTypeReferenceProperty.FindPropertyRelative(ClassTypeReference.NameOfAssetPath);
         }
 
         public string TypeNameAndAssembly
@@ -30,13 +27,7 @@
 
         public bool TypeNameHasMultipleDifferentValues => _typeNameProperty.hasMultipleDifferentValues;
 
-        private static string GetClassGuidFromTypeName(string typeName)
-        {
-            var type = Type.GetType(typeName);
-            return ClassTypeReference.GetClassGUID(type);
-        }
-
-        public void TryUpdateTypeUsingGUID()
+        public void TryUpdatingTypeUsingGUID()
         {
             if (_guidProperty.stringValue == string.Empty)
                 return;
@@ -47,7 +38,18 @@
                 return;
 
             Type type = script.GetClass();
+            var previousValue = _typeNameProperty.stringValue;
             _typeNameProperty.stringValue = ClassTypeReference.GetTypeNameAndAssembly(type);
+            Debug.LogFormat(
+                "Type reference has been updated from '{0}' to '{1}'.",
+                previousValue,
+                _typeNameProperty.stringValue);
+        }
+
+        private static string GetClassGuidFromTypeName(string typeName)
+        {
+            var type = Type.GetType(typeName);
+            return ClassTypeReference.GetClassGUID(type);
         }
     }
 }

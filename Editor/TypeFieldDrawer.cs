@@ -5,6 +5,8 @@
 
     internal class TypeFieldDrawer
     {
+        private const string MissingSuffix = " {Missing}";
+
         private readonly SerializedClassTypeReference _serializedTypeRef;
         private readonly TypeDropDownDrawer _dropDownDrawer;
         private Rect _position;
@@ -22,36 +24,15 @@
 
         public void Draw()
         {
-            var valueToRestore = EditorGUI.showMixedValue;
+            bool valueToRestore = EditorGUI.showMixedValue;
             EditorGUI.showMixedValue = _serializedTypeRef.TypeNameHasMultipleDifferentValues;
             DrawTypeSelectionControl();
             EditorGUI.showMixedValue = valueToRestore;
         }
 
-        private string GetTypeNameForField()
-        {
-            // Remove assembly name and leave only type name.
-            var typeParts = _serializedTypeRef.TypeNameAndAssembly.Split(',');
-            var typeName = typeParts[0].Trim();
-
-            if (typeName == string.Empty)
-            {
-                typeName = ClassTypeReference.NoneElement;
-            }
-            else if (CachedTypeReference.GetType(_serializedTypeRef.TypeNameAndAssembly) == null)
-            {
-                _serializedTypeRef.TryUpdateTypeUsingGUID();
-
-                if (CachedTypeReference.GetType(_serializedTypeRef.TypeNameAndAssembly) == null)
-                    typeName += " {Missing}";
-            }
-
-            return typeName;
-        }
-
         private void DrawTypeSelectionControl()
         {
-            var controlID = GUIUtility.GetControlID(
+            int controlID = GUIUtility.GetControlID(
                 CachedTypeReference.ControlHint,
                 FocusType.Keyboard,
                 _position);
@@ -105,9 +86,9 @@
 
         private void OnKeyDown(int controlID)
         {
-            var keyboardFocusIsOnElement = GUI.enabled && GUIUtility.keyboardControl == controlID;
+            bool keyboardFocusIsOnElement = GUI.enabled && GUIUtility.keyboardControl == controlID;
 
-            var necessaryKeyIsDown =
+            bool necessaryKeyIsDown =
                 Event.current.keyCode == KeyCode.Return
                 || Event.current.keyCode == KeyCode.Space;
 
@@ -122,6 +103,26 @@
         {
             CachedTypeReference.FieldContent.text = GetTypeNameForField();
             EditorStyles.popup.Draw(_position, CachedTypeReference.FieldContent, controlID);
+        }
+
+        private string GetTypeNameForField()
+        {
+            var typeParts = _serializedTypeRef.TypeNameAndAssembly.Split(',');
+            string typeName = typeParts[0].Trim();
+
+            if (typeName == string.Empty)
+            {
+                typeName = ClassTypeReference.NoneElement;
+            }
+            else if (CachedTypeReference.GetType(_serializedTypeRef.TypeNameAndAssembly) == null)
+            {
+                _serializedTypeRef.TryUpdatingTypeUsingGUID();
+
+                if (CachedTypeReference.GetType(_serializedTypeRef.TypeNameAndAssembly) == null)
+                    typeName += MissingSuffix;
+            }
+
+            return typeName;
         }
 
         private void OnTypeReferenceUpdated(int controlID)
