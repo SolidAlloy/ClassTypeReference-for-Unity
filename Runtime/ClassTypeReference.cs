@@ -20,11 +20,9 @@ namespace TypeReferences
 
         public const string NameOfTypeNameField = nameof(_typeNameAndAssembly);
         public const string NameOfGuidField = nameof(_GUID);
-        public const string NameOfAssetPath = nameof(_assetPath);
 
         [SerializeField] private string _typeNameAndAssembly;
         [SerializeField] private string _GUID;
-        [SerializeField] private string _assetPath;
         private Type _type;
 
         /// <summary>
