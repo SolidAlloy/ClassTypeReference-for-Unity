@@ -4,7 +4,10 @@
     using UnityEditor;
     using UnityEngine;
 
-    public class SerializedClassTypeReference
+    /// <summary>
+    /// A class that gives access to serialized properties inside ClassTypeReference.
+    /// </summary>
+    internal class SerializedClassTypeReference
     {
         private readonly SerializedProperty _typeNameProperty;
         private readonly SerializedProperty _guidProperty;
@@ -27,6 +30,10 @@
 
         public bool TypeNameHasMultipleDifferentValues => _typeNameProperty.hasMultipleDifferentValues;
 
+        /// <summary>
+        /// Try finding the class type given the GUID of the file where it is located.
+        /// If found, change the ClassTypeReference._typeNameAndAssembly value.
+        /// </summary>
         public void TryUpdatingTypeUsingGUID()
         {
             if (_guidProperty.stringValue == string.Empty)

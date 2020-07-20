@@ -3,6 +3,9 @@
     using UnityEditor;
     using UnityEngine;
 
+    /// <summary>
+    /// Draws a ClassTypeReference field and handles control over the drop-down list.
+    /// </summary>
     internal class TypeFieldDrawer
     {
         private const string MissingSuffix = " {Missing}";

@@ -14,7 +14,7 @@ namespace TypeReferences
     public sealed class ClassTypeReference : ISerializationCallbackReceiver
     {
         /// <summary>
-        /// Name of the element in the drop-down list choosing which will set the type to null.
+        /// Name of the element in the drop-down list that corresponds to null value.
         /// </summary>
         public const string NoneElement = "(None)";
 
@@ -91,6 +91,13 @@ namespace TypeReferences
                 : string.Empty;
         }
 
+        /// <summary>
+        /// Get GUID of the file that contains the class of the given type.
+        /// It works only for MonoBehaviours, ScriptableObjects, and other classes
+        /// where the name of the file must match the class name.
+        /// </summary>
+        /// <param name="type">Type of the class to search for.</param>
+        /// <returns>string representing the GUID of the file, or empty string if no file found.</returns>
         public static string GetClassGUID(Type type)
         {
             if (type == null || type.FullName == null)

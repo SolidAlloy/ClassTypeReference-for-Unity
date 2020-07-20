@@ -6,9 +6,12 @@
     using System.Reflection;
     using UnityEngine;
 
+    /// <summary>
+    /// A class responsible for collecting class types according to given filters and conditions.
+    /// </summary>
     internal static class TypeCollector
     {
-        public static IEnumerable<Assembly> GetTypeRelatedAssemblies(Type type)
+        public static IEnumerable<Assembly> GetAssembliesTypeHasAccessTo(Type type)
         {
             var typeAssembly = type.Assembly;
             var assemblies = new List<Assembly> { typeAssembly };
@@ -27,12 +30,12 @@
             var types = new List<Type>();
 
             foreach (var assembly in assemblies)
-                types.AddRange(GetFilteredTypesInAssembly(assembly, filter));
+                types.AddRange(GetFilteredTypesFromAssembly(assembly, filter));
 
             return types;
         }
 
-        private static IEnumerable<Type> GetFilteredTypesInAssembly(
+        private static IEnumerable<Type> GetFilteredTypesFromAssembly(
             Assembly assembly,
             ClassTypeConstraintAttribute filter)
         {
