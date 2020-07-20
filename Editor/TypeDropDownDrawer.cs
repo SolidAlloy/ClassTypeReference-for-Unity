@@ -5,16 +5,19 @@
     using UnityEditor;
     using UnityEngine;
 
-    public class TypeDropDownDrawer
+    /// <summary>
+    /// Draws expanded drop-down list of class types.
+    /// </summary>
+    internal class TypeDropDownDrawer
     {
         private readonly Type _selectedType;
         private readonly ClassTypeConstraintAttribute _constraints;
         private readonly Type _declaringType;
         private GenericMenu _menu;
 
-        public TypeDropDownDrawer(string classRef, ClassTypeConstraintAttribute constraints, Type declaringType)
+        public TypeDropDownDrawer(string typeName, ClassTypeConstraintAttribute constraints, Type declaringType)
         {
-            _selectedType = CachedTypeReference.GetType(classRef);
+            _selectedType = CachedTypeReference.GetType(typeName);
             _constraints = constraints;
             _declaringType = declaringType;
         }
@@ -53,7 +56,7 @@
 
         private IEnumerable<Type> GetFilteredTypes()
         {
-            var typeRelatedAssemblies = TypeCollector.GetTypeRelatedAssemblies(_declaringType);
+            var typeRelatedAssemblies = TypeCollector.GetAssembliesTypeHasAccessTo(_declaringType);
 
             var filteredTypes = TypeCollector.GetFilteredTypesFromAssemblies(
                 typeRelatedAssemblies,

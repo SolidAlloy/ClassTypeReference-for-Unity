@@ -3,49 +3,39 @@
     using UnityEditor;
     using UnityEngine;
 
+    /// <summary>
+    /// Draws a ClassTypeReference field and handles control over the drop-down list.
+    /// </summary>
     internal class TypeFieldDrawer
     {
-        private readonly ClassRefAccessor _classRefAccessor;
+        private const string MissingSuffix = " {Missing}";
+
+        private readonly SerializedClassTypeReference _serializedTypeRef;
         private readonly TypeDropDownDrawer _dropDownDrawer;
         private Rect _position;
         private bool _triggerDropDown;
 
-        public TypeFieldDrawer(ClassRefAccessor classRefAccessor, Rect position, TypeDropDownDrawer dropDownDrawer)
+        public TypeFieldDrawer(
+            SerializedClassTypeReference serializedTypeRef,
+            Rect position,
+            TypeDropDownDrawer dropDownDrawer)
         {
-            _classRefAccessor = classRefAccessor;
+            _serializedTypeRef = serializedTypeRef;
             _position = position;
             _dropDownDrawer = dropDownDrawer;
         }
 
         public void Draw()
         {
-            var valueToRestore = EditorGUI.showMixedValue;
-            EditorGUI.showMixedValue = _classRefAccessor.HasMultipleDifferentValues;
+            bool valueToRestore = EditorGUI.showMixedValue;
+            EditorGUI.showMixedValue = _serializedTypeRef.TypeNameHasMultipleDifferentValues;
             DrawTypeSelectionControl();
             EditorGUI.showMixedValue = valueToRestore;
         }
 
-        private static string GetTypeNameForField(string classRef)
-        {
-            // Remove assembly name and leave only type name.
-            var classRefParts = classRef.Split(',');
-            var typeName = classRefParts[0].Trim();
-
-            if (typeName == string.Empty)
-            {
-                typeName = ClassTypeReference.NoneElement;
-            }
-            else if (CachedTypeReference.GetType(classRef) == null)
-            {
-                typeName += " {Missing}";
-            }
-
-            return typeName;
-        }
-
         private void DrawTypeSelectionControl()
         {
-            var controlID = GUIUtility.GetControlID(
+            int controlID = GUIUtility.GetControlID(
                 CachedTypeReference.ControlHint,
                 FocusType.Keyboard,
                 _position);
@@ -58,7 +48,7 @@
                 return;
 
             CachedTypeReference.SelectionControlID = controlID;
-            CachedTypeReference.SelectedClassRef = _classRefAccessor.Value;
+            CachedTypeReference.SelectedTypeNameAndAssembly = _serializedTypeRef.TypeNameAndAssembly;
 
             _dropDownDrawer.Draw(_position);
         }
@@ -99,9 +89,9 @@
 
         private void OnKeyDown(int controlID)
         {
-            var keyboardFocusIsOnElement = GUI.enabled && GUIUtility.keyboardControl == controlID;
+            bool keyboardFocusIsOnElement = GUI.enabled && GUIUtility.keyboardControl == controlID;
 
-            var necessaryKeyIsDown =
+            bool necessaryKeyIsDown =
                 Event.current.keyCode == KeyCode.Return
                 || Event.current.keyCode == KeyCode.Space;
 
@@ -114,8 +104,28 @@
 
         private void DrawFieldContent(int controlID)
         {
-            CachedTypeReference.FieldContent.text = GetTypeNameForField(_classRefAccessor.Value);
+            CachedTypeReference.FieldContent.text = GetTypeNameForField();
             EditorStyles.popup.Draw(_position, CachedTypeReference.FieldContent, controlID);
+        }
+
+        private string GetTypeNameForField()
+        {
+            var typeParts = _serializedTypeRef.TypeNameAndAssembly.Split(',');
+            string typeName = typeParts[0].Trim();
+
+            if (typeName == string.Empty)
+            {
+                typeName = ClassTypeReference.NoneElement;
+            }
+            else if (CachedTypeReference.GetType(_serializedTypeRef.TypeNameAndAssembly) == null)
+            {
+                _serializedTypeRef.TryUpdatingTypeUsingGUID();
+
+                if (CachedTypeReference.GetType(_serializedTypeRef.TypeNameAndAssembly) == null)
+                    typeName += MissingSuffix;
+            }
+
+            return typeName;
         }
 
         private void OnTypeReferenceUpdated(int controlID)
@@ -123,14 +133,14 @@
             if (CachedTypeReference.SelectionControlID != controlID)
                 return;
 
-            if (_classRefAccessor.Value != CachedTypeReference.SelectedClassRef)
+            if (_serializedTypeRef.TypeNameAndAssembly != CachedTypeReference.SelectedTypeNameAndAssembly)
             {
-                _classRefAccessor.Value = CachedTypeReference.SelectedClassRef;
+                _serializedTypeRef.TypeNameAndAssembly = CachedTypeReference.SelectedTypeNameAndAssembly;
                 GUI.changed = true;
             }
 
             CachedTypeReference.SelectionControlID = 0;
-            CachedTypeReference.SelectedClassRef = null;
+            CachedTypeReference.SelectedTypeNameAndAssembly = null;
         }
     }
 }

@@ -1,6 +1,7 @@
 ﻿namespace TypeReferences.Tests.Editor
 {
     using System;
+    using System.Linq;
     using NUnit.Framework;
 
     internal class ClassTypeReferenceTests
@@ -51,14 +52,14 @@
             }
 
             [Test]
-            public void When_empty_string_is_passed_creates_istance_with_null_type()
+            public void When_empty_string_is_passed_creates_instance_with_null_type()
             {
                 var typeRef = new ClassTypeReference(string.Empty);
                 Assert.That(typeRef.Type, Is.Null);
             }
 
             [Test]
-            public void When_not_assembly_qualified_name_string_is_passed_type_will_be_null()
+            public void When_not_assembly_qualified_name_string_is_passed_creates_instance_with_null_type()
             {
                 string typeName = "wrongTypeName";
                 var typeRef = new ClassTypeReference(typeName);
@@ -135,23 +136,50 @@
             }
         }
 
-        internal class TheGetClassRefMethod
+        internal class TheGetTypeNameAndAssemblyMethod
         {
             [Test]
             public void When_null_is_passed_returns_empty_string()
             {
-                string classRef = ClassTypeReference.GetClassRef(null);
-                Assert.That(classRef, Is.EqualTo(string.Empty));
+                string typeAndAssembly = ClassTypeReference.GetTypeNameAndAssembly(null);
+                Assert.That(typeAndAssembly, Is.EqualTo(string.Empty));
             }
 
             [Test]
             public void When_type_is_passed_returns_string_that_contains_full_type_name_and_assembly_name()
             {
-                Type exampleType = typeof(ClassExample);
-                string classRef = ClassTypeReference.GetClassRef(exampleType);
-                Assert.That(classRef.Contains(exampleType.FullName));
-                Assert.That(classRef.Contains(exampleType.Assembly.GetName().Name));
+                var exampleType = typeof(ClassExample);
+                string typeAndAssembly = ClassTypeReference.GetTypeNameAndAssembly(exampleType);
+                Assert.That(typeAndAssembly.Contains(exampleType.FullName));
+                Assert.That(typeAndAssembly.Contains(exampleType.Assembly.GetName().Name));
             }
+        }
+
+        internal class TheGetClassGuidMethod
+        {
+            [Test]
+            public void When_type_is_null_returns_empty_string()
+            {
+                Assert.That(ClassTypeReference.GetClassGUID(null), Is.EqualTo(string.Empty));
+            }
+
+            [Test]
+            public void When_type_full_name_is_null_returns_empty_string()
+            {
+                var genericType = typeof(GenericClass<>)
+                    .GetGenericArguments()
+                    .First();
+
+                Assert.That(ClassTypeReference.GetClassGUID(genericType), Is.EqualTo(string.Empty));
+            }
+
+            [Test]
+            public void When_one_asset_is_found_by_type_name_returns_its_GUID()
+            {
+                // I found no easy way to test this. Perhaps, someone can help.
+            }
+
+            private class GenericClass<T> { }
         }
 
         internal class ToStringMethod
