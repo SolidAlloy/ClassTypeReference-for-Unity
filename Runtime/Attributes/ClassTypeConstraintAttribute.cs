@@ -36,8 +36,14 @@ namespace TypeReferences
         /// </summary>
         public bool ExcludeNone { get; set; } = false;
 
+        /// <summary>
+        /// Includes additional types in the drop-down list. Allows to include even value types.
+        /// </summary>
         public Type[] IncludeTypes { get; set; }
 
+        /// <summary>
+        /// Excludes some of the types from the drop-down list.
+        /// </summary>
         public Type[] ExcludeTypes { get; set; }
 
         /// <summary>
