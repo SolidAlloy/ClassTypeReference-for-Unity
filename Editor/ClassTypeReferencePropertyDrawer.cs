@@ -11,7 +11,7 @@ namespace TypeReferences.Editor
     /// </summary>
     [CustomPropertyDrawer(typeof(ClassTypeReference))]
     [CustomPropertyDrawer(typeof(ClassTypeConstraintAttribute), true)]
-    public sealed class ClassTypeReferencePropertyDrawer : PropertyDrawer
+    internal sealed class ClassTypeReferencePropertyDrawer : PropertyDrawer
     {
         public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
         {
