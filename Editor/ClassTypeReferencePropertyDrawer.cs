@@ -40,7 +40,7 @@ namespace TypeReferences.Editor
             var dropDown = new TypeDropDownDrawer(
                 serializedTypeRef.TypeNameAndAssembly,
                 constraints,
-                fieldInfo.DeclaringType);
+                fieldInfo?.DeclaringType);
 
             var fieldDrawer = new TypeFieldDrawer(serializedTypeRef, position, dropDown);
 
