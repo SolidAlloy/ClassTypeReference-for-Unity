@@ -123,6 +123,27 @@ public class ExampleBehaviour : MonoBehaviour
 
 Note that the type can still be null by default or if set through code.
 
+
+
+You can include or exclude certain types from the drop-down list:
+
+```csharp
+using UnityEngine;
+using TypeReferences;
+
+public class ExampleBehaviour: MonoBehaviour
+{
+    [ClassExtends(
+        typeof(MonoBehaviour),
+        IncludeTypes = new[] { typeof(ScriptableObject) },
+        ExcludeTypes = new[] { typeof(ExampleBehaviour), typeof(BadBehaviour) },
+    )]
+    public ClassTypeReference mostlyMonoBehaviourType;
+}
+```
+
+
+
 Contribution Agreement
 ----------------------
 

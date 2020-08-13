@@ -13,7 +13,7 @@
     {
         public static IEnumerable<Assembly> GetAssembliesTypeHasAccessTo(Type type)
         {
-            var typeAssembly = type.Assembly;
+            var typeAssembly = type == null ? Assembly.Load("Assembly-CSharp") : type.Assembly;
             var assemblies = new List<Assembly> { typeAssembly };
 
             assemblies.AddRange(

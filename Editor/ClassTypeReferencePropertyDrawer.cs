@@ -11,7 +11,7 @@ namespace TypeReferences.Editor
     /// </summary>
     [CustomPropertyDrawer(typeof(ClassTypeReference))]
     [CustomPropertyDrawer(typeof(ClassTypeConstraintAttribute), true)]
-    public sealed class ClassTypeReferencePropertyDrawer : PropertyDrawer
+    internal sealed class ClassTypeReferencePropertyDrawer : PropertyDrawer
     {
         public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
         {
@@ -20,16 +20,17 @@ namespace TypeReferences.Editor
 
         public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
         {
-            position = MovePositionToLabelIfPossible(position, label);
+            position = ExcludeLabelFromPositionIfNecessary(position, label);
             DrawTypeReferenceField(position, property);
         }
 
-        private static Rect MovePositionToLabelIfPossible(Rect position, GUIContent label)
+        private static Rect ExcludeLabelFromPositionIfNecessary(Rect position, GUIContent label)
         {
-            if (label != null && label != GUIContent.none)
-                position = EditorGUI.PrefixLabel(position, label);
+            if (label == null || label == GUIContent.none)
+                return position;
 
-            return position;
+            var positionExcludingLabel = EditorGUI.PrefixLabel(position, label);
+            return positionExcludingLabel;
         }
 
         private void DrawTypeReferenceField(Rect position, SerializedProperty property)
@@ -40,7 +41,7 @@ namespace TypeReferences.Editor
             var dropDown = new TypeDropDownDrawer(
                 serializedTypeRef.TypeNameAndAssembly,
                 constraints,
-                fieldInfo.DeclaringType);
+                fieldInfo?.DeclaringType);
 
             var fieldDrawer = new TypeFieldDrawer(serializedTypeRef, position, dropDown);
 
