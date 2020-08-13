@@ -20,11 +20,12 @@ namespace TypeReferences.Editor
 
         public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
         {
-            position = MovePositionToLabelIfPossible(position, label);
+
+            position = ExcludeLabelFromPositionIfNecessary(position, label);
             DrawTypeReferenceField(position, property);
         }
 
-        private static Rect MovePositionToLabelIfPossible(Rect position, GUIContent label)
+        private static Rect ExcludeLabelFromPositionIfNecessary(Rect position, GUIContent label)
         {
             if (label != null && label != GUIContent.none)
                 position = EditorGUI.PrefixLabel(position, label);
