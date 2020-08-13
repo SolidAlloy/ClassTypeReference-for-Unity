@@ -55,6 +55,7 @@
             var types = GetFilteredTypes();
 
             AddIncludedTypes(types);
+            RemoveExcludedTypes(types);
 
             foreach (var nameTypePair in types)
             {
@@ -83,7 +84,25 @@
                 return;
 
             foreach (var typeToInclude in _constraints?.IncludeTypes)
-                types.Add(typeToInclude.FullName ?? string.Empty, typeToInclude);
+            {
+                if (typeToInclude != null)
+                    types.Add(typeToInclude.FullName ?? string.Empty, typeToInclude);
+            }
+        }
+
+        private void RemoveExcludedTypes(IDictionary<string, Type> types)
+        {
+            var typesToExclude = _constraints?.ExcludeTypes;
+            if (typesToExclude == null)
+                return;
+
+            foreach (var typeToExclude in _constraints?.ExcludeTypes)
+            {
+                if (typeToExclude == null || string.IsNullOrEmpty(typeToExclude.FullName))
+                    continue;
+
+                types.Remove(typeToExclude.FullName);
+            }
         }
 
         private void AddLabelIfNotEmpty(string menuLabel, Type type)
