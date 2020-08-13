@@ -36,6 +36,8 @@ namespace TypeReferences
         /// </summary>
         public bool ExcludeNone { get; set; } = false;
 
+        public Type[] IncludeTypes { get; set; }
+
         /// <summary>
         /// Determines whether the specified <see cref="Type"/> satisfies filter constraint.
         /// </summary>

@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
     using UnityEditor;
     using UnityEngine;
 
@@ -29,19 +30,14 @@
             AddNoneElementIfNotExcluded();
 
             var classGrouping = _constraints?.Grouping ?? ClassTypeConstraintAttribute.DefaultGrouping;
-
-            foreach (var type in GetFilteredTypes())
-            {
-                var menuLabel = TypeNameFormatter.Format(type, classGrouping);
-                AddLabelIfNotEmpty(menuLabel, type);
-            }
+            AddTypes(classGrouping);
 
             _menu.DropDown(position);
         }
 
         private void AddNoneElementIfNotExcluded()
         {
-            var excludeNone = _constraints?.ExcludeNone ?? false;
+            bool excludeNone = _constraints?.ExcludeNone ?? false;
             if (excludeNone)
                 return;
 
@@ -54,7 +50,20 @@
             _menu.AddSeparator(string.Empty);
         }
 
-        private IEnumerable<Type> GetFilteredTypes()
+        private void AddTypes(ClassGrouping classGrouping)
+        {
+            var types = GetFilteredTypes();
+
+            AddIncludedTypes(types);
+
+            foreach (var nameTypePair in types)
+            {
+                string menuLabel = TypeNameFormatter.Format(nameTypePair.Value, classGrouping);
+                AddLabelIfNotEmpty(menuLabel, nameTypePair.Value);
+            }
+        }
+
+        private SortedList<string, Type> GetFilteredTypes()
         {
             var typeRelatedAssemblies = TypeCollector.GetAssembliesTypeHasAccessTo(_declaringType);
 
@@ -62,9 +71,19 @@
                 typeRelatedAssemblies,
                 _constraints);
 
-            filteredTypes.Sort((a, b) => a.FullName.CompareTo(b.FullName));
+            var sortedTypes = new SortedList<string, Type>(filteredTypes.ToDictionary(type => type.FullName));
 
-            return filteredTypes;
+            return sortedTypes;
+        }
+
+        private void AddIncludedTypes(IDictionary<string, Type> types)
+        {
+            var typesToInclude = _constraints?.IncludeTypes;
+            if (typesToInclude == null)
+                return;
+
+            foreach (var typeToInclude in _constraints?.IncludeTypes)
+                types.Add(typeToInclude.FullName ?? string.Empty, typeToInclude);
         }
 
         private void AddLabelIfNotEmpty(string menuLabel, Type type)

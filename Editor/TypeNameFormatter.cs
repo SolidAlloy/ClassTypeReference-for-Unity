@@ -7,7 +7,7 @@
     {
         public static string Format(Type type, ClassGrouping grouping)
         {
-            var name = type.FullName ?? string.Empty;
+            string name = type.FullName ?? string.Empty;
 
             switch (grouping)
             {
@@ -32,7 +32,7 @@
 
         private static string FormatByNamespaceFlat(string name)
         {
-            var lastPeriodIndex = name.LastIndexOf('.');
+            int lastPeriodIndex = name.LastIndexOf('.');
             if (lastPeriodIndex != -1)
                 name = name.Substring(0, lastPeriodIndex) + "/" + name.Substring(lastPeriodIndex + 1);
 
