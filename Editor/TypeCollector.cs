@@ -9,7 +9,7 @@
     /// <summary>
     /// A class responsible for collecting class types according to given filters and conditions.
     /// </summary>
-    internal static class TypeCollector
+    public static class TypeCollector
     {
         public static IEnumerable<Assembly> GetAssembliesTypeHasAccessTo(Type type)
         {
@@ -35,21 +35,33 @@
             return types;
         }
 
+        public static List<Type> GetVisibleTypesFromAssemblies(IEnumerable<Assembly> assemblies)
+        {
+            var types = new List<Type>();
+
+            foreach (var assembly in assemblies)
+            {
+                types.AddRange(GetVisibleTypesFromAssembly(assembly));
+            }
+
+            return types;
+        }
+
         private static IEnumerable<Type> GetFilteredTypesFromAssembly(
             Assembly assembly,
             ClassTypeConstraintAttribute filter)
         {
-            return from type in GetTypesFromAssembly(assembly)
+            return from type in GetVisibleTypesFromAssembly(assembly)
                 where type.IsVisible && type.IsClass
                 where FilterConstraintIsSatisfied(filter, type)
                 select type;
         }
 
-        private static Type[] GetTypesFromAssembly(Assembly assembly)
+        private static IEnumerable<Type> GetVisibleTypesFromAssembly(Assembly assembly)
         {
             try
             {
-                return assembly.GetTypes();
+                return assembly.GetTypes().Where(type => type.IsVisible);
             }
             catch (ReflectionTypeLoadException e)
             {
