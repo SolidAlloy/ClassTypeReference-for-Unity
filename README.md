@@ -106,9 +106,7 @@ public class ExampleBehaviour : MonoBehaviour
 }
 ```
 
-
-
-
+&nbsp;  
 
 You can exclude **(None)** so that no one can choose it from the dropdown. Use it with any of the attributes like this:
 
@@ -125,9 +123,7 @@ public class ExampleBehaviour : MonoBehaviour
 
 Note that the type can still be null by default or if set through code.
 
-
-
-
+&nbsp;  
 
 You can include or exclude certain types from the drop-down list:
 
@@ -146,9 +142,7 @@ public class ExampleBehaviour: MonoBehaviour
 }
 ```
 
-
-
-
+&nbsp;  
 
 When you use ClassExtends, the parent type is not included in the search by default. To include it, use the IncludeBaseType option:
 
@@ -157,9 +151,7 @@ When you use ClassExtends, the parent type is not included in the search by defa
 public ClassTypeReference parentAndDerivedClasses;
 ```
 
-
-
-
+&nbsp;  
 
 > **Why the type I want to reference is not shown in the dropdown?**
 
@@ -173,7 +165,7 @@ public class ExampleBehaviour: MonoBehaviour
 }
 ```
 
-
+&nbsp;  
 
 Contribution Agreement
 ----------------------
