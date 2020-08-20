@@ -108,6 +108,8 @@ public class ExampleBehaviour : MonoBehaviour
 
 
 
+
+
 You can exclude **(None)** so that no one can choose it from the dropdown. Use it with any of the attributes like this:
 
 ```csharp
@@ -122,6 +124,8 @@ public class ExampleBehaviour : MonoBehaviour
 ```
 
 Note that the type can still be null by default or if set through code.
+
+
 
 
 
@@ -144,11 +148,22 @@ public class ExampleBehaviour: MonoBehaviour
 
 
 
+
+
+When you use ClassExtends, the parent type is not included in the search by default. To include it, use the IncludeBaseType option:
+
+```csharp
+[ClassExtends(typeof(ParentClass), IncludeBaseType = true)]
+public ClassTypeReference parentAndDerivedClasses;
+```
+
+
+
+
+
 > **Why the type I want to reference is not shown in the dropdown?**
 
 By default, only the types the class can reference directly are included in the drop-down list. For example, if the type you want to reference is located in TestAssembly.dll, but the assembly your class is located in does not have a reference to TestAssembly, types from TestAssembly will not be available in the drop-down list just like they are not possible to reference directly in your class. The best solution here will be to change your architecture so that the class with the ClassTypeReference field has access to the types you want to reference. However, if you really want to break encapsulation or just test out some things, there is an option to include assemblies your class does not have access to - *IncludeAdditionalAssemblies*. Use it like this:
-
-
 
 ```csharp
 public class ExampleBehaviour: MonoBehaviour
