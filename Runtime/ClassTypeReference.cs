@@ -4,8 +4,12 @@
 namespace TypeReferences
 {
     using System;
-    using UnityEditor;
     using UnityEngine;
+
+#if UNITY_EDITOR
+    using UnityEditor;
+#endif
+
 
     /// <summary>
     /// Reference to a class <see cref="System.Type"/> with support for Unity serialization.
@@ -103,8 +107,12 @@ namespace TypeReferences
             if (type == null || type.FullName == null)
                 return string.Empty;
 
+#if UNITY_EDITOR
             var guids = AssetDatabase.FindAssets(type.FullName);
             return guids.Length == 1 ? guids[0] : string.Empty;
+#else
+            return string.Empty;
+#endif
         }
 
         public override string ToString()
