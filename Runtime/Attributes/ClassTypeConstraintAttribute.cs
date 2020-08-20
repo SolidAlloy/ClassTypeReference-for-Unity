@@ -47,6 +47,12 @@ namespace TypeReferences
         public Type[] ExcludeTypes { get; set; }
 
         /// <summary>
+        /// Adds types from additional assemblies to the drop-down list.
+        /// By default, only types that can be accessed directly by the class are shown in the list.
+        /// </summary>
+        public string[] AddAssembliesToSearch { get; set; }
+
+        /// <summary>
         /// Determines whether the specified <see cref="Type"/> satisfies filter constraint.
         /// </summary>
         /// <param name="type">Type to test.</param>

@@ -3,6 +3,7 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using System.Reflection;
     using UnityEditor;
     using UnityEngine;
 
@@ -68,6 +69,9 @@
         {
             var typeRelatedAssemblies = TypeCollector.GetAssembliesTypeHasAccessTo(_declaringType);
 
+            if (_constraints.AddAssembliesToSearch != null)
+                AddAdditionalAssemblies(typeRelatedAssemblies);
+
             var filteredTypes = TypeCollector.GetFilteredTypesFromAssemblies(
                 typeRelatedAssemblies,
                 _constraints);
@@ -112,6 +116,19 @@
 
             var content = new GUIContent(menuLabel);
             _menu.AddItem(content, _selectedType == type, CachedTypeReference.SelectedTypeName, type);
+        }
+
+        private void AddAdditionalAssemblies(ICollection<Assembly> typeRelatedAssemblies)
+        {
+            foreach (string assemblyName in _constraints.AddAssembliesToSearch)
+            {
+                var additionalAssembly = TypeCollector.TryLoadAssembly(assemblyName);
+                if (additionalAssembly == null)
+                    continue;
+
+                if ( ! typeRelatedAssemblies.Contains(additionalAssembly))
+                    typeRelatedAssemblies.Add(additionalAssembly);
+            }
         }
     }
 }
