@@ -69,8 +69,8 @@
         {
             var typeRelatedAssemblies = TypeCollector.GetAssembliesTypeHasAccessTo(_declaringType);
 
-            if (_constraints.AddAssembliesToSearch != null)
-                AddAdditionalAssemblies(typeRelatedAssemblies);
+            if (_constraints.IncludeAdditionalAssemblies != null)
+                IncludeAdditionalAssemblies(typeRelatedAssemblies);
 
             var filteredTypes = TypeCollector.GetFilteredTypesFromAssemblies(
                 typeRelatedAssemblies,
@@ -118,9 +118,9 @@
             _menu.AddItem(content, _selectedType == type, CachedTypeReference.SelectedTypeName, type);
         }
 
-        private void AddAdditionalAssemblies(ICollection<Assembly> typeRelatedAssemblies)
+        private void IncludeAdditionalAssemblies(ICollection<Assembly> typeRelatedAssemblies)
         {
-            foreach (string assemblyName in _constraints.AddAssembliesToSearch)
+            foreach (string assemblyName in _constraints.IncludeAdditionalAssemblies)
             {
                 var additionalAssembly = TypeCollector.TryLoadAssembly(assemblyName);
                 if (additionalAssembly == null)
