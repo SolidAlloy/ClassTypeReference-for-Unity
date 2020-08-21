@@ -28,8 +28,7 @@
         /// </summary>
         public bool IncludeBaseType { get; set; }
 
-        /// <inheritdoc/>
-        public override bool IsConstraintSatisfied(Type type)
+        private bool TypeExtendsBaseType(Type type)
         {
             if (type == BaseType && ! IncludeBaseType)
                 return false;
@@ -41,6 +40,21 @@
                 return true;
 
             return BaseType.IsAssignableFrom(type) && base.IsConstraintSatisfied(type);
+        }
+
+        /// <inheritdoc/>
+        public override bool IsConstraintSatisfied(Type type)
+        {
+            // Some people mistakenly use ClassExtends(typeof(InterfaceType)) instead of ClassImplements.
+            // ClassExtends allows them to do that to lower the number of errors they get by using the attribute.
+            if (type.IsInterface)
+            {
+                return base.IsConstraintSatisfied(type) && TypeImplementsInterface(type, BaseType);
+            }
+            else
+            {
+                return TypeExtendsBaseType(type);
+            }
         }
     }
 }

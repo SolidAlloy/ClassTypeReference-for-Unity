@@ -4,6 +4,7 @@
 namespace TypeReferences
 {
     using System;
+    using System.Linq;
     using UnityEngine;
 
     /// <summary>
@@ -63,6 +64,14 @@ namespace TypeReferences
         public virtual bool IsConstraintSatisfied(Type type)
         {
             return AllowAbstract || !type.IsAbstract;
+        }
+
+        protected static bool TypeImplementsInterface(Type type, Type interfaceType)
+        {
+            bool specifiedTypeIsInCollection = type.GetInterfaces()
+                .Any(typeInCollection => typeInCollection == interfaceType);
+
+            return specifiedTypeIsInCollection;
         }
     }
 }
