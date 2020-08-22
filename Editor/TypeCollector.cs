@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.IO;
     using System.Linq;
     using System.Reflection;
     using UnityEngine;
@@ -11,7 +12,7 @@
     /// </summary>
     public static class TypeCollector
     {
-        public static IEnumerable<Assembly> GetAssembliesTypeHasAccessTo(Type type)
+        public static List<Assembly> GetAssembliesTypeHasAccessTo(Type type)
         {
             var typeAssembly = type == null ? Assembly.Load("Assembly-CSharp") : type.Assembly;
             var assemblies = new List<Assembly> { typeAssembly };
@@ -45,6 +46,33 @@
             }
 
             return types;
+        }
+
+        public static Assembly TryLoadAssembly(string assemblyName)
+        {
+            if (string.IsNullOrEmpty(assemblyName))
+                return null;
+
+            Assembly assembly = null;
+
+            try
+            {
+                assembly = Assembly.Load(assemblyName);
+            }
+            catch (FileNotFoundException)
+            {
+                Debug.LogError($"{assemblyName} was not found. It will not be added to dropdown.");
+            }
+            catch (FileLoadException)
+            {
+                Debug.LogError($"Failed to load {assemblyName}. It will not be added to dropdown.");
+            }
+            catch (BadImageFormatException)
+            {
+                Debug.LogError($"{assemblyName} is not a valid assembly. It will not be added to dropdown.");
+            }
+
+            return assembly;
         }
 
         private static IEnumerable<Type> GetFilteredTypesFromAssembly(

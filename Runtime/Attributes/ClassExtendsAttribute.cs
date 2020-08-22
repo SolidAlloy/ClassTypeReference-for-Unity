@@ -23,11 +23,38 @@
         /// </summary>
         public Type BaseType { get; private set; }
 
+        /// <summary>
+        /// Allows to choose the base type from the drop-down as well.
+        /// </summary>
+        public bool IncludeBaseType { get; set; }
+
+        private bool TypeExtendsBaseType(Type type)
+        {
+            if (type == BaseType && ! IncludeBaseType)
+                return false;
+
+            // Include base type in the drop-down even if it is abstract.
+            // If the user set IncludeBaseType to true, they probably want to include the base type in the dropdown
+            // even though it is abstract.
+            if (type == BaseType)
+                return true;
+
+            return BaseType.IsAssignableFrom(type) && base.IsConstraintSatisfied(type);
+        }
+
         /// <inheritdoc/>
         public override bool IsConstraintSatisfied(Type type)
         {
-            return base.IsConstraintSatisfied(type)
-                   && BaseType.IsAssignableFrom(type) && type != BaseType;
+            // Some people mistakenly use ClassExtends(typeof(InterfaceType)) instead of ClassImplements.
+            // ClassExtends allows them to do that to lower the number of errors they get by using the attribute.
+            if (type.IsInterface)
+            {
+                return base.IsConstraintSatisfied(type) && TypeImplementsInterface(type, BaseType);
+            }
+            else
+            {
+                return TypeExtendsBaseType(type);
+            }
         }
     }
 }

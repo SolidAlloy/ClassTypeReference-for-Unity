@@ -4,6 +4,7 @@
 namespace TypeReferences
 {
     using System;
+    using System.Linq;
     using UnityEngine;
 
     /// <summary>
@@ -47,6 +48,12 @@ namespace TypeReferences
         public Type[] ExcludeTypes { get; set; }
 
         /// <summary>
+        /// Adds types from additional assemblies to the drop-down list.
+        /// By default, only types that can be accessed directly by the class are shown in the list.
+        /// </summary>
+        public string[] IncludeAdditionalAssemblies { get; set; }
+
+        /// <summary>
         /// Determines whether the specified <see cref="Type"/> satisfies filter constraint.
         /// </summary>
         /// <param name="type">Type to test.</param>
@@ -57,6 +64,14 @@ namespace TypeReferences
         public virtual bool IsConstraintSatisfied(Type type)
         {
             return AllowAbstract || !type.IsAbstract;
+        }
+
+        protected static bool TypeImplementsInterface(Type type, Type interfaceType)
+        {
+            bool specifiedTypeIsInCollection = type.GetInterfaces()
+                .Any(typeInCollection => typeInCollection == interfaceType);
+
+            return specifiedTypeIsInCollection;
         }
     }
 }
