@@ -1,4 +1,4 @@
-﻿namespace TypeReferences.Editor.Deprecated
+﻿namespace TypeReferences.Deprecated.Editor.Deprecated
 {
     using System;
     using TypeReferences.Deprecated;

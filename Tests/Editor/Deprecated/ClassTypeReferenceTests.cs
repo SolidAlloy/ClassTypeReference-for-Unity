@@ -1,4 +1,4 @@
-﻿namespace TypeReferences.Tests.Editor.Deprecated
+﻿namespace TypeReferences.Deprecated.Tests.Editor.Deprecated
 {
     using System;
     using System.Linq;

@@ -27,7 +27,10 @@
         /// <inheritdoc/>
         public override bool IsConstraintSatisfied(Type type)
         {
-            return base.IsConstraintSatisfied(type) && TypeImplementsInterface(type, InterfaceType);
+            bool typeImplementsInterface = type.GetInterfaces()
+                .Any(typeInCollection => typeInCollection == InterfaceType);
+
+            return base.IsConstraintSatisfied(type) && typeImplementsInterface;
         }
     }
 }
