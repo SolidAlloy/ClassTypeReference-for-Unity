@@ -1,6 +1,7 @@
-﻿namespace TypeReferences.Editor
+﻿namespace TypeReferences.Editor.Deprecated
 {
     using System;
+    using TypeReferences.Deprecated;
     using UnityEditor;
     using UnityEngine;
 

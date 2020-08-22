@@ -1,6 +1,7 @@
-﻿namespace TypeReferences.Editor
+﻿namespace TypeReferences.Editor.Deprecated
 {
     using System;
+    using TypeReferences.Deprecated;
     using UnityEngine;
 
     internal static class TypeNameFormatter

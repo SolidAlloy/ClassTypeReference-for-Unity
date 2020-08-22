@@ -1,4 +1,4 @@
-﻿namespace TypeReferences
+﻿namespace TypeReferences.Deprecated
 {
     using System;
 
