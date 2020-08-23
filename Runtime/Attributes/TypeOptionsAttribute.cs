@@ -9,7 +9,7 @@
     /// a <see cref="TypeReference"/> with the Unity inspector.
     /// </summary>
     [AttributeUsage(AttributeTargets.Field)]
-    public class TypeFilterAttribute : PropertyAttribute
+    public class TypeOptionsAttribute : PropertyAttribute
     {
         /// <summary>
         /// Default grouping of selectable types.
@@ -55,6 +55,9 @@
         /// </returns>
         public virtual bool MatchesRequirements(Type type)
         {
+            if (ExcludeTypes == null)
+                return true;
+
             return ! ExcludeTypes.Contains(type);
         }
     }

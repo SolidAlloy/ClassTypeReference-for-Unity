@@ -7,7 +7,7 @@
     /// selecting a <see cref="TypeReference"/> with the Unity inspector.
     /// </summary>
     [AttributeUsage(AttributeTargets.Field)]
-    public class InheritsAttribute : TypeFilterAttribute
+    public class InheritsAttribute : TypeOptionsAttribute
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="InheritsAttribute"/> class.

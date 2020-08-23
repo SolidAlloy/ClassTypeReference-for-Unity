@@ -1,4 +1,4 @@
-﻿namespace TypeReferences.Deprecated.Editor
+﻿namespace TypeReferences.Editor
 {
     using System;
     using TypeReferences.Deprecated;
@@ -8,15 +8,15 @@
     /// <summary>
     /// A class that gives access to serialized properties inside ClassTypeReference.
     /// </summary>
-    internal class SerializedClassTypeReference
+    internal class SerializedTypeReference
     {
         private readonly SerializedProperty _typeNameProperty;
         private readonly SerializedProperty _guidProperty;
 
-        public SerializedClassTypeReference(SerializedProperty classTypeReferenceProperty)
+        public SerializedTypeReference(SerializedProperty typeReferenceProperty)
         {
-            _typeNameProperty = classTypeReferenceProperty.FindPropertyRelative(ClassTypeReference.NameOfTypeNameField);
-            _guidProperty = classTypeReferenceProperty.FindPropertyRelative(ClassTypeReference.NameOfGuidField);
+            _typeNameProperty = typeReferenceProperty.FindPropertyRelative(TypeReference.NameOfTypeNameField);
+            _guidProperty = typeReferenceProperty.FindPropertyRelative(TypeReference.NameOfGuidField);
         }
 
         public string TypeNameAndAssembly
@@ -47,7 +47,7 @@
 
             Type type = script.GetClass();
             var previousValue = _typeNameProperty.stringValue;
-            _typeNameProperty.stringValue = ClassTypeReference.GetTypeNameAndAssembly(type);
+            _typeNameProperty.stringValue = TypeReference.GetTypeNameAndAssembly(type);
             Debug.LogFormat(
                 "Type reference has been updated from '{0}' to '{1}'.",
                 previousValue,

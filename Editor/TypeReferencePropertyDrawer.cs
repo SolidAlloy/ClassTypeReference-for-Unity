@@ -1,15 +1,15 @@
-namespace TypeReferences.Deprecated.Editor
+namespace TypeReferences.Editor
 {
-    using TypeReferences.Deprecated;
+    using TypeReferences;
     using UnityEditor;
     using UnityEngine;
 
     /// <summary>
-    /// Custom property drawer for <see cref="ClassTypeReference"/> properties.
+    /// Custom property drawer for <see cref="TypeReference"/> properties.
     /// </summary>
-    [CustomPropertyDrawer(typeof(ClassTypeReference))]
-    [CustomPropertyDrawer(typeof(ClassTypeConstraintAttribute), true)]
-    internal sealed class ClassTypeReferencePropertyDrawer : PropertyDrawer
+    [CustomPropertyDrawer(typeof(TypeReference))]
+    [CustomPropertyDrawer(typeof(TypeOptionsAttribute), true)]
+    internal sealed class TypeReferencePropertyDrawer : PropertyDrawer
     {
         public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
         {
@@ -33,8 +33,8 @@ namespace TypeReferences.Deprecated.Editor
 
         private void DrawTypeReferenceField(Rect position, SerializedProperty property)
         {
-            var constraints = attribute as ClassTypeConstraintAttribute;
-            var serializedTypeRef = new SerializedClassTypeReference(property);
+            var constraints = attribute as TypeOptionsAttribute;
+            var serializedTypeRef = new SerializedTypeReference(property);
 
             var dropDown = new TypeDropDownDrawer(
                 serializedTypeRef.TypeNameAndAssembly,

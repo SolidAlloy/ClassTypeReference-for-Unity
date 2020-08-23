@@ -1,18 +1,18 @@
-﻿namespace TypeReferences.Deprecated.Editor
+﻿namespace TypeReferences.Editor
 {
     using System;
     using System.Collections.Generic;
-    using TypeReferences.Deprecated;
+    using TypeReferences;
     using UnityEditor;
     using UnityEngine;
 
     /// <summary>
-    /// A class that holds static values related to ClassTypeReference and its custom inspector.
+    /// A class that holds static values related to <see cref="TypeReference"/> and its custom inspector.
     /// </summary>
     internal static class CachedTypeReference
     {
         public const string ReferenceUpdatedCommandName = "TypeReferenceUpdated";
-        public static readonly int ControlHint = typeof(ClassTypeReferencePropertyDrawer).GetHashCode();
+        public static readonly int ControlHint = typeof(TypeReferencePropertyDrawer).GetHashCode();
         public static readonly GUIContent FieldContent = new GUIContent();
         public static readonly GenericMenu.MenuFunction2 SelectedTypeName = OnSelectedTypeName;
         public static int SelectionControlID;
@@ -43,7 +43,7 @@
         {
             var selectedType = userData as Type;
 
-            SelectedTypeNameAndAssembly = ClassTypeReference.GetTypeNameAndAssembly(selectedType);
+            SelectedTypeNameAndAssembly = TypeReference.GetTypeNameAndAssembly(selectedType);
             Event typeReferenceUpdated = EditorGUIUtility.CommandEvent(ReferenceUpdatedCommandName);
             EditorWindow.focusedWindow.SendEvent(typeReferenceUpdated);
         }
