@@ -1,7 +1,7 @@
 README
 ======
 
-A class that provides serializable references to `System.Type` of classes with an accompanying custom property drawer which allows class selection from drop-down.
+A class that provides serializable references to `System.Type` with an accompanying custom property drawer which allows class selection from drop-down.
 
 ![screenshot](https://raw.githubusercontent.com/SolidAlloy/ClassTypeReference-for-Unity/master/.screenshot.png)
 
@@ -17,14 +17,164 @@ Project supports Unity Package Manager. To install the project as a Git package 
 2. Press the **+** button, choose "**Add package from git URL...**"
 3. Enter "https://github.com/SolidAlloy/ClassTypeReference-for-Unity.git" and press **Add**.
 
-Usage Examples
+## Simple Usage
+
+Types can be assigned via inspector simply by using `TypeReference`:
+
+```csharp
+using TypeReferences;
+
+public class ExampleBehaviour: MonoBehaviour
+{
+    [SerializeField] private TypeReference greetingLoggerType;
+}
+```
+
+&nbsp;  
+
+Usually, you would want to choose between two or three classes that extend a common parent class or implement certain interface. Use **[Inherits]** attribute for such cases:
+
+```csharp
+using TypeReferences;
+
+public class ExampleBehaviour: MonoBehaviour
+{
+    [Inherits(typeof(IGreetingLogger))]
+    public TypeReference greetingLoggerType;
+    
+    [Inherits(typeof(MonoBehaviour))]
+    public TypeReference onlyMonoBehaviours;
+}
+```
+
+&nbsp;  
+
+TypeReference can be used in place of `System.Type` most of the time:
+
+```csharp
+TypeReference greetingLoggerType = typeof(DefaultGreetingLogger);
+var logger = (IGreetingLogger) System.Activator.CreateInstance(greetingLoggerType);
+logger.LogGreeting();
+```
+
+But if you need to refer to the `System.Type` object directly, use the **Type** property:
+
+```csharp
+bool isLoggerAbstract = greetingLoggerType.Type.IsAbstract;
+```
+
+## TypeOptions Attribute
+
+If you need to customize the look of the drop-down menu or change what types are included in the list, use the `[TypeOptions]` attribute.
+
+Presentation of drop-down list can be customized with the `Grouping` enum:
+
+- **ClassGrouping.None** - No grouping, just show type names in a list; for instance, "Some.Nested.Namespace.SpecialClass".
+
+- **ClassGrouping.ByNamespace** - Group classes by namespace and show foldout menus for nested namespaces; for instance, "Some > Nested > Namespace > SpecialClass".
+
+- **ClassGrouping.ByNamespaceFlat** ***(default)*** - Group classes by namespace; for instance, "Some.Nested.Namespace > SpecialClass".
+
+- **ClassGrouping.ByAddComponentMenu** - Group classes in the same way as Unity does for its component menu. This grouping method must only be used for `MonoBehaviour` types.
+
+For instance,
+
+  ```csharp
+[TypeOptions(Grouping = ClassGrouping.ByAddComponentMenu)]
+public TypeReference greetingLoggerType;
+  ```
+
+  &nbsp;  
+
+There are situations when you need to include a few types in the drop-down menu or exclude some of the listed types. Use `IncludeTypes` and `ExcludeTypes` for this:
+
+```csharp
+[Inherits(typeof(IGreetingLogger), IncludeTypes = new[] { MonoBehaviour })]
+public TypeReference greetingLoggerType;
+
+[TypeOptions(ExcludeTypes = new[] { DebugModeClass, TestClass })]
+public TypeReference productionType;
+```
+
+
+
+You can exclude **(None)** so that no one can choose it from the dropdown.
+
+```csharp
+[TypeOptions(ExcludeNone = true)]
+public TypeReference greetingLogger;
+```
+
+Note that the type can still be null by default or if set through code.
+
+
+
+By default, only the types the class can reference directly are included in the drop-down list.
+
+```csharp
+public class ExampleBehaviour
+{
+    // If this gives an error because it cannot find CustomPlugin type
+    public CustomPlugin plugin;
+    
+    // Then CustomPlugin will not be in the drop-down.
+    public TypeReference pluginType;
+}
+```
+
+You might need to add a reference to the assembly where `CustomPlugin` is located to make it appear in the drop-down menu. However, if it is not possible or you just need to test out some things, there is an option to include assemblies your class does not have access to - `IncludeAdditionalAssemblies`. Use it like this:
+
+```csharp
+[ClassImplements(typeof(IAttribute), IncludeAdditionalAssemblies = new[] { "Assembly-CSharp" })]
+public TypeReference attribute;
+```
+
+## Inherits Attribute
+
+This attribute allows you to choose only from the classes that implement a certain interface or extend a class. It has all the arguments `TypeOptions` provides.
+
+```csharp
+[Inherits(typeof(IGreetingLogger))]
+public TypeReference greetingLoggerType;
+
+[Inherits(typeof(MonoBehaviour))]
+public TypeReference onlyMonoBehaviours;
+
+// All the TypeOptions arguments are available with Inherits too.
+[Inherits(typeof(IGreetingLogger), ExcludeNone = true)]
+public TypeReference greetingLoggerType;
+```
+
+
+
+If you need to have the base type in the drop-down menu too, use `IncludeBaseType`
+
+```csharp
+[Inherits(typeof(MonoBehaviour), IncludeBaseType = true)]
+public TypeReference onlyMonoBehaviours;
+```
+
+
+
+By default, abstract types (abstract classes and interfaces) are not included in the drop-down list. However, you can allow them:
+
+```csharp
+[Inherits(typeof(IGreetingLogger), AllowAbstract = true)]
+public TypeReference greetingLoggerType;
+```
+
+Deprecated Interface
 --------------
+
+**This interface supports only class types. Use it only if you already have `ClassTypeReference` references in the legacy code. The new interface has all the features of the deprecated one and more.**
+
+
 
 Type references can be made using the inspector simply by using `ClassTypeReference`:
 
 ```csharp
 using UnityEngine;
-using TypeReferences;
+using TypeReferences.Deprecated;
 
 public class ExampleBehaviour : MonoBehaviour
 {
@@ -42,7 +192,7 @@ You can apply one of two attributes to drastically reduce the number of types pr
 
 ```csharp
 using UnityEngine;
-using TypeReferences;
+using TypeReferences.Deprecated;
 
 public class ExampleBehaviour : MonoBehaviour
 {
@@ -61,7 +211,7 @@ To create an instance at runtime you can use the `System.Activator` class from t
 ```csharp
 using System;
 using UnityEngine;
-using TypeReferences;
+using TypeReferences.Deprecated;
 
 public class ExampleBehaviour : MonoBehaviour
 {
@@ -97,7 +247,7 @@ For instance,
 
 ```csharp
 using UnityEngine;
-using TypeReferences;
+using TypeReferences.Deprecated;
 
 public class ExampleBehaviour : MonoBehaviour
 {
@@ -112,7 +262,7 @@ You can exclude **(None)** so that no one can choose it from the dropdown. Use i
 
 ```csharp
 using UnityEngine;
-using TypeReferences;
+using TypeReferences.Deprecated;
 
 public class ExampleBehaviour : MonoBehaviour
 {
@@ -129,7 +279,7 @@ You can include or exclude certain types from the drop-down list:
 
 ```csharp
 using UnityEngine;
-using TypeReferences;
+using TypeReferences.Deprecated;
 
 public class ExampleBehaviour: MonoBehaviour
 {
