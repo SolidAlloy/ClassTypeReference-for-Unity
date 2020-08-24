@@ -211,15 +211,16 @@
             [Test]
             public void When_type_is_null_returns_empty_string()
             {
-                Assert.That(TypeReference.GetClassGUID(null), Is.EqualTo(string.Empty));
+                var typeRef = new TypeReference();
+                Assert.That(typeRef.GetClassGUID(null), Is.EqualTo(string.Empty));
             }
 
             [Test]
             public void When_type_full_name_is_null_returns_empty_string()
             {
+                var typeRef = new TypeReference();
                 var genericType = GetGenericType();
-
-                Assert.That(TypeReference.GetClassGUID(genericType), Is.EqualTo(string.Empty));
+                Assert.That(typeRef.GetClassGUID(genericType), Is.EqualTo(string.Empty));
             }
 
             [Test]

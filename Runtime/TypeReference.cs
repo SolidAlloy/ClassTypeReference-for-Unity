@@ -21,6 +21,8 @@
         public const string NameOfTypeNameField = nameof(_typeNameAndAssembly);
         public const string NameOfGuidField = nameof(_GUID);
 
+        public bool GuidAssignmentFailed;
+
         [SerializeField] private string _typeNameAndAssembly;
         [SerializeField] private string _GUID;
         private Type _type;
@@ -101,13 +103,25 @@
         /// </summary>
         /// <param name="type">Type of the class to search for.</param>
         /// <returns>String representing the GUID of the file, or empty string if no file found.</returns>
-        public static string GetClassGUID(Type type)
+        public string GetClassGUID(Type type)
         {
             if (type == null || type.FullName == null)
                 return string.Empty;
 
+            string[] guids;
+
 #if UNITY_EDITOR
-            var guids = AssetDatabase.FindAssets(type.FullName);
+            try
+            {
+                guids = AssetDatabase.FindAssets(type.FullName);
+            }
+            // It is thrown on assembly recompiling if field initialization is used on field.
+            catch (UnityException)
+            {
+                GuidAssignmentFailed = true;
+                return string.Empty;
+            }
+
             return guids.Length == 1 ? guids[0] : string.Empty;
 #else
             return string.Empty;
