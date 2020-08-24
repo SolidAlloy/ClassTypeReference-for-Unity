@@ -17,7 +17,7 @@
         public const Grouping DefaultGrouping = Grouping.ByNamespaceFlat;
 
         /// <summary>
-        /// Gets or sets grouping of selectable types. Defaults to <see cref="Grouping.ByNamespaceFlat"/>
+        /// Gets or sets grouping of selectable types. Defaults to <see><cref>Grouping.ByNamespaceFlat</cref></see>
         /// unless explicitly specified.
         /// </summary>
         public Grouping Grouping { get; set; } = Grouping.ByNamespaceFlat;

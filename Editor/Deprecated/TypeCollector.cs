@@ -5,7 +5,7 @@
     using System.IO;
     using System.Linq;
     using System.Reflection;
-    using TypeReferences.Deprecated;
+    using Deprecated;
     using UnityEngine;
 
     /// <summary>

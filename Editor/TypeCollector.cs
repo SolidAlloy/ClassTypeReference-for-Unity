@@ -80,10 +80,8 @@
             Assembly assembly,
             TypeOptionsAttribute filter)
         {
-            return from type in GetVisibleTypesFromAssembly(assembly)
-                where type.IsVisible && type.IsClass
-                where FilterConstraintIsSatisfied(filter, type)
-                select type;
+            return GetVisibleTypesFromAssembly(assembly)
+                .Where(type => type.IsVisible && FilterConstraintIsSatisfied(filter, type));
         }
 
         private static IEnumerable<Type> GetVisibleTypesFromAssembly(Assembly assembly)

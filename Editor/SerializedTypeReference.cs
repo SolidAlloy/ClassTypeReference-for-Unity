@@ -1,12 +1,12 @@
 ﻿namespace TypeReferences.Editor
 {
     using System;
-    using TypeReferences.Deprecated;
+    using Deprecated;
     using UnityEditor;
     using UnityEngine;
 
     /// <summary>
-    /// A class that gives access to serialized properties inside ClassTypeReference.
+    /// A class that gives access to serialized properties inside <see cref="TypeReference"/>.
     /// </summary>
     internal class SerializedTypeReference
     {

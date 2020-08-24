@@ -4,7 +4,7 @@
     using System.Collections.Generic;
     using System.Linq;
     using System.Reflection;
-    using TypeReferences.Deprecated;
+    using Deprecated;
     using UnityEditor;
     using UnityEngine;
 

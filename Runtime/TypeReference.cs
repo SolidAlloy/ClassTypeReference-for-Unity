@@ -7,7 +7,6 @@
     using UnityEditor;
 #endif
 
-
     /// <summary>
     /// Reference to a class <see cref="System.Type"/> with support for Unity serialization.
     /// </summary>

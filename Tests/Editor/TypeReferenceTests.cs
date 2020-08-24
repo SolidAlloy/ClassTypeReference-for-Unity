@@ -1,4 +1,4 @@
-﻿namespace TypeReferences.Deprecated.Tests.Editor
+﻿namespace TypeReferences.Tests.Editor
 {
     using System;
     using System.Collections.Generic;

@@ -28,9 +28,9 @@
         /// Defaults to a value of <c>false</c> unless explicitly specified.
         /// </summary>
         public bool IncludeBaseType { get; set; } = false;
-        
+
         /// <summary>
-        /// Gets or sets whether abstract classes can be selected from drop-down.
+        /// Allows abstract classes and interfaces to be selected from drop-down.
         /// Defaults to a value of <c>false</c> unless explicitly specified.
         /// </summary>
         public bool AllowAbstract { get; set; } = false;
@@ -38,15 +38,17 @@
         /// <inheritdoc/>
         public override bool MatchesRequirements(Type type)
         {
-            if (type == BaseType && ! IncludeBaseType)
+            if (type == BaseType && !IncludeBaseType)
+            {
                 return false;
-            
+            }
+
             // Include base type in the drop-down even if it is abstract.
             // If the user set IncludeBaseType to true, they probably want to include the base type in the dropdown
             // even though it is abstract.
             if (type == BaseType)
                 return true;
-            
+
             bool passesAbstractConstraint = AllowAbstract || !type.IsAbstract;
 
             return BaseType.IsAssignableFrom(type) && passesAbstractConstraint && base.MatchesRequirements(type);

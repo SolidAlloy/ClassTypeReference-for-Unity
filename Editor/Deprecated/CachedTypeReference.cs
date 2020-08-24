@@ -2,7 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
-    using TypeReferences.Deprecated;
+    using Deprecated;
     using UnityEditor;
     using UnityEngine;
 

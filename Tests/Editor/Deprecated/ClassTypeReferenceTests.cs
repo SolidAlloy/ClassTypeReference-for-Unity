@@ -1,9 +1,9 @@
-﻿namespace TypeReferences.Deprecated.Tests.Editor.Deprecated
+﻿namespace TypeReferences.Deprecated.Tests.Editor
 {
     using System;
     using System.Linq;
+    using Deprecated;
     using NUnit.Framework;
-    using TypeReferences.Deprecated;
 
     internal class ClassTypeReferenceTests
     {
