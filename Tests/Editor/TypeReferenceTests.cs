@@ -206,30 +206,6 @@
             }
         }
 
-        internal class TheGetClassGuidMethod
-        {
-            [Test]
-            public void When_type_is_null_returns_empty_string()
-            {
-                var typeRef = new TypeReference();
-                Assert.That(typeRef.GetClassGUID(null), Is.EqualTo(string.Empty));
-            }
-
-            [Test]
-            public void When_type_full_name_is_null_returns_empty_string()
-            {
-                var typeRef = new TypeReference();
-                var genericType = GetGenericType();
-                Assert.That(typeRef.GetClassGUID(genericType), Is.EqualTo(string.Empty));
-            }
-
-            [Test]
-            public void When_one_asset_is_found_by_type_name_returns_its_GUID()
-            {
-                // I found no easy way to test this. Perhaps, someone can help.
-            }
-        }
-
         internal class ToStringMethod
         {
             [Test]

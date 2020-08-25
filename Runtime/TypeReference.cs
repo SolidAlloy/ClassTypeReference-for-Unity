@@ -73,7 +73,7 @@
 
                 _type = value;
                 _typeNameAndAssembly = GetTypeNameAndAssembly(value);
-                _GUID = GetClassGUID(value);
+                SetClassGuidIfExists(value);
             }
         }
 
@@ -103,25 +103,29 @@
         /// </summary>
         /// <param name="type">Type of the class to search for.</param>
         /// <returns>String representing the GUID of the file, or empty string if no file found.</returns>
-        public string GetClassGUID(Type type)
+        private void SetClassGuidIfExists(Type type)
         {
-            if (type == null || type.FullName == null)
-                return string.Empty;
-
-            string[] guids;
-
-#if UNITY_EDITOR
             try
             {
-                guids = AssetDatabase.FindAssets(type.FullName);
+                _GUID = GetClassGUID(type);
             }
             // It is thrown on assembly recompiling if field initialization is used on field.
             catch (UnityException)
             {
                 GuidAssignmentFailed = true;
-                return string.Empty;
+                _GUID = string.Empty;
             }
+        }
 
+        public static string GetClassGUID(Type type)
+        {
+            if (type == null || type.FullName == null)
+                return string.Empty;
+
+#if UNITY_EDITOR
+            var guids = AssetDatabase.FindAssets(type.FullName);
+            Debug.Log($"guids: {guids.Length}");
+            Debug.Log($"full name: {type.FullName}");
             return guids.Length == 1 ? guids[0] : string.Empty;
 #else
             return string.Empty;
