@@ -124,8 +124,6 @@
 
 #if UNITY_EDITOR
             var guids = AssetDatabase.FindAssets(type.FullName);
-            Debug.Log($"guids: {guids.Length}");
-            Debug.Log($"full name: {type.FullName}");
             return guids.Length == 1 ? guids[0] : string.Empty;
 #else
             return string.Empty;

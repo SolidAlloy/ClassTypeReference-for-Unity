@@ -24,18 +24,6 @@
             SetGuidIfAssignmentFailed();
         }
 
-        private void SetGuidIfAssignmentFailed()
-        {
-            if ( ! GuidAssignmentFailed || string.IsNullOrEmpty(TypeNameAndAssembly))
-                return;
-
-            GuidAssignmentFailed = false;
-            var type = Type.GetType(TypeNameAndAssembly);
-            Debug.Log($"type: {type}");
-            GUID = TypeReference.GetClassGUID(type);
-            Debug.Log($"guid: {GUID}");
-        }
-
         public string TypeNameAndAssembly
         {
             get => _typeNameProperty.stringValue;
@@ -60,6 +48,15 @@
 
         public bool TypeNameHasMultipleDifferentValues => _typeNameProperty.hasMultipleDifferentValues;
 
+        private void SetGuidIfAssignmentFailed()
+        {
+            if ( ! GuidAssignmentFailed || string.IsNullOrEmpty(TypeNameAndAssembly))
+                return;
+
+            GuidAssignmentFailed = false;
+            GUID = GetClassGuidFromTypeName(TypeNameAndAssembly);
+        }
+
         /// <summary>
         /// Try finding the class type given the GUID of the file where it is located.
         /// If found, change the ClassTypeReference._typeNameAndAssembly value.
@@ -83,7 +80,7 @@
                 TypeNameAndAssembly);
         }
 
-        private static string GetClassGuidFromTypeName(string typeName)
+        private string GetClassGuidFromTypeName(string typeName)
         {
             var type = Type.GetType(typeName);
             return ClassTypeReference.GetClassGUID(type);
