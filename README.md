@@ -1,7 +1,7 @@
 README
 ======
 
-A class that provides serializable references to `System.Type` with an accompanying custom property drawer which allows class selection from drop-down.
+A class that provides serializable references to `System.Type` with an accompanying custom property drawer which allows type selection from drop-down.
 
 ![screenshot](https://raw.githubusercontent.com/SolidAlloy/ClassTypeReference-for-Unity/master/.screenshot.png)
 
@@ -69,18 +69,18 @@ If you need to customize the look of the drop-down menu or change what types are
 
 Presentation of drop-down list can be customized with the `Grouping` enum:
 
-- **ClassGrouping.None** - No grouping, just show type names in a list; for instance, "Some.Nested.Namespace.SpecialClass".
+- **Grouping.None** - No grouping, just show type names in a list; for instance, "Some.Nested.Namespace.SpecialClass".
 
-- **ClassGrouping.ByNamespace** - Group classes by namespace and show foldout menus for nested namespaces; for instance, "Some > Nested > Namespace > SpecialClass".
+- **Grouping.ByNamespace** - Group classes by namespace and show foldout menus for nested namespaces; for instance, "Some > Nested > Namespace > SpecialClass".
 
-- **ClassGrouping.ByNamespaceFlat** ***(default)*** - Group classes by namespace; for instance, "Some.Nested.Namespace > SpecialClass".
+- **Grouping.ByNamespaceFlat** ***(default)*** - Group classes by namespace; for instance, "Some.Nested.Namespace > SpecialClass".
 
-- **ClassGrouping.ByAddComponentMenu** - Group classes in the same way as Unity does for its component menu. This grouping method must only be used for `MonoBehaviour` types.
+- **Grouping.ByAddComponentMenu** - Group classes in the same way as Unity does for its component menu. This grouping method must only be used for `MonoBehaviour` types.
 
 For instance,
 
   ```csharp
-[TypeOptions(Grouping = ClassGrouping.ByAddComponentMenu)]
+[TypeOptions(Grouping = Grouping.ByAddComponentMenu)]
 public TypeReference greetingLoggerType;
   ```
 
@@ -125,7 +125,7 @@ public class ExampleBehaviour
 You might need to add a reference to the assembly where `CustomPlugin` is located to make it appear in the drop-down menu. However, if it is not possible or you just need to test out some things, there is an option to include assemblies your class does not have access to - `IncludeAdditionalAssemblies`. Use it like this:
 
 ```csharp
-[ClassImplements(typeof(IAttribute), IncludeAdditionalAssemblies = new[] { "Assembly-CSharp" })]
+[Inherits(typeof(IAttribute), IncludeAdditionalAssemblies = new[] { "Assembly-CSharp" })]
 public TypeReference attribute;
 ```
 
