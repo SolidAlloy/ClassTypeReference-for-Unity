@@ -70,7 +70,7 @@
         {
             var typeRelatedAssemblies = TypeCollector.GetAssembliesTypeHasAccessTo(_declaringType);
 
-            if (_constraints.IncludeAdditionalAssemblies != null)
+            if (_constraints?.IncludeAdditionalAssemblies != null)
                 IncludeAdditionalAssemblies(typeRelatedAssemblies);
 
             var filteredTypes = TypeCollector.GetFilteredTypesFromAssemblies(
