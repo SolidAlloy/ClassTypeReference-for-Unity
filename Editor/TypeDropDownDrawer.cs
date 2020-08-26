@@ -16,7 +16,7 @@
         private readonly Type _selectedType;
         private readonly TypeOptionsAttribute _constraints;
         private readonly Type _declaringType;
-        private GenericMenu _menu;
+        private LimitedGenericMenu _menu;
 
         public TypeDropDownDrawer(string typeName, TypeOptionsAttribute constraints, Type declaringType)
         {
@@ -27,7 +27,7 @@
 
         public void Draw(Rect position)
         {
-            _menu = new GenericMenu();
+            _menu = new LimitedGenericMenu();
 
             AddNoneElementIfNotExcluded();
 
@@ -49,7 +49,7 @@
                 CachedTypeReference.SelectedTypeName,
                 null);
 
-            _menu.AddSeparator(string.Empty);
+            _menu.AddLineSeparator();
         }
 
         private void AddTypesToMenu(Grouping typeGrouping)
@@ -114,6 +114,45 @@
                 if ( ! typeRelatedAssemblies.Contains(additionalAssembly))
                     typeRelatedAssemblies.Add(additionalAssembly);
             }
+        }
+    }
+
+    internal class LimitedGenericMenu
+    {
+        private readonly GenericMenu _menu;
+        private int _itemCount;
+        private const int ItemLimit = 1000;
+        private bool _itemLimitAlreadyReached;
+
+        public LimitedGenericMenu()
+        {
+            _menu = new GenericMenu();
+        }
+
+        public void DropDown(Rect position)
+        {
+            _menu.DropDown(position);
+        }
+
+        public void AddItem(GUIContent content, bool on, GenericMenu.MenuFunction2 func, object userData)
+        {
+            if (_itemLimitAlreadyReached)
+                return;
+
+            if (_itemCount == ItemLimit)
+            {
+                Debug.LogWarning("Item limit has been reached. Only the first 1000 items are shown in the list.");
+                _itemLimitAlreadyReached = true;
+                return;
+            }
+
+            _menu.AddItem(content, on, func, userData);
+            _itemCount++;
+        }
+
+        public void AddLineSeparator()
+        {
+            _menu.AddSeparator(string.Empty);
         }
     }
 }
