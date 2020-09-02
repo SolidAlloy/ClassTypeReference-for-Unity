@@ -17,9 +17,9 @@
   },
   "samples": [
    {
-     "displayName": "Demo",
-     "description": "Demo scene with a MonoBehaviour that has a class types drop-down in Inspector.",
-     "path": "Samples~/Demo"
+     "displayName": "Usage Examples",
+     "description": "A scene that shows how to use different attributes and how they look in the Inspector.",
+     "path": "Samples~/Usage Examples"
    }
  ]
 }

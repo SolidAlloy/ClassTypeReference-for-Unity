@@ -1,7 +1,4 @@
-﻿// Copyright ClassTypeReference Contributors. All rights reserved.
-// Licensed under the MIT license. See LICENSE file in the project root.
-
-namespace Example
+﻿namespace TypeReferences.Demo.Utils
 {
     using UnityEngine;
 
@@ -24,5 +21,15 @@ namespace Example
         {
             Debug.Log("Greetings!");
         }
+    }
+
+    public abstract class AbstractGreetingLogger : IGreetingLogger
+    {
+        public abstract void LogGreeting();
+    }
+
+    public interface ILoggerChildInterface : IGreetingLogger
+    {
+        void AdditionalMethod();
     }
 }

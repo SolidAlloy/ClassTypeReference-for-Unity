@@ -43,7 +43,7 @@ RenderSettings:
 --- !u!157 &4
 LightmapSettings:
   m_ObjectHideFlags: 0
-  serializedVersion: 11
+  serializedVersion: 12
   m_GIWorkflowMode: 1
   m_GISettings:
     serializedVersion: 2
@@ -98,7 +98,7 @@ LightmapSettings:
     m_TrainingDataDestination: TrainingData
     m_LightProbeSampleCountMultiplier: 4
   m_LightingDataAsset: {fileID: 0}
-  m_UseShadowmask: 0
+  m_LightingSettings: {fileID: 4890085278179872738, guid: 7d1fa6f4444b6c44a919f9688035347d, type: 2}
 --- !u!196 &5
 NavMeshSettings:
   serializedVersion: 2
@@ -118,10 +118,12 @@ NavMeshSettings:
     manualTileSize: 0
     tileSize: 256
     accuratePlacement: 0
+    maxJobWorkers: 0
+    preserveTilesOutsideBounds: 0
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
---- !u!1 &993631736
+--- !u!1 &1162487825
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -129,89 +131,86 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 993631741}
-  - component: {fileID: 993631740}
-  - component: {fileID: 993631738}
-  - component: {fileID: 993631737}
+  - component: {fileID: 1162487829}
+  - component: {fileID: 1162487828}
+  - component: {fileID: 1162487827}
+  - component: {fileID: 1162487826}
   m_Layer: 0
-  m_Name: Main Camera
-  m_TagString: MainCamera
+  m_Name: Inherits Attribute Examples
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!81 &993631737
-AudioListener:
+--- !u!114 &1162487826
+MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 993631736}
+  m_GameObject: {fileID: 1162487825}
   m_Enabled: 1
---- !u!124 &993631738
-Behaviour:
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5e858db1690b42ac86b0b212040ae4af, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  GreetingLoggerType:
+    GuidAssignmentFailed: 0
+    _typeNameAndAssembly: TypeReferences.Demo.Utils.AbstractGreetingLogger, Assembly-CSharp
+    _GUID: 
+--- !u!114 &1162487827
+MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 993631736}
+  m_GameObject: {fileID: 1162487825}
   m_Enabled: 1
---- !u!20 &993631740
-Camera:
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8dd13da77f22459c96f15264f735ee73, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  GreetingLoggerType:
+    GuidAssignmentFailed: 0
+    _typeNameAndAssembly: TypeReferences.Demo.Utils.IGreetingLogger, Assembly-CSharp
+    _GUID: 
+--- !u!114 &1162487828
+MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 993631736}
+  m_GameObject: {fileID: 1162487825}
   m_Enabled: 1
-  serializedVersion: 2
-  m_ClearFlags: 1
-  m_BackGroundColor: {r: 0.19215687, g: 0.3019608, b: 0.4745098, a: 0.019607844}
-  m_projectionMatrixMode: 1
-  m_GateFitMode: 2
-  m_FOVAxisMode: 0
-  m_SensorSize: {x: 36, y: 24}
-  m_LensShift: {x: 0, y: 0}
-  m_FocalLength: 50
-  m_NormalizedViewPortRect:
-    serializedVersion: 2
-    x: 0
-    y: 0
-    width: 1
-    height: 1
-  near clip plane: 0.3
-  far clip plane: 1000
-  field of view: 60
-  orthographic: 0
-  orthographic size: 5
-  m_Depth: -1
-  m_CullingMask:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_RenderingPath: -1
-  m_TargetTexture: {fileID: 0}
-  m_TargetDisplay: 0
-  m_TargetEye: 3
-  m_HDR: 0
-  m_AllowMSAA: 1
-  m_AllowDynamicResolution: 0
-  m_ForceIntoRT: 0
-  m_OcclusionCulling: 1
-  m_StereoConvergence: 10
-  m_StereoSeparation: 0.022
---- !u!4 &993631741
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b11a7fb5dcf74e0285a677d60da8f593, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  GreetingLoggerType:
+    GuidAssignmentFailed: 0
+    _typeNameAndAssembly: 
+    _GUID: 
+  OnlyMonoBehaviours:
+    GuidAssignmentFailed: 0
+    _typeNameAndAssembly: 
+    _GUID: 
+  NoneExcluded:
+    GuidAssignmentFailed: 0
+    _typeNameAndAssembly: 
+    _GUID: 
+--- !u!4 &1162487829
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 993631736}
+  m_GameObject: {fileID: 1162487825}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 1, z: -10}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 0
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2073488519
 GameObject:
@@ -223,8 +222,13 @@ GameObject:
   m_Component:
   - component: {fileID: 2073488521}
   - component: {fileID: 2073488520}
+  - component: {fileID: 2073488523}
+  - component: {fileID: 2073488522}
+  - component: {fileID: 2073488526}
+  - component: {fileID: 2073488525}
+  - component: {fileID: 2073488524}
   m_Layer: 0
-  m_Name: GameObject
+  m_Name: TypeOptions Attribute Examples
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -242,8 +246,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: aacefe2f2e630a44ea15d9bd8c246241, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  greetingLoggerType:
-    _classRef: Example.DefaultGreetingLogger, Assembly-CSharp
+  GreetingLoggerType:
+    GuidAssignmentFailed: 0
+    _typeNameAndAssembly: TypeReferences.Demo.Utils.AnotherGreetingLogger, Assembly-CSharp
+    _GUID: 
 --- !u!4 &2073488521
 Transform:
   m_ObjectHideFlags: 0
@@ -256,5 +262,91 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2073488522
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2073488519}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f3238fa800d04cc3a9746a0765aed6e8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  FlatList:
+    GuidAssignmentFailed: 0
+    _typeNameAndAssembly: 
+    _GUID: 
+--- !u!114 &2073488523
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2073488519}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c4088eddd0b54347852b6be3bbcbeb3a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  AnyType:
+    GuidAssignmentFailed: 0
+    _typeNameAndAssembly: 
+    _GUID: 
+--- !u!114 &2073488524
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2073488519}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8cd5df17388c43ef9b4e71d15395e894, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  noAttribute:
+    NoAttribute:
+      GuidAssignmentFailed: 0
+      _typeNameAndAssembly: 
+      _GUID: 
+  DefaultAssemblyIncluded:
+    DefaultAssemblyIncluded:
+      GuidAssignmentFailed: 0
+      _typeNameAndAssembly: 
+      _GUID: 
+--- !u!114 &2073488525
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2073488519}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: be7dae3625604e2498b203b6e701e06d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  GreetingLoggerType:
+    GuidAssignmentFailed: 0
+    _typeNameAndAssembly: 
+    _GUID: 
+--- !u!114 &2073488526
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2073488519}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 806468ec90f74130b6c6e45e410adfef, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  LoggerWithMonoBehaviourAndWithoutDefault:
+    GuidAssignmentFailed: 0
+    _typeNameAndAssembly: 
+    _GUID: 

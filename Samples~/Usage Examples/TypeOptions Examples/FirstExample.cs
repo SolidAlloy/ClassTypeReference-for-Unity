@@ -1,18 +1,18 @@
-﻿// Copyright ClassTypeReference Contributors. All rights reserved.
-// Licensed under the MIT license. See LICENSE file in the project root.
-
-namespace Example
+﻿namespace TypeReferences.Demo.TypeOptions_Examples
 {
     using System;
-    using TypeReferences;
     using UnityEngine;
+    using Utils;
 
-    public class ExampleBehaviour : MonoBehaviour
+    public class FirstExample : TypeReferenceExample
     {
-        [ClassImplements(typeof(IGreetingLogger))]
-        public ClassTypeReference GreetingLoggerType = typeof(DefaultGreetingLogger);
+        [InfoBox("Example usage of TypeReference. You can choose between several types and initialize " +
+                 "the class dynamically.")]
+        [Inherits(typeof(IGreetingLogger))]
+        public TypeReference GreetingLoggerType;
 
-        private void Start()
+        [Button]
+        public void LogGreeting()
         {
             if (GreetingLoggerType.Type == null)
             {
