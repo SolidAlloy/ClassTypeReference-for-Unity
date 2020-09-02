@@ -96,7 +96,7 @@ public TypeReference greetingLoggerType;
 public TypeReference productionType;
 ```
 
-
+&nbsp;  
 
 You can exclude **(None)** so that no one can choose it from the dropdown.
 
@@ -107,7 +107,7 @@ public TypeReference greetingLogger;
 
 Note that the type can still be null by default or if set through code.
 
-
+&nbsp;  
 
 By default, only the types the class can reference directly are included in the drop-down list.
 
@@ -145,7 +145,7 @@ public TypeReference onlyMonoBehaviours;
 public TypeReference greetingLoggerType;
 ```
 
-
+&nbsp;  
 
 If you need to have the base type in the drop-down menu too, use `IncludeBaseType`
 
@@ -154,7 +154,7 @@ If you need to have the base type in the drop-down menu too, use `IncludeBaseTyp
 public TypeReference onlyMonoBehaviours;
 ```
 
-
+&nbsp;  
 
 By default, abstract types (abstract classes and interfaces) are not included in the drop-down list. However, you can allow them:
 
@@ -168,7 +168,7 @@ Deprecated Interface
 
 **This interface supports only class types. Use it only if you already have `ClassTypeReference` references in the legacy code. The new interface has all the features of the deprecated one and more.**
 
-
+&nbsp;  
 
 Type references can be made using the inspector simply by using `ClassTypeReference`:
 
