@@ -1,0 +1,15 @@
+{
+    "name": "CustomAssembly",
+    "references": [
+        "GUID:ea6a6314f279f814facc8c48a7d3c9f1"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

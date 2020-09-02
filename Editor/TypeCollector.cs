@@ -5,10 +5,11 @@
     using System.IO;
     using System.Linq;
     using System.Reflection;
+    using TypeReferences;
     using UnityEngine;
 
     /// <summary>
-    /// A class responsible for collecting class types according to given filters and conditions.
+    /// A class responsible for collecting types according to given filters and conditions.
     /// </summary>
     public static class TypeCollector
     {
@@ -26,7 +27,7 @@
 
         public static List<Type> GetFilteredTypesFromAssemblies(
             IEnumerable<Assembly> assemblies,
-            ClassTypeConstraintAttribute filter)
+            TypeOptionsAttribute filter)
         {
             var types = new List<Type>();
 
@@ -77,12 +78,10 @@
 
         private static IEnumerable<Type> GetFilteredTypesFromAssembly(
             Assembly assembly,
-            ClassTypeConstraintAttribute filter)
+            TypeOptionsAttribute filter)
         {
-            return from type in GetVisibleTypesFromAssembly(assembly)
-                where type.IsVisible && type.IsClass
-                where FilterConstraintIsSatisfied(filter, type)
-                select type;
+            return GetVisibleTypesFromAssembly(assembly)
+                .Where(type => type.IsVisible && FilterConstraintIsSatisfied(filter, type));
         }
 
         private static IEnumerable<Type> GetVisibleTypesFromAssembly(Assembly assembly)
@@ -98,12 +97,12 @@
             }
         }
 
-        private static bool FilterConstraintIsSatisfied(ClassTypeConstraintAttribute filter, Type type)
+        private static bool FilterConstraintIsSatisfied(TypeOptionsAttribute filter, Type type)
         {
             if (filter == null)
                 return true;
 
-            return filter.IsConstraintSatisfied(type);
+            return filter.MatchesRequirements(type);
         }
     }
 }

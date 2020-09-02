@@ -1,11 +1,12 @@
 ﻿namespace TypeReferences.Editor
 {
     using System;
+    using TypeReferences;
     using UnityEngine;
 
     internal static class TypeNameFormatter
     {
-        public static string Format(Type type, ClassGrouping grouping)
+        public static string Format(Type type, Grouping grouping)
         {
             string name = type.FullName ?? string.Empty;
 
@@ -14,13 +15,13 @@
                 default:
                     return name;
 
-                case ClassGrouping.ByNamespace:
+                case Grouping.ByNamespace:
                     return FormatByNamespace(name);
 
-                case ClassGrouping.ByNamespaceFlat:
+                case Grouping.ByNamespaceFlat:
                     return FormatByNamespaceFlat(name);
 
-                case ClassGrouping.ByAddComponentMenu:
+                case Grouping.ByAddComponentMenu:
                     return FormatByAddComponentMenu(type, name);
             }
         }

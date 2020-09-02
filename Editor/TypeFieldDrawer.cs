@@ -1,22 +1,23 @@
 ﻿namespace TypeReferences.Editor
 {
+    using TypeReferences;
     using UnityEditor;
     using UnityEngine;
 
     /// <summary>
-    /// Draws a ClassTypeReference field and handles control over the drop-down list.
+    /// Draws a <see cref="TypeReference"/> field and handles control over the drop-down list.
     /// </summary>
     internal class TypeFieldDrawer
     {
         private const string MissingSuffix = " {Missing}";
 
-        private readonly SerializedClassTypeReference _serializedTypeRef;
+        private readonly SerializedTypeReference _serializedTypeRef;
         private readonly TypeDropDownDrawer _dropDownDrawer;
         private Rect _position;
         private bool _triggerDropDown;
 
         public TypeFieldDrawer(
-            SerializedClassTypeReference serializedTypeRef,
+            SerializedTypeReference serializedTypeRef,
             Rect position,
             TypeDropDownDrawer dropDownDrawer)
         {
@@ -115,7 +116,7 @@
 
             if (typeName == string.Empty)
             {
-                typeName = ClassTypeReference.NoneElement;
+                typeName = TypeReference.NoneElement;
             }
             else if (CachedTypeReference.GetType(_serializedTypeRef.TypeNameAndAssembly) == null)
             {
