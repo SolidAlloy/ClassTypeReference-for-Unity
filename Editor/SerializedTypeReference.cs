@@ -83,7 +83,7 @@
         private string GetClassGuidFromTypeName(string typeName)
         {
             var type = Type.GetType(typeName);
-            return ClassTypeReference.GetClassGUID(type);
+            return TypeReference.GetClassGUID(type);
         }
     }
 }

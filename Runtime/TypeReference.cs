@@ -96,13 +96,6 @@
                 : string.Empty;
         }
 
-        /// <summary>
-        /// Get GUID of the file that contains the class of the given type.
-        /// It works only for MonoBehaviours, ScriptableObjects, and other classes
-        /// where the name of the file must match the class name.
-        /// </summary>
-        /// <param name="type">Type of the class to search for.</param>
-        /// <returns>String representing the GUID of the file, or empty string if no file found.</returns>
         private void SetClassGuidIfExists(Type type)
         {
             try
@@ -117,17 +110,30 @@
             }
         }
 
+        /// <summary>
+        /// Get GUID of the file that contains the class of the given type.
+        /// It works only for MonoBehaviours, ScriptableObjects, and other classes
+        /// where the name of the file must match the class name.
+        /// </summary>
+        /// <param name="type">Type of the class to search for.</param>
+        /// <returns>String representing the GUID of the file, or empty string if no file found.</returns>
         public static string GetClassGUID(Type type)
         {
             if (type == null || type.FullName == null)
                 return string.Empty;
 
 #if UNITY_EDITOR
-            var guids = AssetDatabase.FindAssets(type.FullName);
-            return guids.Length == 1 ? guids[0] : string.Empty;
-#else
-            return string.Empty;
+            var guids = AssetDatabase.FindAssets(type.Name);
+
+            foreach (string guid in guids)
+            {
+                string assetPath = AssetDatabase.GUIDToAssetPath(guid);
+                var asset = AssetDatabase.LoadAssetAtPath<MonoScript>(assetPath);
+                if (asset.GetClass() == type)
+                    return guid;
+            }
 #endif
+            return string.Empty;
         }
 
         public override string ToString()
