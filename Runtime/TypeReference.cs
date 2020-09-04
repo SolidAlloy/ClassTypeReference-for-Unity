@@ -129,6 +129,10 @@
             {
                 string assetPath = AssetDatabase.GUIDToAssetPath(guid);
                 var asset = AssetDatabase.LoadAssetAtPath<MonoScript>(assetPath);
+
+                if (asset == null)
+                    continue;
+
                 if (asset.GetClass() == type)
                     return guid;
             }
