@@ -11,39 +11,46 @@
     [AttributeUsage(AttributeTargets.Field)]
     public class TypeOptionsAttribute : PropertyAttribute
     {
-        /// <summary>
-        /// Default grouping of selectable types.
-        /// </summary>
+        /// <summary>Default grouping of selectable types.</summary>
         public const Grouping DefaultGrouping = Grouping.ByNamespaceFlat;
 
         /// <summary>
         /// Gets or sets grouping of selectable types. Defaults to <see><cref>Grouping.ByNamespaceFlat</cref></see>
         /// unless explicitly specified.
         /// </summary>
-        public Grouping Grouping { get; set; } = Grouping.ByNamespaceFlat;
+        public Grouping Grouping = Grouping.ByNamespaceFlat;
 
         /// <summary>
         /// Removes (None) from the dropdown and disallows setting Type to null in Inspector.
         /// Note that the type can still be null by default or if set through code.
         /// Defaults to <c>false</c> unless explicitly specified.
         /// </summary>
-        public bool ExcludeNone { get; set; } = false;
+        public bool ExcludeNone = false;
 
-        /// <summary>
-        /// Includes additional types in the drop-down list.
-        /// </summary>
-        public Type[] IncludeTypes { get; set; }
+        /// <summary>Includes additional types in the drop-down list.</summary>
+        public Type[] IncludeTypes;
 
-        /// <summary>
-        /// Excludes some of the types from the drop-down list.
-        /// </summary>
-        public Type[] ExcludeTypes { get; set; }
+        /// <summary>Excludes some of the types from the drop-down list.</summary>
+        public Type[] ExcludeTypes;
 
         /// <summary>
         /// Adds types from additional assemblies to the drop-down list.
         /// By default, only types that can be accessed directly by the class are shown in the list.
         /// </summary>
-        public string[] IncludeAdditionalAssemblies { get; set; }
+        public string[] IncludeAdditionalAssemblies;
+
+        /// <summary>Gets or sets the height of the dropdown. Default is zero.</summary>
+        public int DropdownHeight = 0;
+
+        /// <summary>
+        /// If the dropdown renders a tree-view, then setting this to true will ensure everything is expanded by default.
+        /// </summary>
+        public bool ExpandAllFolders = false;
+
+        /// <summary>
+        /// Sets the minimum number of items in the drop-down for the search bar to appear. Defaults to 10.
+        /// </summary>
+        public int SearchbarMinItemsCount = 10;
 
         /// <summary>
         /// Determines whether the specified <see cref="Type"/> matches requirements set in the attribute.

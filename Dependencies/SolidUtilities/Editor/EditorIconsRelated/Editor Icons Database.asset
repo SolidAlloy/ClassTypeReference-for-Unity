@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4edf6f6aea69833479ae7500b4bdd8da, type: 3}
+  m_Name: Editor Icons Database
+  m_EditorClassIdentifier: 
+  _description: "With this \"database\", EditorIcons class has to hold only one GUID\r\n   
+    reference - to this scriptable object. Every asset-related to editor icons can\r\n   
+    be found here. Also, it allows to swap icons and skins without changing code."
+  TriangleRight: {fileID: 2800000, guid: bb26edf4be136b0459bfdf7ff0c7455b, type: 3}
+  _activeDarkSkin: {fileID: 2100000, guid: afd8a9f771318eb4fa2f59beaff7c586, type: 2}
+  _activeLightSkin: {fileID: 2100000, guid: ee90dc9421b3dc44d964287f916ed291, type: 2}
+  _highlightedDarkSkin: {fileID: 2100000, guid: 62fb3eb881fc0a345bf6ecb6cf403fd9, type: 2}
+  _highlightedLightSkin: {fileID: 2100000, guid: 4e4d317484a3c6f40a42c5f3db79ee79, type: 2}

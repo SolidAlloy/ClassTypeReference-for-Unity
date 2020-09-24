@@ -129,6 +129,33 @@ You might need to add a reference to the assembly where `CustomPlugin` is locate
 public TypeReference attribute;
 ```
 
+&nbsp;  
+
+If you are not satisfied with the auto-adjusted height, you can set the custom one with the DropdownHeight option. Use it like this: 
+
+```csharp
+[Inherits(typeof(IGreetingLogger), DropdownHeight = 300)]
+public TypeReference greetingLoggerType;
+```
+
+&nbsp;  
+
+By default, folders are closed. If you want them all to be expanded when you open the dropdown, use ExpandAllFolders = true:
+
+```csharp
+[TypeOptions(ExpandAllFolders = true)]
+public TypeReference allTypes;
+```
+
+&nbsp;  
+
+By default, the searchbar appears when you have more than 10 types in the dropdown list. You can change this behaviour with the SearchbarMinItemsCount option. Here we used SearchbarMinItemsCount = 0 to make searchbar appear even though there are less than 10 types to choose from.
+
+```csharp
+[Inherits(typeof(IGreetingLogger), SearchbarMinItemsCount = 0)]
+public TypeReference greetingLoggerType;
+```
+
 ## Inherits Attribute
 
 This attribute allows you to choose only from the classes that implement a certain interface or extend a class. It has all the arguments `TypeOptions` provides.

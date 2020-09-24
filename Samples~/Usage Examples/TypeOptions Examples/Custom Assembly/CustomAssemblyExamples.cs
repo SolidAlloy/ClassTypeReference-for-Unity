@@ -12,6 +12,6 @@
     [Serializable]
     public struct DefaultAssemblyIncludedStruct
     {
-        [TypeOptions(IncludeAdditionalAssemblies = new []{ "Assembly-CSharp" })] public TypeReference DefaultAssemblyIncluded;
+        [TypeOptions(IncludeAdditionalAssemblies = new[] { "Assembly-CSharp" })] public TypeReference DefaultAssemblyIncluded;
     }
 }
