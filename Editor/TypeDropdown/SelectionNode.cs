@@ -185,7 +185,7 @@
       }
       else if (IsHoveredOver)
       {
-        EditorGUI.DrawRect(_rect, DropdownStyle.MouseOverColor);
+        EditorGUI.DrawRect(_rect, DropdownStyle.HighlightedColor);
       }
 
       Rect indentedNodeRect = _rect;

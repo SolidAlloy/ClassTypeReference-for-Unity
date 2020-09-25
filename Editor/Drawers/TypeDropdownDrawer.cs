@@ -6,7 +6,11 @@
     using TypeDropdown;
     using Util;
 
-    public class TypeDropdownDrawer
+    /// <summary>
+    /// This class gathers needed types from assemblies based on the attribute options, and creates a popup window with
+    /// the collected types.
+    /// </summary>
+    internal class TypeDropdownDrawer
     {
         private readonly TypeOptionsAttribute _attribute;
         private readonly Type _declaringType;
