@@ -47,7 +47,7 @@
 
         private void OnGUI()
         {
-            CloseOnKeyPress();
+            CloseOnEscPress();
             DrawContent();
             RepaintIfMouseWasUsed();
         }
@@ -96,7 +96,7 @@
             position = positionToAdjust;
         }
 
-        private void CloseOnKeyPress()
+        private void CloseOnEscPress()
         {
             if (Event.current.type == EventType.KeyDown && Event.current.keyCode == KeyCode.Escape)
             {

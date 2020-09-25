@@ -4,8 +4,19 @@
     using TypeReferences;
     using UnityEngine;
 
+    /// <summary>
+    /// Generates paths for dropdown items based on <see cref="System.Type.FullName"/> and formatted according to
+    /// <see cref="Grouping"/>.
+    /// </summary>
     internal static class TypeNameFormatter
     {
+        /// <summary>Generates a path for a dropdown item according to <paramref name="grouping"/>.</summary>
+        /// <param name="type">Type to generate the path for.</param>
+        /// <param name="fullTypeName">Full name of the type.</param>
+        /// <param name="grouping">Grouping mode to apply when formatting full type name.</param>
+        /// <returns>
+        /// Path where some dots in full type name are replaced with slashes. This allows to generate folders for types.
+        /// </returns>
         public static string Format(Type type, string fullTypeName, Grouping grouping)
         {
             switch (grouping)

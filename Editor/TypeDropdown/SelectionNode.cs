@@ -10,6 +10,9 @@
   using UnityEngine;
   using UnityEngine.Assertions;
 
+  /// <summary>
+  /// A node in the selection tree. It may be a folder or an item that represents <see cref="System.Type"/>.
+  /// </summary>
   internal class SelectionNode
   {
     public readonly List<SelectionNode> ChildNodes = new List<SelectionNode>();
@@ -88,8 +91,8 @@
     public string FullTypeName { get; }
 
     /// <summary>
-    /// Makes a folder expanded or closed.
-    /// It can be set for dropdown items but will do anything as they cannot be expanded.
+    /// If the node is folder, this shows whether is is expanded or closed. If the node is type item, setting this
+    /// will do nothing, and its value is always false.
     /// </summary>
     public bool Expanded
     {
@@ -160,9 +163,7 @@
         childItem.DrawSelfAndChildren(indentLevel + 1, visibleRect);
     }
 
-    /// <summary>
-    /// Reserves a space for the rect but does not draw its content.
-    /// </summary>
+    /// <summary>Reserves a space for the rect but does not draw its content.</summary>
     /// <returns>True if there is no need to draw the contents.</returns>
     protected bool ReserveSpaceAndStop()
     {
@@ -237,7 +238,7 @@
     private bool NodeIsOutsideOfVisibleRect(Rect visibleRect) =>
       _rect.y + _rect.height < visibleRect.y || _rect.y > visibleRect.y + visibleRect.height;
 
-    private Rect GetTriangleRect(Rect nodeRect)
+    private static Rect GetTriangleRect(Rect nodeRect)
     {
       Rect triangleRect = nodeRect.AlignMiddleVertically(DropdownStyle.IconSize);
       triangleRect.width = DropdownStyle.IconSize;

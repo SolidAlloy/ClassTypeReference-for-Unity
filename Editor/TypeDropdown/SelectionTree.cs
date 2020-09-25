@@ -8,10 +8,13 @@
   using SolidUtilities.Extensions;
   using UnityEngine;
 
+  /// <summary>
+  /// Represents a node tree that contains folders (namespaces) and types. It is also responsible for drawing all the
+  /// nodes, along with search toolbar and scrollbar.
+  /// </summary>
   internal partial class SelectionTree
   {
     private readonly List<SelectionNode> _searchModeTree = new List<SelectionNode>();
-
     private readonly SelectionNode _root;
     private readonly NoneElement _noneElement;
     private readonly string _searchFieldControlName = Guid.NewGuid().ToString();
@@ -19,6 +22,7 @@
     private readonly Scrollbar _scrollbar = new Scrollbar();
     private readonly int _searchbarMinItemsCount;
     private readonly int _typeItemsCount;
+    private readonly bool _drawSearchbar;
 
     private string _searchString = string.Empty;
     private SelectionNode _selectedNode;
@@ -32,14 +36,13 @@
     {
       _root = SelectionNode.CreateRoot(this);
       _onTypeSelected = onTypeSelected;
-      _searchbarMinItemsCount = searchbarMinItemsCount;
 
       if ( ! hideNoneElement)
         _noneElement = NoneElement.Create(this);
 
       SelectionPaths = items.Select(item => item.Path).ToArray();
       FillTreeWithItems(items);
-      _typeItemsCount = items.Count;
+      _drawSearchbar = items.Count >= searchbarMinItemsCount;
 
       SetSelection(items, selectedType);
     }
@@ -77,7 +80,7 @@
       }
       else
       {
-        if (_typeItemsCount >= _searchbarMinItemsCount)
+        if (_drawSearchbar)
           EditorDrawHelper.DrawWithSearchToolbarStyle(DrawSearchToolbar, DropdownStyle.SearchToolbarHeight);
 
         if (! DrawInSearchMode)

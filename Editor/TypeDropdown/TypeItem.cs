@@ -4,6 +4,10 @@
     using System.Collections.Generic;
     using Util;
 
+    /// <summary>
+    /// Item that contains <see cref="System.Type"/>, its full name, and path (full type name, formatted according to
+    /// <see cref="Grouping"/>).
+    /// </summary>
     internal readonly struct TypeItem
     {
         public readonly string Path;
