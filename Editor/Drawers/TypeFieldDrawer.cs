@@ -1,6 +1,7 @@
 ﻿namespace TypeReferences.Editor.Drawers
 {
     using System;
+    using System.Linq;
     using Editor.Util;
     using TypeReferences;
     using UnityEditor;
@@ -17,17 +18,21 @@
 
         private readonly SerializedTypeReference _serializedTypeRef;
         private readonly TypeDropdownDrawer _dropdownDrawer;
+        private readonly bool _showShortName;
+
         private Rect _position;
         private bool _triggerDropDown;
 
         public TypeFieldDrawer(
             SerializedTypeReference serializedTypeRef,
             Rect position,
-            TypeDropdownDrawer dropdownDrawer)
+            TypeDropdownDrawer dropdownDrawer,
+            bool showShortName)
         {
             _serializedTypeRef = serializedTypeRef;
             _position = position;
             _dropdownDrawer = dropdownDrawer;
+            _showShortName = showShortName;
         }
 
         public void Draw()
@@ -40,13 +45,8 @@
 
         private void DrawTypeSelectionControl()
         {
-            int controlID = GUIUtility.GetControlID(
-                ControlHint,
-                FocusType.Keyboard,
-                _position);
-
+            int controlID = GUIUtility.GetControlID(ControlHint, FocusType.Keyboard, _position);
             _triggerDropDown = false;
-
             ReactToCurrentEvent(controlID);
 
             if ( ! _triggerDropDown)
@@ -110,6 +110,9 @@
             var typeParts = _serializedTypeRef.TypeNameAndAssembly.Split(',');
             string typeName = typeParts[0].Trim();
 
+            if (_showShortName)
+                typeName = GetShortName(typeName);
+
             if (typeName == string.Empty)
             {
                 typeName = TypeReference.NoneElement;
@@ -124,6 +127,8 @@
 
             return typeName;
         }
+
+        private static string GetShortName(string fullTypeName) => fullTypeName.Split('.').Last();
 
         private void OnTypeSelected(Type selectedType)
         {

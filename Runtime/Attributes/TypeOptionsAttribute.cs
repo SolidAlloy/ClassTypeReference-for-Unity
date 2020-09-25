@@ -11,9 +11,6 @@
     [AttributeUsage(AttributeTargets.Field)]
     public class TypeOptionsAttribute : PropertyAttribute
     {
-        /// <summary>Default grouping of selectable types.</summary>
-        public const Grouping DefaultGrouping = Grouping.ByNamespaceFlat;
-
         /// <summary>
         /// Gets or sets grouping of selectable types. Defaults to <see><cref>Grouping.ByNamespaceFlat</cref></see>
         /// unless explicitly specified.
@@ -51,6 +48,11 @@
         /// Sets the minimum number of items in the drop-down for the search bar to appear. Defaults to 10.
         /// </summary>
         public int SearchbarMinItemsCount = 10;
+
+        /// <summary>
+        /// Makes the field show the short name of the selected type instead of the full one. False by default.
+        /// </summary>
+        public bool ShowShortName = false;
 
         /// <summary>
         /// Determines whether the specified <see cref="Type"/> matches requirements set in the attribute.

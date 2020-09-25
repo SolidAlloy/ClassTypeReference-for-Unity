@@ -29,8 +29,8 @@ namespace TypeReferences.Editor.Drawers
             if (label == null || label == GUIContent.none)
                 return position;
 
-            var positionExcludingLabel = EditorGUI.PrefixLabel(position, label);
-            return positionExcludingLabel;
+            var fieldRectWithoutLabel = EditorGUI.PrefixLabel(position, label);
+            return fieldRectWithoutLabel;
         }
 
         private void DrawTypeReferenceField(Rect position, SerializedProperty property)
@@ -43,17 +43,13 @@ namespace TypeReferences.Editor.Drawers
             if (selectedType != null && !typeOptionsAttribute.MatchesRequirements(selectedType))
             {
                 Debug.Log($"{property.name} had the {selectedType} value but the type does not match " +
-                          $"constraints set in the attribute, so it was set to null.");
+                          "constraints set in the attribute, so it was set to null.");
                 selectedType = null;
                 serializedTypeRef.TypeNameAndAssembly = string.Empty;
             }
 
-            var dropDown = new TypeDropdownDrawer(
-                selectedType,
-                typeOptionsAttribute,
-                fieldInfo?.DeclaringType);
-
-            var fieldDrawer = new TypeFieldDrawer(serializedTypeRef, position, dropDown);
+            var dropdownDrawer = new TypeDropdownDrawer(selectedType, typeOptionsAttribute, fieldInfo?.DeclaringType);
+            var fieldDrawer = new TypeFieldDrawer(serializedTypeRef, position, dropdownDrawer, typeOptionsAttribute.ShowShortName);
 
             fieldDrawer.Draw();
         }
