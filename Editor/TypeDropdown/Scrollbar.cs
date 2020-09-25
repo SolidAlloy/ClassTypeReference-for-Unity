@@ -7,6 +7,9 @@
     using UnityEngine;
     using UnityEngine.Assertions;
 
+    /// <summary>
+    /// This class automates drawing the scrollbar next to a large list and scrolling to the selected node.
+    /// </summary>
     internal class Scrollbar
     {
         private bool _visible = true;
@@ -19,6 +22,11 @@
 
         private static Rect VisibleRect => VisibleRectGetter.Get();
 
+        /// <summary>Draws elements with scrollbar if the list is large enough.</summary>
+        /// <param name="drawContent">
+        /// Action that takes a visible rect as an argument. Visible rect is the rect where GUI elements are in the
+        /// window borders and are shown on screen.
+        /// </param>
         public void DrawWithScrollbar(Action<Rect> drawContent)
         {
             EditorDrawHelper.DrawVertically(windowRect =>
@@ -41,8 +49,11 @@
             ScrollToNodeIfNeeded();
         }
 
+        /// <summary>Move thumb to the beginning of the list.</summary>
         public void ToTop() => _position.y = 0f;
 
+        /// <summary>Ask scrollbar to start moving to a node. The process can take several frames.</summary>
+        /// <param name="node">The node to scroll to.</param>
         public void RequestScrollToNode(SelectionNode node)
         {
             if (node == null)

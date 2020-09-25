@@ -3,6 +3,9 @@
     using UnityEditor;
     using UnityEngine;
 
+    /// <summary>
+    /// A node that represents the null type value. It is drawn separately from other nodes and has its own root.
+    /// </summary>
     internal class NoneElement : SelectionNode
     {
         private NoneElement(SelectionNode root, SelectionTree parentTree)

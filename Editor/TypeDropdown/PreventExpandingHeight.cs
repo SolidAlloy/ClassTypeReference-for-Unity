@@ -2,6 +2,9 @@
 {
     using UnityEngine;
 
+    /// <summary>
+    /// Represents an opposite of <see cref="GUILayout.ExpandHeight"/> and can be used as bool.
+    /// </summary>
     internal class PreventExpandingHeight
     {
         private readonly bool _preventExpanding;
@@ -10,7 +13,7 @@
         public PreventExpandingHeight(bool preventExpanding)
         {
             _preventExpanding = preventExpanding;
-            _option = GUILayout.ExpandHeight(!preventExpanding);
+            _option = GUILayout.ExpandHeight( ! preventExpanding);
         }
 
         public static implicit operator GUILayoutOption(PreventExpandingHeight option)
