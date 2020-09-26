@@ -2,6 +2,7 @@
 {
     using System;
     using System.Reflection;
+    using SolidUtilities.Editor.Extensions;
     using TypeReferences.Editor.Drawers;
     using UnityEditor;
     using UnityEngine;

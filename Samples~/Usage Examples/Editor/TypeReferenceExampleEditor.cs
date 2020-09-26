@@ -3,6 +3,9 @@
     using System;
     using System.Linq;
     using System.Reflection;
+    using SolidUtilities.Editor;
+    using SolidUtilities.Editor.Extensions;
+    using SolidUtilities.Extensions;
     using UnityEditor;
     using UnityEngine;
     using Utils;
@@ -27,7 +30,7 @@
                     if (property.IsBuiltIn())
                         continue;
 
-                    var field = targetType.GetFieldAtPath(property.propertyPath);
+                    FieldInfo field = targetType.GetFieldAtPath(property.propertyPath);
 
                     if (field == null)
                         continue;
