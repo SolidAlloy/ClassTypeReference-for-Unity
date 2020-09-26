@@ -156,6 +156,16 @@ By default, the searchbar appears when you have more than 10 types in the dropdo
 public TypeReference greetingLoggerType;
 ```
 
+&nbsp;  
+
+You can make the field show just the type name without its namespace. For example, in this case, the field will show *DefaultGreetingLogger* instead of *TypeReferences.Demo.Utils.DefaultGreetingLogger*:
+
+```csharp
+[Inherits(typeof(IGreetingLogger), ShortName = true)] public TypeReference GreetingLoggerType;
+```
+
+&nbsp;  
+
 ## Inherits Attribute
 
 This attribute allows you to choose only from the classes that implement a certain interface or extend a class. It has all the arguments `TypeOptions` provides.
