@@ -2,7 +2,7 @@
 {
     using Utils;
 
-    public class SixthExample : TypeReferenceExample
+    public class IncludeAdditionalAssemblies : TypeReferenceExample
     {
         [InfoBox("By default, only the types the class can reference directly are included in the drop-down " +
                  "list. In this example, CustomAssembly only has access to the TypeReferences assembly.")]

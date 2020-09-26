@@ -4,7 +4,7 @@
     using UnityEngine;
     using Utils;
 
-    public class FirstExample : TypeReferenceExample
+    public class ExampleUsage : TypeReferenceExample
     {
         [InfoBox("Example usage of TypeReference. You can choose between several types and initialize " +
                  "the class dynamically.")]

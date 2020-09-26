@@ -2,7 +2,7 @@
 {
     using Utils;
 
-    public class ThirdExample : TypeReferenceExample
+    public class AllowAbstract : TypeReferenceExample
     {
         [InfoBox("By default, abstract types (abstract classes and interfaces) are not included in the " +
                  "drop-down list. However, you can allow them: [Inherits(typeof(IGreetingLogger), AllowAbstract = true)]")]

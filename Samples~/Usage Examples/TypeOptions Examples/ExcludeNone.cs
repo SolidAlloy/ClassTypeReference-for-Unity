@@ -2,7 +2,7 @@
 {
     using Utils;
 
-    public class FifthExample : TypeReferenceExample
+    public class ExcludeNone : TypeReferenceExample
     {
         [InfoBox("You can exclude (None) so that no one can choose it from the dropdown. Note that the type " +
                  "can still be null by default or if set through code.")]

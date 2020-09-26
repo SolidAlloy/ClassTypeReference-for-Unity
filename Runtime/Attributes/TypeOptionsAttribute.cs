@@ -52,7 +52,7 @@
         /// <summary>
         /// Makes the field show the short name of the selected type instead of the full one. False by default.
         /// </summary>
-        public bool ShowShortName = false;
+        public bool ShortName = false;
 
         /// <summary>
         /// Determines whether the specified <see cref="Type"/> matches requirements set in the attribute.

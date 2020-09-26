@@ -3,7 +3,7 @@
     using UnityEngine;
     using Utils;
 
-    public class FirstExample : TypeReferenceExample
+    public class InheritsExample : TypeReferenceExample
     {
         [InfoBox("[Inherits] attribute allows you to choose only from the classes that implement a certain " +
                  "interface or extend a class. It has all the arguments TypeOptions provides. This one lists only " +

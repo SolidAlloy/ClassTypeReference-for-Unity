@@ -1,8 +1,8 @@
-﻿namespace TypeReferences.Demo.Advanced_Look_Customization
+﻿namespace TypeReferences.Demo.Look_Customization
 {
     using Utils;
 
-    public class SecondExample : TypeReferenceExample
+    public class ExpandFolders : TypeReferenceExample
     {
         [InfoBox("By default, folders are closed. If you want them all to be expanded when you open the dropdown, " +
                  "add [TypeOptions(ExpandAllFolders = true)]")]

@@ -2,7 +2,7 @@
 {
     using Utils;
 
-    public class SecondExample : TypeReferenceExample
+    public class IncludeBaseType : TypeReferenceExample
     {
         [InfoBox("If you need to have the base type in the drop-down menu too, use IncludeBaseType like this: " +
                  "[Inherits(typeof(IGreetingLogger), IncludeBaseType = true)]")]

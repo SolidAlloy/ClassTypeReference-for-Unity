@@ -3,7 +3,7 @@
     using UnityEngine;
     using Utils;
 
-    public class FourthExample : TypeReferenceExample
+    public class IncludeExcludeTypes : TypeReferenceExample
     {
         [InfoBox("You can include the types that are not in the list originally by using the IncludeTypes " +
                  "option, and exclude types with ExcludeTypes. In this example, we use " +

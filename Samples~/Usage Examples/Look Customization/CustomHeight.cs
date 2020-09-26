@@ -1,8 +1,8 @@
-﻿namespace TypeReferences.Demo.Advanced_Look_Customization
+﻿namespace TypeReferences.Demo.Look_Customization
 {
     using Utils;
 
-    public class FirstExample : TypeReferenceExample
+    public class CustomHeight : TypeReferenceExample
     {
         [InfoBox("If you are not satisfied with the auto-adjusted height, you can set the custom one with " +
                  "DropdownHeight option. Use it like this: [Inherits(typeof(IGreetingLogger), DropdownHeight = 300)]")]

@@ -225,7 +225,7 @@ GameObject:
   - component: {fileID: 1980899713}
   - component: {fileID: 1980899712}
   m_Layer: 0
-  m_Name: Advanced Look Customization
+  m_Name: Look Customization
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
