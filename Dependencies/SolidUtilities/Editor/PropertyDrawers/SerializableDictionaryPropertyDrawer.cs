@@ -1,9 +1,9 @@
-﻿namespace SolidUtilities.Editor.SerializableCollections
+﻿namespace SolidUtilities.Editor.PropertyDrawers
 {
     using System;
     using System.Collections.Generic;
     using System.Reflection;
-    using SolidUtilities.SerializableCollections;
+    using SerializableCollections;
     using UnityEditor;
     using UnityEngine;
     using Object = UnityEngine.Object;

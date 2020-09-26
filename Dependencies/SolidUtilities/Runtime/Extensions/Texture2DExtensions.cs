@@ -2,7 +2,7 @@
 {
     using UnityEngine;
 
-    /// <summary>Different useful extensions for <see cref="Texture2D"/></summary>
+    /// <summary>Different useful extensions for <see cref="Texture2D"/>.</summary>
     public static class Texture2DExtensions
     {
         /// <summary>Rotates the input texture by 90 degrees and returns the new rotated texture.</summary>
