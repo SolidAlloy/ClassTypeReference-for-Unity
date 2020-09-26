@@ -9,7 +9,7 @@
     public static class PropertyDrawerExtensions
     {
         /// <summary>
-        /// Set attribute manually for a PropertyDrawer. This makes PropertyDrawer think a field it represents has a
+        /// Sets an attribute manually for a PropertyDrawer. This makes PropertyDrawer think a field it represents has a
         /// certain attribute.
         /// </summary>
         /// <param name="drawer">The property drawer to set an attribute for.</param>

@@ -6,7 +6,7 @@
     /// <summary>Different useful extensions for <see cref="System.Type"/>.</summary>
     public static class TypeExtensions
     {
-        /// <summary>Finds a field recursively in fields of a class.</summary>
+        /// <summary>Finds a field recursively in the fields of a class.</summary>
         /// <param name="parentType">The class type to start the search from.</param>
         /// <param name="path">The path to a field, separated by dot.</param>
         /// <returns>Field info if the field is found, and null if not.</returns>

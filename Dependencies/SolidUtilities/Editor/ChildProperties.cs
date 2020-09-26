@@ -6,7 +6,7 @@
     using UnityEditor;
 
     /// <summary>
-    /// Allows to iterate over child properties of a serialized object without entering nested properties.
+    /// Allows iterating over child properties of a serialized object without entering nested properties.
     /// </summary>
     /// <example><code>
     /// var childProperties = new ChildProperties(serializedObject, true);
