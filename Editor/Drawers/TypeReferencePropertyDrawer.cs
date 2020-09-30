@@ -15,7 +15,7 @@ namespace TypeReferences.Editor.Drawers
     {
         public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
         {
-            return EditorStyles.popup.CalcHeight(GUIContent.none, 0);
+            return EditorStyles.popup.CalcHeight(GUIContent.none, 0f);
         }
 
         public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
@@ -40,7 +40,7 @@ namespace TypeReferences.Editor.Drawers
 
             var selectedType = TypeCache.GetType(serializedTypeRef.TypeNameAndAssembly);
 
-            if (selectedType != null && !typeOptionsAttribute.MatchesRequirements(selectedType))
+            if (selectedType != null && ! typeOptionsAttribute.MatchesRequirements(selectedType))
             {
                 Debug.Log($"{property.name} had the {selectedType} value but the type does not match " +
                           "constraints set in the attribute, so it was set to null.");

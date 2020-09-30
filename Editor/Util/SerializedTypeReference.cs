@@ -13,7 +13,6 @@
         private readonly SerializedProperty _typeNameProperty;
         private readonly SerializedProperty _guidProperty;
         private readonly SerializedProperty _guidAssignmentFailedProperty;
-        private readonly TypeReference _typeRefInstance;
 
         public SerializedTypeReference(SerializedProperty typeReferenceProperty)
         {
