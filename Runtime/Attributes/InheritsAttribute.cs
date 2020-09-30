@@ -1,6 +1,7 @@
 ﻿namespace TypeReferences
 {
     using System;
+    using SolidUtilities.Extensions;
 
     /// <summary>
     /// Constraint that allows selection of types that inherit a specific parent type or interface when
@@ -51,7 +52,7 @@
 
             bool passesAbstractConstraint = AllowAbstract || !type.IsAbstract;
 
-            return BaseType.IsAssignableFrom(type) && passesAbstractConstraint && base.MatchesRequirements(type);
+            return type.InheritsFrom(BaseType) && passesAbstractConstraint && base.MatchesRequirements(type);
         }
     }
 }

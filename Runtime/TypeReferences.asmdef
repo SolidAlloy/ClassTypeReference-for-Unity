@@ -1,3 +1,16 @@
-﻿{
-	"name": "TypeReferences"
+{
+    "name": "TypeReferences",
+    "rootNamespace": "",
+    "references": [
+        "GUID:b73ef07971851e14fa74ae50b76f8225"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
 }
