@@ -1,6 +1,8 @@
 README
 ======
 [![openupm](https://img.shields.io/npm/v/com.solidalloy.type.references?label=openupm&registry_uri=https://package.openupm.com)](https://openupm.com/packages/com.solidalloy.type.references/)
+
+
 A class that provides serializable references to `System.Type` with an accompanying custom property drawer which allows type selection from drop-down.
 
 ![screenshot](https://raw.githubusercontent.com/SolidAlloy/ClassTypeReference-for-Unity/master/.screenshot.png)
