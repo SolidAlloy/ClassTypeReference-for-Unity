@@ -19,12 +19,11 @@
         public const string NoneElement = "(None)";
 
         public const string NameOfTypeNameField = nameof(_typeNameAndAssembly);
-        public const string NameOfGuidField = nameof(_GUID);
 
         public bool GuidAssignmentFailed;
+        public string GUID;
 
         [SerializeField] private string _typeNameAndAssembly;
-        [SerializeField] private string _GUID;
         private Type _type;
 
         /// <summary>
@@ -79,7 +78,7 @@
 
         public static implicit operator Type(TypeReference typeReference)
         {
-            return typeReference.Type;
+            return typeReference?.Type;
         }
 
         public static implicit operator TypeReference(Type type)
@@ -100,13 +99,13 @@
         {
             try
             {
-                _GUID = GetClassGUID(type);
+                GUID = GetClassGUID(type);
             }
             // It is thrown on assembly recompiling if field initialization is used on field.
             catch (UnityException)
             {
                 GuidAssignmentFailed = true;
-                _GUID = string.Empty;
+                GUID = string.Empty;
             }
         }
 

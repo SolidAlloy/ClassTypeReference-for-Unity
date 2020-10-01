@@ -18,7 +18,7 @@
         {
             _parentObject = typeReferenceProperty.serializedObject;
             _typeNameProperty = typeReferenceProperty.FindPropertyRelative(TypeReference.NameOfTypeNameField);
-            _guidProperty = typeReferenceProperty.FindPropertyRelative(TypeReference.NameOfGuidField);
+            _guidProperty = typeReferenceProperty.FindPropertyRelative(nameof(TypeReference.GUID));
             _guidAssignmentFailedProperty = typeReferenceProperty.FindPropertyRelative(nameof(TypeReference.GuidAssignmentFailed));
 
             SetGuidIfAssignmentFailed();
