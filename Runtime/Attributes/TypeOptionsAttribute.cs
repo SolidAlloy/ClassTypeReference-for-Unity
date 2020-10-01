@@ -55,6 +55,12 @@
         public bool ShortName = false;
 
         /// <summary>
+        /// If the dropdown shows built-in types, it will show them by their keyword names (int) instead of full names
+        /// (System.Int32).
+        /// </summary>
+        public bool UseBuiltInTypeNames = true;
+
+        /// <summary>
         /// Determines whether the specified <see cref="Type"/> matches requirements set in the attribute.
         /// </summary>
         /// <param name="type">Type to test.</param>
