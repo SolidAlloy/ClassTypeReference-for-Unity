@@ -22,7 +22,7 @@ Or if you don't have it add the scoped registry to the manifest.json with the de
       "name": "package.openupm.com",
       "url": "https://package.openupm.com",
       "scopes": [
-        "com.evomo.motionai",
+        "com.solidalloy.type.references",
         "com.openupm"
       ]
     }
