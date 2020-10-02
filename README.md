@@ -190,6 +190,10 @@ You can make the field show just the type name without its namespace. For exampl
 
 &nbsp;  
 
+By default, the field shows built-in types by their keyword name instead of the full name (e.g. `int` instead of `System.Int32`). You can change this by setting the *UseBuiltInNames* option to false.
+
+&nbsp;  
+
 ## Inherits Attribute
 
 This attribute allows you to choose only from the classes that implement a certain interface or extend a class. It has all the arguments `TypeOptions` provides.
