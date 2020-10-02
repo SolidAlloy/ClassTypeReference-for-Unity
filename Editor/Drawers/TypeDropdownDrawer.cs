@@ -2,8 +2,10 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
     using System.Reflection;
     using TypeDropdown;
+    using UnityEngine;
     using Util;
 
     /// <summary>
@@ -73,13 +75,18 @@
                 typeRelatedAssemblies,
                 _attribute);
 
+            bool systemAssemblyIsIncluded = typeRelatedAssemblies.Any(assembly => assembly.FullName == "System");
+
             var sortedTypes = new SortedSet<TypeItem>(new TypeItemComparer());
 
             for (int i = 0; i < filteredTypes.Count; i++)
             {
                 var type = filteredTypes[i];
                 if (type.FullName != null)
+                {
                     sortedTypes.Add(new TypeItem(type, _attribute.Grouping));
+                }
+
             }
 
             return sortedTypes;
