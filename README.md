@@ -1,5 +1,7 @@
 README
 ======
+[![openupm](https://img.shields.io/npm/v/com.solidalloy.type.references?label=openupm&registry_uri=https://package.openupm.com)](https://openupm.com/packages/com.solidalloy.type.references/)
+
 
 A class that provides serializable references to `System.Type` with an accompanying custom property drawer which allows type selection from drop-down.
 
@@ -8,6 +10,28 @@ A class that provides serializable references to `System.Type` with an accompany
 Whilst we have not encountered any platform specific issues yet, the source code in this repository *might* not necessarily work for all of Unity's platforms or build configurations. It would be greatly appreciated if people would report issues using the [issue tracker](https://github.com/SolidAlloy/ClassTypeReference-for-Unity/issues).
 
 This is a fork of the currently inactive project by Rotorz: [ClassTypeReference for Unity](https://bitbucket.org/rotorz/classtypereference-for-unity/src/master/)
+## Install with OpenUPM
+Once you have the OpenUpm cli run the following command:
+
+```openupm install com.solidalloy.type.references```
+
+Or if you don't have it add the scoped registry to the manifest.json with the desired dependency semantic version: 
+```
+  "scopedRegistries": [
+    {
+      "name": "package.openupm.com",
+      "url": "https://package.openupm.com",
+      "scopes": [
+        "com.solidalloy.type.references",
+        "com.openupm"
+      ]
+    }
+  ],
+  "dependencies": {
+    "com.solidalloy.type.references": "2.1.0""
+  },
+
+```
 
 ## Install via Git URL
 
