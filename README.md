@@ -1,4 +1,4 @@
-README
+Type References for Unity3D
 ======
 [![openupm](https://img.shields.io/npm/v/com.solidalloy.type.references?label=openupm&registry_uri=https://package.openupm.com)](https://openupm.com/packages/com.solidalloy.type.references/)
 
@@ -11,24 +11,25 @@ Whilst we have not encountered any platform specific issues yet, the source code
 
 This is a fork of the currently inactive project by Rotorz: [ClassTypeReference for Unity](https://bitbucket.org/rotorz/classtypereference-for-unity/src/master/)
 ## Install with OpenUPM
-Once you have the OpenUpm cli run the following command:
+Once you have the OpenUPM cli, run the following command:
 
 ```openupm install com.solidalloy.type.references```
 
-Or if you don't have it add the scoped registry to the manifest.json with the desired dependency semantic version: 
+Or if you don't have it, add the scoped registry to manifest.json with the desired dependency semantic version: 
 ```
   "scopedRegistries": [
     {
       "name": "package.openupm.com",
       "url": "https://package.openupm.com",
       "scopes": [
+        "com.solidalloy.util",
         "com.solidalloy.type.references",
         "com.openupm"
       ]
     }
   ],
   "dependencies": {
-    "com.solidalloy.type.references": "2.1.0""
+    "com.solidalloy.type.references": "2.1.0"
   },
 
 ```
@@ -39,7 +40,8 @@ Project supports Unity Package Manager. To install the project as a Git package 
 
 1. In Unity, open **Window** -> **Package Manager**.
 2. Press the **+** button, choose "**Add package from git URL...**"
-3. Enter "https://github.com/SolidAlloy/ClassTypeReference-for-Unity.git" and press **Add**.
+3. Enter "https://github.com/SolidAlloy/SolidUtilities.git" and press **Add**.
+4. When the first package is installed, add the main one: "https://github.com/SolidAlloy/ClassTypeReference-for-Unity.git".
 
 ## Simple Usage
 
