@@ -49,7 +49,13 @@ namespace TypeReferences.Editor.Drawers
             }
 
             var dropdownDrawer = new TypeDropdownDrawer(selectedType, typeOptionsAttribute, fieldInfo?.DeclaringType);
-            var fieldDrawer = new TypeFieldDrawer(serializedTypeRef, position, dropdownDrawer, typeOptionsAttribute.ShortName);
+
+            var fieldDrawer = new TypeFieldDrawer(
+                serializedTypeRef,
+                position,
+                dropdownDrawer,
+                typeOptionsAttribute.ShortName,
+                typeOptionsAttribute.UseBuiltInNames);
 
             fieldDrawer.Draw();
         }

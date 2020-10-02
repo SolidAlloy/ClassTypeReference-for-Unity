@@ -3,6 +3,7 @@
     using System;
     using System.Linq;
     using Editor.Util;
+    using SolidUtilities.Editor.Helpers;
     using TypeReferences;
     using UnityEditor;
     using UnityEngine;
@@ -19,6 +20,7 @@
         private readonly SerializedTypeReference _serializedTypeRef;
         private readonly TypeDropdownDrawer _dropdownDrawer;
         private readonly bool _showShortName;
+        private readonly bool _useBuiltInNames;
 
         private Rect _position;
         private bool _triggerDropDown;
@@ -27,20 +29,21 @@
             SerializedTypeReference serializedTypeRef,
             Rect position,
             TypeDropdownDrawer dropdownDrawer,
-            bool showShortName)
+            bool showShortName,
+            bool useBuiltInNames)
         {
             _serializedTypeRef = serializedTypeRef;
             _position = position;
             _dropdownDrawer = dropdownDrawer;
             _showShortName = showShortName;
+            _useBuiltInNames = useBuiltInNames;
         }
 
         public void Draw()
         {
-            bool valueToRestore = EditorGUI.showMixedValue;
-            EditorGUI.showMixedValue = _serializedTypeRef.TypeNameHasMultipleDifferentValues;
-            DrawTypeSelectionControl();
-            EditorGUI.showMixedValue = valueToRestore;
+            EditorDrawHelper.WhileShowingMixedValue(
+                _serializedTypeRef.TypeNameHasMultipleDifferentValues,
+                DrawTypeSelectionControl);
         }
 
         private void DrawTypeSelectionControl()
@@ -101,34 +104,33 @@
 
         private void DrawFieldContent(int controlID)
         {
-            var fieldContent = new GUIContent(GetTypeNameForField());
+            var typeParts = _serializedTypeRef.TypeNameAndAssembly.Split(',');
+            string fullTypeName = typeParts[0].Trim();
+            var fieldContent = new GUIContent(GetTypeToShow(fullTypeName));
             EditorStyles.popup.Draw(_position, fieldContent, controlID);
         }
 
-        private string GetTypeNameForField()
+        private string GetTypeToShow(string typeName)
         {
-            var typeParts = _serializedTypeRef.TypeNameAndAssembly.Split(',');
-            string typeName = typeParts[0].Trim();
+            if (_useBuiltInNames && TypeNameFormatter.TryReplaceWithBuiltInName(ref typeName, true))
+                return typeName;
 
             if (_showShortName)
-                typeName = GetShortName(typeName);
+                typeName = TypeNameFormatter.GetShortName(typeName);
 
             if (typeName == string.Empty)
-            {
-                typeName = TypeReference.NoneElement;
-            }
-            else if (TypeCache.GetType(_serializedTypeRef.TypeNameAndAssembly) == null)
+                return TypeReference.NoneElement;
+
+            if (TypeCache.GetType(_serializedTypeRef.TypeNameAndAssembly) == null)
             {
                 _serializedTypeRef.TryUpdatingTypeUsingGUID();
 
                 if (TypeCache.GetType(_serializedTypeRef.TypeNameAndAssembly) == null)
-                    typeName += MissingSuffix;
+                    return typeName + MissingSuffix;
             }
 
             return typeName;
         }
-
-        private static string GetShortName(string fullTypeName) => fullTypeName.Split('.').Last();
 
         private void OnTypeSelected(Type selectedType)
         {

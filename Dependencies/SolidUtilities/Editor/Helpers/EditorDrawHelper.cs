@@ -199,5 +199,26 @@
 
             return text;
         }
+
+        /// <summary>
+        /// Sets <see cref="EditorGUI.showMixedValue"/> to the needed value temporarily and draws the content.
+        /// </summary>
+        /// <param name="showMixedValue">Whether to show mixed value.</param>
+        /// <param name="drawAction">
+        /// The action to draw content while <see cref="EditorGUI.showMixedValue"/> is set to
+        /// <paramref name="showMixedValue"/>.
+        /// </param>
+        /// <example><code>
+        /// EditorDrawHelper.WhileShowingMixedValue(
+        ///     _serializedTypeRef.TypeNameHasMultipleDifferentValues,
+        ///     DrawTypeSelectionControl);
+        /// </code></example>
+        public static void WhileShowingMixedValue(bool showMixedValue, Action drawAction)
+        {
+            bool valueToRestore = EditorGUI.showMixedValue;
+            EditorGUI.showMixedValue = showMixedValue;
+            drawAction();
+            EditorGUI.showMixedValue = valueToRestore;
+        }
     }
 }

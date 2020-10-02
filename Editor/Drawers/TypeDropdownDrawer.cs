@@ -4,6 +4,7 @@
     using System.Collections.Generic;
     using System.Linq;
     using System.Reflection;
+    using Editor.Util;
     using TypeDropdown;
     using UnityEngine;
     using Util;
@@ -75,18 +76,22 @@
                 typeRelatedAssemblies,
                 _attribute);
 
-            bool systemAssemblyIsIncluded = typeRelatedAssemblies.Any(assembly => assembly.FullName == "System");
+            bool replaceBuiltInNames = _attribute.UseBuiltInNames && typeRelatedAssemblies
+                .Any(assembly => assembly.GetName().Name == "mscorlib");
 
             var sortedTypes = new SortedSet<TypeItem>(new TypeItemComparer());
 
             for (int i = 0; i < filteredTypes.Count; i++)
             {
                 var type = filteredTypes[i];
-                if (type.FullName != null)
-                {
-                    sortedTypes.Add(new TypeItem(type, _attribute.Grouping));
-                }
+                string fullTypeName = type.FullName;
+                if (fullTypeName == null)
+                    continue;
 
+                if (replaceBuiltInNames)
+                    TypeNameFormatter.TryReplaceWithBuiltInName(ref fullTypeName);
+
+                sortedTypes.Add(new TypeItem(type, fullTypeName, _attribute.Grouping));
             }
 
             return sortedTypes;
