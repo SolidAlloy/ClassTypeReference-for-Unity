@@ -55,8 +55,8 @@
         public bool ShortName = false;
 
         /// <summary>
-        /// If the dropdown shows built-in types, it will show them by their keyword names (int) instead of full names
-        /// (System.Int32).
+        /// Whether to make dropdown show built-in types by their keyword name (int) instead of the full name
+        /// (System.Int32). Defaults to true.
         /// </summary>
         public bool UseBuiltInNames = true;
 
