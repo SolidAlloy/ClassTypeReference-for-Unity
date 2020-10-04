@@ -1,3 +1,11 @@
+## [2.2.3](https://github.com/SolidAlloy/ClassTypeReference-for-Unity/compare/2.2.2...2.2.3) (2020-10-04)
+
+
+### Bug Fixes
+
+* Made TypeReferenceComparer.GetHashCode not accept null Type ([3e388b9](https://github.com/SolidAlloy/ClassTypeReference-for-Unity/commit/3e388b91313ac183fe61b328c80f6538ef20003b))
+* Removed unnecessary assignment of type when showing the dropdown window ([d4399e0](https://github.com/SolidAlloy/ClassTypeReference-for-Unity/commit/d4399e0d48fd745f3728f902e063269cc43bd80d))
+
 ## [2.2.2](https://github.com/SolidAlloy/ClassTypeReference-for-Unity/compare/2.2.1...2.2.2) (2020-10-04)
 
 
