@@ -1,6 +1,7 @@
 ﻿namespace TypeReferences.Editor.TypeDropdown
 {
     using System;
+    using SolidUtilities.Editor.Extensions;
     using SolidUtilities.Editor.Helpers;
     using SolidUtilities.Extensions;
     using UnityEditor;
@@ -78,22 +79,8 @@
 
         private void AdjustHeightIfNeeded()
         {
-            if ( ! _preventExpandingHeight)
-                return;
-
-            if (_contentHeight.ApproximatelyEquals(position.height))
-                return;
-
-            Rect positionToAdjust = position;
-
-            positionToAdjust.height = Math.Min(_contentHeight, DropdownStyle.MaxWindowHeight);
-            minSize = new Vector2(minSize.x, positionToAdjust.height);
-            maxSize = new Vector2(maxSize.x, positionToAdjust.height);
-            float screenHeight = Screen.currentResolution.height - 40f;
-            if (positionToAdjust.yMax >= screenHeight)
-                positionToAdjust.y -= positionToAdjust.yMax - screenHeight;
-
-            position = positionToAdjust;
+            if (_preventExpandingHeight || ! _contentHeight.ApproximatelyEquals(position.height))
+                this.Resize(height: Math.Min(_contentHeight, DropdownStyle.MaxWindowHeight));
         }
 
         private void CloseOnEscPress()
@@ -107,7 +94,7 @@
 
         private void DrawContent()
         {
-            DrawInFixedRectIfNeeded(() =>
+            DrawInFixedRectIfConditionIsMet(_preventExpandingHeight, () =>
             {
                 float contentHeight = EditorDrawHelper.DrawVertically(_selectionTree.Draw, _preventExpandingHeight,
                     DropdownStyle.BackgroundColor);
@@ -125,14 +112,14 @@
                 Repaint();
         }
 
-        private void DrawInFixedRectIfNeeded(Action drawContent)
+        private void DrawInFixedRectIfConditionIsMet(bool condition, Action drawContent)
         {
-            if (_preventExpandingHeight)
+            if (condition)
                 GUILayout.BeginArea(new Rect(0.0f, 0.0f, position.width, DropdownStyle.MaxWindowHeight));
 
             drawContent();
 
-            if (_preventExpandingHeight)
+            if (condition)
                 GUILayout.EndArea();
         }
     }
