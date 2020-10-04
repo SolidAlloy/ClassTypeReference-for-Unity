@@ -35,7 +35,6 @@
             bool hideNoneElement)
         {
             _root = SelectionNode.CreateRoot(this);
-            _onTypeSelected = onTypeSelected;
 
             if ( ! hideNoneElement)
                 _noneElement = NoneElement.Create(this);
@@ -45,6 +44,7 @@
             _drawSearchbar = items.Count >= searchbarMinItemsCount;
 
             SetSelection(items, selectedType);
+            _onTypeSelected = onTypeSelected;
         }
 
         public event Action SelectionChanged;
@@ -57,7 +57,7 @@
             set
             {
                 _selectedNode = value;
-                _onTypeSelected(_selectedNode.Type);
+                _onTypeSelected?.Invoke(_selectedNode.Type);
                 SelectionChanged?.Invoke();
             }
         }
