@@ -6,14 +6,13 @@
     using System.Reflection;
     using Editor.Util;
     using TypeDropdown;
-    using UnityEngine;
     using Util;
 
     /// <summary>
     /// This class gathers needed types from assemblies based on the attribute options, and creates a popup window with
     /// the collected types.
     /// </summary>
-    internal class TypeDropdownDrawer
+    public class TypeDropdownDrawer
     {
         private readonly TypeOptionsAttribute _attribute;
         private readonly Type _declaringType;
