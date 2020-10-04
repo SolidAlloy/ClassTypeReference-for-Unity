@@ -13,6 +13,7 @@
         private SelectionTree _selectionTree;
         private PreventExpandingHeight _preventExpandingHeight;
         private float _contentHeight;
+        private float _optimalWidth;
 
         public static void Create(SelectionTree selectionTree, int windowHeight)
         {
@@ -33,16 +34,20 @@
             _selectionTree = selectionTree;
             _selectionTree.SelectionChanged += Close;
 
-            float windowWidth = CalculateOptimalWidth();
+            _optimalWidth = CalculateOptimalWidth();
 
             _preventExpandingHeight = new PreventExpandingHeight(windowHeight == 0f);
 
             Vector2 windowPosition = GUIUtility.GUIToScreenPoint(Event.current.mousePosition);
-            var windowSize = new Vector2(windowWidth, windowHeight);
+
+            // If the window width is smaller than the distance from cursor to the right border of the window, the
+            // window will not appear because the cursor is outside of the window and OnGUI will never be called.
+            float distanceToRightBorder = Screen.currentResolution.width - windowPosition.x + 8f;
+            var windowSize = new Vector2(Mathf.Max(distanceToRightBorder, _optimalWidth), windowHeight);
 
             // ShowAsDropDown usually shows the window under a button, but since we don't need to align the window to
             // any button, we set buttonRect.height to 0f.
-            var buttonRect = new Rect(windowPosition, new Vector2(windowSize.x, 0f));
+            var buttonRect = new Rect(windowPosition, new Vector2(distanceToRightBorder, 0f));
             ShowAsDropDown(buttonRect, windowSize);
         }
 
@@ -56,7 +61,7 @@
         private void Update()
         {
             // If called in OnGUI, the dropdown blinks before appearing for some reason. Thus, it works well only in Update.
-            AdjustHeightIfNeeded();
+            AdjustSizeIfNeeded();
         }
 
         private static void ResetControl()
@@ -77,8 +82,13 @@
             return windowWidth < DropdownStyle.MinWindowWidth ? DropdownStyle.MinWindowWidth : windowWidth;
         }
 
-        private void AdjustHeightIfNeeded()
+        private void AdjustSizeIfNeeded()
         {
+            if (!_optimalWidth.ApproximatelyEquals(position.width))
+            {
+                this.Resize(_optimalWidth);
+            }
+
             if (_preventExpandingHeight || ! _contentHeight.ApproximatelyEquals(position.height))
                 this.Resize(height: Math.Min(_contentHeight, DropdownStyle.MaxWindowHeight));
         }
