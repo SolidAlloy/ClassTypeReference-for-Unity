@@ -1,6 +1,6 @@
 {
   "name": "com.solidalloy.type.references",
-  "version": "2.2.1",
+  "version": "2.2.2",
   "displayName": "Type References",
   "description": "Property Drawer that allows class selection from drop-down.",
   "dependencies": {
