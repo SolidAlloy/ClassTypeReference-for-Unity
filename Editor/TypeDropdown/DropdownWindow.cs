@@ -84,12 +84,10 @@
 
         private void AdjustSizeIfNeeded()
         {
-            if (!_optimalWidth.ApproximatelyEquals(position.width))
-            {
+            if (_optimalWidth.DoesNotEqualApproximately(position.width))
                 this.Resize(_optimalWidth);
-            }
 
-            if (_preventExpandingHeight || ! _contentHeight.ApproximatelyEquals(position.height))
+            if (_preventExpandingHeight || _contentHeight.DoesNotEqualApproximately(position.height))
                 this.Resize(height: Math.Min(_contentHeight, DropdownStyle.MaxWindowHeight));
         }
 
