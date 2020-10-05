@@ -20,8 +20,6 @@
         private readonly string _searchFieldControlName = Guid.NewGuid().ToString();
         private readonly Action<Type> _onTypeSelected;
         private readonly Scrollbar _scrollbar = new Scrollbar();
-        private readonly int _searchbarMinItemsCount;
-        private readonly int _typeItemsCount;
         private readonly bool _drawSearchbar;
 
         private string _searchString = string.Empty;
