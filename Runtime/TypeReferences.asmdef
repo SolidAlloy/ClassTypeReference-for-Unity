@@ -1,6 +1,6 @@
 {
     "name": "TypeReferences",
-    "rootNamespace": "",
+    "rootNamespace": "TypeReferences",
     "references": [
         "GUID:b73ef07971851e14fa74ae50b76f8225"
     ],

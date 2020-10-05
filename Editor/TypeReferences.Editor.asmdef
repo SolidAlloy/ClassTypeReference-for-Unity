@@ -1,5 +1,6 @@
 {
     "name": "TypeReferences.Editor",
+    "rootNamespace": "TypeReferences.Editor",
     "references": [
         "GUID:ea6a6314f279f814facc8c48a7d3c9f1",
         "GUID:b73ef07971851e14fa74ae50b76f8225",
