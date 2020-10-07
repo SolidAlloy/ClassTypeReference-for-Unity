@@ -1,10 +1,10 @@
 namespace TypeReferences.Editor.Drawers
 {
-    using Editor.Util;
     using TypeReferences;
     using UnityEditor;
     using UnityEngine;
-    using TypeCache = Editor.Util.TypeCache;
+    using Util;
+    using TypeCache = Util.TypeCache;
 
     /// <summary>
     /// Custom property drawer for <see cref="TypeReference"/> properties.

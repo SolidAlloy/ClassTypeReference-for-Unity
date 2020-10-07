@@ -95,20 +95,6 @@
                 : string.Empty;
         }
 
-        private void SetClassGuidIfExists(Type type)
-        {
-            try
-            {
-                GUID = GetClassGUID(type);
-            }
-            // It is thrown on assembly recompiling if field initialization is used on field.
-            catch (UnityException)
-            {
-                GuidAssignmentFailed = true;
-                GUID = string.Empty;
-            }
-        }
-
         /// <summary>
         /// Get GUID of the file that contains the class of the given type.
         /// It works only for MonoBehaviours, ScriptableObjects, and other classes
@@ -170,6 +156,20 @@
 
             if (type.FullName == null)
                 throw new ArgumentException($"'{type}' does not have full name.", nameof(type));
+        }
+
+        private void SetClassGuidIfExists(Type type)
+        {
+            try
+            {
+                GUID = GetClassGUID(type);
+            }
+            // It is thrown on assembly recompiling if field initialization is used on field.
+            catch (UnityException)
+            {
+                GuidAssignmentFailed = true;
+                GUID = string.Empty;
+            }
         }
 
         private Type TryGetTypeFromSerializedFields()

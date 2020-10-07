@@ -1,13 +1,12 @@
 ﻿namespace TypeReferences.Editor.Drawers
 {
     using System;
-    using System.Linq;
-    using Editor.Util;
     using SolidUtilities.Editor.Helpers;
     using TypeReferences;
     using UnityEditor;
     using UnityEngine;
-    using TypeCache = Editor.Util.TypeCache;
+    using Util;
+    using TypeCache = Util.TypeCache;
 
     /// <summary>
     /// Draws a <see cref="TypeReference"/> field and handles control over the drop-down list.

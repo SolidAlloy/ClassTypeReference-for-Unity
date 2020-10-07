@@ -28,7 +28,7 @@
         /// Allows to choose the base type from the drop-down as well.
         /// Defaults to a value of <c>false</c> unless explicitly specified.
         /// </summary>
-        public bool IncludeBaseType { get; set; } = false;
+        public bool IncludeBaseType { get; set; }
 
         /// <summary>
         /// Allows abstract classes and interfaces to be selected from drop-down.

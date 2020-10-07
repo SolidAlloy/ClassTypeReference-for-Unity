@@ -62,6 +62,30 @@
             FullTypeName = null;
         }
 
+        public Rect Rect => _rect;
+
+        public string FullTypeName { get; }
+
+        /// <summary>
+        /// If the node is folder, this shows whether is is expanded or closed. If the node is type item, setting this
+        /// will do nothing, and its value is always false.
+        /// </summary>
+        public bool Expanded
+        {
+            get => IsFolder && _expanded;
+            set => _expanded = value;
+        }
+
+        private bool IsSelected => _parentTree.SelectedNode == this;
+
+        private bool IsFolder => ChildNodes.Count != 0;
+
+        private bool IsHoveredOver => _rect.Contains(Event.current.mousePosition);
+
+        private bool IsRoot => _parentNode == null;
+
+        public void Select() => _parentTree.SelectedNode = this;
+
         /// <summary>Creates a root node that does not have a parent and does not show up in the popup.</summary>
         /// <param name="parentTree">The tree this node belongs to.</param>
         /// <returns>The root node.</returns>
@@ -90,30 +114,6 @@
             ChildNodes.Add(child);
             return child;
         }
-
-        public Rect Rect => _rect;
-
-        public string FullTypeName { get; }
-
-        /// <summary>
-        /// If the node is folder, this shows whether is is expanded or closed. If the node is type item, setting this
-        /// will do nothing, and its value is always false.
-        /// </summary>
-        public bool Expanded
-        {
-            get => IsFolder && _expanded;
-            set => _expanded = value;
-        }
-
-        private bool IsSelected => _parentTree.SelectedNode == this;
-
-        private bool IsFolder => ChildNodes.Count != 0;
-
-        private bool IsHoveredOver => _rect.Contains(Event.current.mousePosition);
-
-        private bool IsRoot => _parentNode == null;
-
-        public void Select() => _parentTree.SelectedNode = this;
 
         public IEnumerable<SelectionNode> GetChildNodesRecursive()
         {
