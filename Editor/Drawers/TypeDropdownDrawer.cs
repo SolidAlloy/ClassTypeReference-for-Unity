@@ -4,8 +4,8 @@
     using System.Collections.Generic;
     using System.Linq;
     using System.Reflection;
-    using Editor.Util;
     using TypeDropdown;
+    using Util;
 
     /// <summary>
     /// This class gathers needed types from assemblies based on the attribute options, and creates a popup window with
