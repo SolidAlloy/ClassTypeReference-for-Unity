@@ -1,11 +1,10 @@
-﻿namespace TypeReferences.Editor.Drawers.Util
+﻿namespace TypeReferences.Editor.Util
 {
     using System;
     using System.Collections.Generic;
     using System.IO;
     using System.Linq;
     using System.Reflection;
-    using System.Runtime.ExceptionServices;
     using TypeReferences;
     using UnityEngine;
 
@@ -16,20 +15,16 @@
     {
         public static List<Assembly> GetAssembliesTypeHasAccessTo(Type type)
         {
-            Assembly typeAssembly = null;
+            Assembly typeAssembly;
+
             try
             {
                 typeAssembly = type == null ? Assembly.Load("Assembly-CSharp") : type.Assembly;
             }
-            catch (FileNotFoundException e)
+            catch (FileNotFoundException)
             {
-                /*
-                Debug.LogError("Assembly-CSharp.dll was not found. Please create any script in the Assets " +
-                               "folder so that the assembly is generated.");
-                ExceptionDispatchInfo.Capture(e).Throw();
-                */
-                throw new FileNotFoundException("Assembly-CSharp.dll was not found. Please create any script " +
-                                                "in the Assets folder so that the assembly is generated.");
+                throw new FileNotFoundException("Assembly-CSharp.dll was not found. Please create any " +
+                                                "script in the Assets folder so that the assembly is generated.");
             }
 
             var assemblies = new List<Assembly> { typeAssembly };
