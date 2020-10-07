@@ -5,6 +5,7 @@
     using System.IO;
     using System.Linq;
     using System.Reflection;
+    using System.Runtime.ExceptionServices;
     using TypeReferences;
     using UnityEngine;
 
@@ -15,7 +16,22 @@
     {
         public static List<Assembly> GetAssembliesTypeHasAccessTo(Type type)
         {
-            var typeAssembly = type == null ? Assembly.Load("Assembly-CSharp") : type.Assembly;
+            Assembly typeAssembly = null;
+            try
+            {
+                typeAssembly = type == null ? Assembly.Load("Assembly-CSharp") : type.Assembly;
+            }
+            catch (FileNotFoundException e)
+            {
+                /*
+                Debug.LogError("Assembly-CSharp.dll was not found. Please create any script in the Assets " +
+                               "folder so that the assembly is generated.");
+                ExceptionDispatchInfo.Capture(e).Throw();
+                */
+                throw new FileNotFoundException("Assembly-CSharp.dll was not found. Please create any script " +
+                                                "in the Assets folder so that the assembly is generated.");
+            }
+
             var assemblies = new List<Assembly> { typeAssembly };
 
             var referencedAssemblies = typeAssembly.GetReferencedAssemblies().Select(Assembly.Load);
