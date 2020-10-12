@@ -2,6 +2,7 @@
 {
     using System;
     using System.Linq;
+    using JetBrains.Annotations;
     using UnityEngine;
 
     /// <summary>
@@ -15,50 +16,56 @@
         /// Gets or sets grouping of selectable types. Defaults to <see><cref>Grouping.ByNamespaceFlat</cref></see>
         /// unless explicitly specified.
         /// </summary>
-        public Grouping Grouping = Grouping.ByNamespaceFlat;
+        [PublicAPI] public Grouping Grouping = Grouping.ByNamespaceFlat;
 
         /// <summary>
         /// Removes (None) from the dropdown and disallows setting Type to null in Inspector.
         /// Note that the type can still be null by default or if set through code.
         /// Defaults to <c>false</c> unless explicitly specified.
         /// </summary>
-        public bool ExcludeNone = false;
+        [PublicAPI] public bool ExcludeNone;
 
         /// <summary>Includes additional types in the drop-down list.</summary>
-        public Type[] IncludeTypes;
+        [PublicAPI] public Type[] IncludeTypes;
 
         /// <summary>Excludes some of the types from the drop-down list.</summary>
-        public Type[] ExcludeTypes;
+        [PublicAPI] public Type[] ExcludeTypes;
 
         /// <summary>
         /// Adds types from additional assemblies to the drop-down list.
         /// By default, only types that can be accessed directly by the class are shown in the list.
         /// </summary>
-        public string[] IncludeAdditionalAssemblies;
+        [PublicAPI] public string[] IncludeAdditionalAssemblies;
 
         /// <summary>Gets or sets the height of the dropdown. Default is zero.</summary>
-        public int DropdownHeight = 0;
+        [PublicAPI] public int DropdownHeight;
 
         /// <summary>
         /// If the dropdown renders a tree-view, then setting this to true will ensure everything is expanded by default.
         /// </summary>
-        public bool ExpandAllFolders = false;
+        [PublicAPI] public bool ExpandAllFolders;
 
         /// <summary>
         /// Sets the minimum number of items in the drop-down for the search bar to appear. Defaults to 10.
         /// </summary>
-        public int SearchbarMinItemsCount = 10;
+        [PublicAPI] public int SearchbarMinItemsCount = 10;
 
         /// <summary>
         /// Makes the field show the short name of the selected type instead of the full one. False by default.
         /// </summary>
-        public bool ShortName = false;
+        [PublicAPI] public bool ShortName;
 
         /// <summary>
         /// Whether to make dropdown show built-in types by their keyword name (int) instead of the full name
         /// (System.Int32). Defaults to true.
         /// </summary>
-        public bool UseBuiltInNames = true;
+        [PublicAPI] public bool UseBuiltInNames = true;
+
+        /// <summary>
+        /// Additional filter to sort out types. Must return <see langword="true"/> is the type is to be included in
+        /// the collection, and <see langword="false"/> if the type must not be included.
+        /// </summary>
+        [PublicAPI] public Func<Type, bool> AdditionalFilter;
 
         /// <summary>
         /// Determines whether the specified <see cref="Type"/> matches requirements set in the attribute.
@@ -69,6 +76,12 @@
         /// matches the requirements and should thus be selectable.
         /// </returns>
         public virtual bool MatchesRequirements(Type type)
+        {
+            bool passesFilter = AdditionalFilter?.Invoke(type) ?? true;
+            return NotExcluded(type) && passesFilter;
+        }
+
+        private bool NotExcluded(Type type)
         {
             if (ExcludeTypes == null)
                 return true;
