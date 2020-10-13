@@ -1,3 +1,16 @@
+# [2.3.0](https://github.com/SolidAlloy/ClassTypeReference-for-Unity/compare/2.2.3...2.3.0) (2020-10-13)
+
+
+### Bug Fixes
+
+* Replaced AdditionalFilter with SerializableOnly option ([bbf9731](https://github.com/SolidAlloy/ClassTypeReference-for-Unity/commit/bbf973145405af66cd0e0568494493a2503cfe0d))
+
+
+### Features
+
+* Added the AdditionalFilter attribute option ([194db0b](https://github.com/SolidAlloy/ClassTypeReference-for-Unity/commit/194db0b80f016e8274b9f5156849798fe41065e9))
+* Added TypeReference array comparer ([c674f8a](https://github.com/SolidAlloy/ClassTypeReference-for-Unity/commit/c674f8a787c6b1e6f5d254beede3594dffa4c022))
+
 ## [2.2.3](https://github.com/SolidAlloy/ClassTypeReference-for-Unity/compare/2.2.2...2.2.3) (2020-10-04)
 
 
