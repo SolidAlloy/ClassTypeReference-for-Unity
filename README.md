@@ -194,6 +194,15 @@ By default, the field shows built-in types by their keyword name instead of the 
 
 &nbsp;  
 
+The *SerializableOnly* option allows you to show only the classes that can be serialized by Unity. It is useful when creating custom generic classes using the types selected from the dropdown. It is a [new feature in Unity 2020](https://unity.com/releases/2020-1/programmer-tools#create-fields-generic-types-directly).
+
+```csharp
+[SerializeField, TypeOptions(SerializableOnly = true)]
+private TypeReference serializableTypes;
+```
+
+&nbsp;  
+
 ## Inherits Attribute
 
 This attribute allows you to choose only from the classes that implement a certain interface or extend a class. It has all the arguments `TypeOptions` provides.
