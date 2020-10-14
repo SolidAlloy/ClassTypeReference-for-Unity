@@ -170,7 +170,7 @@
         private static Rect GetInnerToolbarArea()
         {
             Rect outerToolbarArea = GUILayoutUtility.GetRect(
-                0.0f,
+                0f,
                 DropdownStyle.SearchToolbarHeight,
                 DrawHelper.ExpandWidth(true));
 
