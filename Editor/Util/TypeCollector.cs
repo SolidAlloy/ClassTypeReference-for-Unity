@@ -13,7 +13,7 @@
     /// </summary>
     internal static class TypeCollector
     {
-        public static List<Assembly> GetAssembliesTypeHasAccessTo(Type type)
+        public static Assembly[] GetAssembliesTypeHasAccessTo(Type type)
         {
             Assembly typeAssembly;
 
@@ -27,12 +27,10 @@
                                                 "script in the Assets folder so that the assembly is generated.");
             }
 
-            var assemblies = new List<Assembly> { typeAssembly };
-
-            var referencedAssemblies = typeAssembly.GetReferencedAssemblies().Select(Assembly.Load);
-            assemblies.AddRange(referencedAssemblies);
-
-            return assemblies;
+            return typeAssembly.GetReferencedAssemblies()
+                .Select(Assembly.Load)
+                .Append(typeAssembly)
+                .ToArray();
         }
 
         public static List<Type> GetFilteredTypesFromAssemblies(
