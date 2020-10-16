@@ -1,3 +1,10 @@
+# [2.4.0](https://github.com/SolidAlloy/ClassTypeReference-for-Unity/compare/2.3.1...2.4.0) (2020-10-16)
+
+
+### Features
+
+* Allowed adding more than one base type for the Inherits attribute ([4afd2d5](https://github.com/SolidAlloy/ClassTypeReference-for-Unity/commit/4afd2d5bd137e3449d90bb4487990dbcbd473695))
+
 # [2.3.0](https://github.com/SolidAlloy/ClassTypeReference-for-Unity/compare/2.2.3...2.3.0) (2020-10-13)
 
 
