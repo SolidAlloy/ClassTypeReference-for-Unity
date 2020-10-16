@@ -1,3 +1,10 @@
+# [2.5.0](https://github.com/SolidAlloy/ClassTypeReference-for-Unity/compare/2.4.0...2.5.0) (2020-10-16)
+
+
+### Features
+
+* Added an additional construct for the Inherits attribute ([b0a1444](https://github.com/SolidAlloy/ClassTypeReference-for-Unity/commit/b0a14449957aaaca511de346782d55071827b1ea))
+
 # [2.4.0](https://github.com/SolidAlloy/ClassTypeReference-for-Unity/compare/2.3.1...2.4.0) (2020-10-16)
 
 
