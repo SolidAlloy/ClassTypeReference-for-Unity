@@ -11,7 +11,7 @@
     /// Reference to a class <see cref="System.Type"/> with support for Unity serialization.
     /// </summary>
     [Serializable]
-    public sealed class TypeReference : ISerializationCallbackReceiver
+    public class TypeReference : ISerializationCallbackReceiver
     {
         /// <summary>
         /// Name of the element in the drop-down list that corresponds to null value.

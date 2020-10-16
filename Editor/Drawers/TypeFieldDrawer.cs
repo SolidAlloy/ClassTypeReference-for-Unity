@@ -11,7 +11,7 @@
     /// <summary>
     /// Draws a <see cref="TypeReference"/> field and handles control over the drop-down list.
     /// </summary>
-    internal class TypeFieldDrawer
+    public class TypeFieldDrawer
     {
         private const string MissingSuffix = " {Missing}";
         private static readonly int ControlHint = typeof(TypeReferencePropertyDrawer).GetHashCode();

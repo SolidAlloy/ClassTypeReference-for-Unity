@@ -7,7 +7,7 @@
     /// <summary>
     /// A class that gives access to serialized properties inside <see cref="TypeReference"/>.
     /// </summary>
-    internal class SerializedTypeReference
+    public class SerializedTypeReference
     {
         private readonly SerializedObject _parentObject;
         private readonly SerializedProperty _typeNameProperty;

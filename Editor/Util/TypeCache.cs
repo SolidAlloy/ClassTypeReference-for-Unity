@@ -6,7 +6,7 @@
     /// <summary>
     /// A class that improves performance by avoiding a large number of <see cref="M:Type.GetType"/> calls.
     /// </summary>
-    internal static class TypeCache
+    public static class TypeCache
     {
         private static readonly Dictionary<string, Type> TypeDict = new Dictionary<string, Type>();
 
