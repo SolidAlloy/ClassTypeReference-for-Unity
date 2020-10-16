@@ -15,13 +15,27 @@
         private readonly IEnumerable<Type> _baseTypes;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="InheritsAttribute"/> class.
+        /// Initializes a new instance of the <see cref="InheritsAttribute"/> class using one base type and optional
+        /// additional base types.
         /// </summary>
         /// <param name="baseType">Type that selectable types must inherit from.</param>
-        /// <param name="additionalBaseTypes">Additional types the selectable types must inherit from (e.g. multiple interfaces).</param>
+        /// <param name="additionalBaseTypes">
+        /// Additional types the selectable types must inherit from (e.g. multiple interfaces).
+        /// </param>
         public InheritsAttribute(Type baseType, params Type[] additionalBaseTypes)
         {
             _baseTypes = additionalBaseTypes.Append(baseType);
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="InheritsAttribute"/> class using multiple base types.
+        /// </summary>
+        /// <param name="baseTypes">
+        /// Types the selectable types must inherit from (e.g. parent class and additional interfaces).
+        /// </param>
+        public InheritsAttribute(Type[] baseTypes)
+        {
+            _baseTypes = baseTypes;
         }
 
         /// <summary>
