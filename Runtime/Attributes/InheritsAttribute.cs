@@ -1,7 +1,6 @@
 ﻿namespace TypeReferences
 {
     using System;
-    using System.Collections.Generic;
     using System.Linq;
     using SolidUtilities.Extensions;
 
@@ -12,7 +11,7 @@
     [AttributeUsage(AttributeTargets.Field)]
     public class InheritsAttribute : TypeOptionsAttribute
     {
-        private readonly IEnumerable<Type> _baseTypes;
+        private readonly Type[] _baseTypes;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="InheritsAttribute"/> class using one base type and optional
@@ -24,7 +23,13 @@
         /// </param>
         public InheritsAttribute(Type baseType, params Type[] additionalBaseTypes)
         {
-            _baseTypes = additionalBaseTypes.Append(baseType);
+            int additionalTypesLength = additionalBaseTypes.Length;
+            _baseTypes = new Type[additionalTypesLength+1];
+
+            for (int i = 0; i < additionalTypesLength; i++)
+                _baseTypes[i] = additionalBaseTypes[i];
+
+            _baseTypes[additionalTypesLength] = baseType;
         }
 
         /// <summary>
@@ -51,7 +56,7 @@
         public bool AllowAbstract { get; set; }
 
         /// <inheritdoc/>
-        public override bool MatchesRequirements(Type type)
+        internal override bool MatchesRequirements(Type type)
         {
             if (_baseTypes.Contains(type) && !IncludeBaseType)
             {
