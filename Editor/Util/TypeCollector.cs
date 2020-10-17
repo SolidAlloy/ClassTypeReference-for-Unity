@@ -13,7 +13,19 @@
     /// </summary>
     internal static class TypeCollector
     {
-        public static Assembly[] GetAssembliesTypeHasAccessTo(Type type)
+        /// <summary>
+        /// Collects assemblies the type has access to: the type's native assembly and all its referenced assemblies.
+        /// </summary>
+        /// <param name="type">Type to collect the assemblies for.</param>
+        /// <returns>Collection of assemblies the type has access to.</returns>
+        /// <exception cref="FileNotFoundException">
+        /// If the method tried to load the Assembly-Csharp assembly but it does not exist.
+        /// </exception>
+        /// <remarks>
+        /// Additional assemblies may be added using <see cref="TypeOptionsAttribute.IncludeAdditionalAssemblies"/>,
+        /// hence the List return type.
+        /// </remarks>
+        public static List<Assembly> GetAssembliesTypeHasAccessTo(Type type)
         {
             Assembly typeAssembly;
 
@@ -30,7 +42,7 @@
             return typeAssembly.GetReferencedAssemblies()
                 .Select(Assembly.Load)
                 .Append(typeAssembly)
-                .ToArray();
+                .ToList();
         }
 
         public static List<Type> GetFilteredTypesFromAssemblies(
