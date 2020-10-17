@@ -16,14 +16,15 @@
         /// <summary>
         /// Name of the element in the drop-down list that corresponds to null value.
         /// </summary>
-        public const string NoneElement = "(None)";
+        internal const string NoneElement = "(None)";
 
-        public const string NameOfTypeNameField = nameof(_typeNameAndAssembly);
+        internal const string NameOfTypeNameField = nameof(_typeNameAndAssembly);
 
-        public bool GuidAssignmentFailed;
-        public string GUID;
+        [SerializeField] internal bool GuidAssignmentFailed;
+        [SerializeField] internal string GUID;
 
         [SerializeField] private string _typeNameAndAssembly;
+
         private Type _type;
 
         /// <summary>
@@ -86,7 +87,24 @@
             return new TypeReference(type);
         }
 
-        public static string GetTypeNameAndAssembly(Type type)
+        public override string ToString()
+        {
+            if (Type != null && Type.FullName != null)
+            {
+                return Type.FullName;
+            }
+            else
+            {
+                return NoneElement;
+            }
+        }
+
+        void ISerializationCallbackReceiver.OnAfterDeserialize() =>
+            _type = IsNotEmpty(_typeNameAndAssembly) ? TryGetTypeFromSerializedFields() : null;
+
+        void ISerializationCallbackReceiver.OnBeforeSerialize() { }
+
+        internal static string GetTypeNameAndAssembly(Type type)
         {
             MakeSureTypeHasName(type);
 
@@ -102,7 +120,7 @@
         /// </summary>
         /// <param name="type">Type of the class to search for.</param>
         /// <returns>String representing the GUID of the file, or empty string if no file found.</returns>
-        public static string GetClassGUID(Type type)
+        internal static string GetClassGUID(Type type)
         {
             if (type == null || type.FullName == null)
                 return string.Empty;
@@ -124,25 +142,6 @@
 #endif
             return string.Empty;
         }
-
-        public override string ToString()
-        {
-            if (Type != null && Type.FullName != null)
-            {
-                return Type.FullName;
-            }
-            else
-            {
-                return NoneElement;
-            }
-        }
-
-        void ISerializationCallbackReceiver.OnAfterDeserialize()
-        {
-            _type = IsNotEmpty(_typeNameAndAssembly) ? TryGetTypeFromSerializedFields() : null;
-        }
-
-        void ISerializationCallbackReceiver.OnBeforeSerialize() { }
 
         private static bool IsNotEmpty(string value)
         {

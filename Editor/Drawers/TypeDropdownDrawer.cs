@@ -11,7 +11,7 @@
     /// This class gathers needed types from assemblies based on the attribute options, and creates a popup window with
     /// the collected types.
     /// </summary>
-    public class TypeDropdownDrawer
+    internal class TypeDropdownDrawer
     {
         private readonly TypeOptionsAttribute _attribute;
         private readonly Type _declaringType;

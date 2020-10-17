@@ -79,7 +79,7 @@
         /// A <see cref="bool"/> value indicating if the type specified by <paramref name="type"/>
         /// matches the requirements and should thus be selectable.
         /// </returns>
-        public virtual bool MatchesRequirements(Type type)
+        internal virtual bool MatchesRequirements(Type type)
         {
             bool passesExcludedFilter = ! ExcludeTypes?.Contains(type) ?? true;
             bool passesSerializableFilter = ! SerializableOnly || type.IsUnitySerializable();

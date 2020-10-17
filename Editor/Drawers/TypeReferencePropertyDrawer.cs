@@ -9,6 +9,7 @@ namespace TypeReferences.Editor.Drawers
     /// <summary>
     /// Custom property drawer for <see cref="TypeReference"/> properties.
     /// </summary>
+    /// <remarks>The class is public because it is used in the Samples package.</remarks>
     [CustomPropertyDrawer(typeof(TypeReference))]
     [CustomPropertyDrawer(typeof(TypeOptionsAttribute), true)]
     public class TypeReferencePropertyDrawer : PropertyDrawer
