@@ -1,6 +1,7 @@
 ﻿namespace TypeReferences.Editor.TypeDropdown
 {
     using System;
+    using System.Collections.Generic;
     using SolidUtilities.Editor.Extensions;
     using SolidUtilities.Editor.Helpers;
     using SolidUtilities.Extensions;
@@ -15,10 +16,13 @@
         private float _contentHeight;
         private float _optimalWidth;
 
-        public static void Create(SelectionTree selectionTree, int windowHeight)
+        public event Action OnClose;
+
+        public static DropdownWindow Create(SelectionTree selectionTree, int windowHeight, Vector2 windowPosition)
         {
             var window = CreateInstance<DropdownWindow>();
-            window.OnCreate(selectionTree, windowHeight);
+            window.OnCreate(selectionTree, windowHeight, windowPosition);
+            return window;
         }
 
         /// <summary>
@@ -27,18 +31,17 @@
         /// </summary>
         /// <param name="selectionTree">Tree that contains the dropdown items to show.</param>
         /// <param name="windowHeight">Height of the window. If set to 0, it will be auto-adjusted.</param>
-        private void OnCreate(SelectionTree selectionTree, float windowHeight)
+        /// <param name="windowPosition">Position of the window to set.</param>
+        private void OnCreate(SelectionTree selectionTree, float windowHeight, Vector2 windowPosition)
         {
             ResetControl();
             wantsMouseMove = true;
             _selectionTree = selectionTree;
             _selectionTree.SelectionChanged += Close;
 
-            _optimalWidth = CalculateOptimalWidth();
+            _optimalWidth = CalculateOptimalWidth(_selectionTree.SelectionPaths);
 
             _preventExpandingHeight = new PreventExpandingHeight(windowHeight == 0f);
-
-            Vector2 windowPosition = GUIUtility.GUIToScreenPoint(Event.current.mousePosition);
 
             // If the window width is smaller than the distance from cursor to the right border of the window, the
             // window will not appear because the cursor is outside of the window and OnGUI will never be called.
@@ -70,10 +73,10 @@
             GUIUtility.keyboardControl = 0;
         }
 
-        private float CalculateOptimalWidth()
+        public static float CalculateOptimalWidth(IEnumerable<string> selectionPaths)
         {
             float windowWidth = PopupHelper.CalculatePopupWidth(
-                _selectionTree.SelectionPaths,
+                selectionPaths,
                 DropdownStyle.DefaultLabelStyle,
                 (int) DropdownStyle.GlobalOffset,
                 (int) DropdownStyle.IndentWidth,
@@ -130,5 +133,7 @@
             if (condition)
                 GUILayout.EndArea();
         }
+
+        private void OnDestroy() => OnClose?.Invoke();
     }
 }

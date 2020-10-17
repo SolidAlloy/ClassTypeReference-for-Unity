@@ -5,6 +5,7 @@
     using System.Linq;
     using System.Reflection;
     using TypeDropdown;
+    using UnityEngine;
     using Util;
 
     /// <summary>
@@ -32,10 +33,11 @@
             if (_attribute.ExpandAllFolders)
                 selectionTree.ExpandAllFolders();
 
-            DropdownWindow.Create(selectionTree, _attribute.DropdownHeight);
+            Vector2 dropdownPosition = GUIUtility.GUIToScreenPoint(Event.current.mousePosition);
+            DropdownWindow.Create(selectionTree, _attribute.DropdownHeight, dropdownPosition);
         }
 
-        private SortedSet<TypeItem> GetDropdownItems()
+        public SortedSet<TypeItem> GetDropdownItems()
         {
             var types = GetFilteredTypes();
 
