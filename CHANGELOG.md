@@ -1,3 +1,10 @@
+## [2.5.1](https://github.com/SolidAlloy/ClassTypeReference-for-Unity/compare/2.5.0...2.5.1) (2020-10-17)
+
+
+### Bug Fixes
+
+* Changed return type from array to list for the GetAssembliesTypeHasAccessTo method ([3f2025e](https://github.com/SolidAlloy/ClassTypeReference-for-Unity/commit/3f2025e90193a82a526a938c333395ae5a65e1d3))
+
 # [2.5.0](https://github.com/SolidAlloy/ClassTypeReference-for-Unity/compare/2.4.0...2.5.0) (2020-10-16)
 
 
