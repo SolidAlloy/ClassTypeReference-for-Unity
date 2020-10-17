@@ -54,6 +54,24 @@
             ShowAsDropDown(buttonRect, windowSize);
         }
 
+        public static float CalculateOptimalWidth(IEnumerable<string> selectionPaths)
+        {
+            float windowWidth = PopupHelper.CalculatePopupWidth(
+                selectionPaths,
+                DropdownStyle.DefaultLabelStyle,
+                (int) DropdownStyle.GlobalOffset,
+                (int) DropdownStyle.IndentWidth,
+                false);
+
+            return windowWidth < DropdownStyle.MinWindowWidth ? DropdownStyle.MinWindowWidth : windowWidth;
+        }
+
+        private static void ResetControl()
+        {
+            GUIUtility.hotControl = 0;
+            GUIUtility.keyboardControl = 0;
+        }
+
         private void OnGUI()
         {
             CloseOnEscPress();
@@ -67,23 +85,7 @@
             AdjustSizeIfNeeded();
         }
 
-        private static void ResetControl()
-        {
-            GUIUtility.hotControl = 0;
-            GUIUtility.keyboardControl = 0;
-        }
-
-        public static float CalculateOptimalWidth(IEnumerable<string> selectionPaths)
-        {
-            float windowWidth = PopupHelper.CalculatePopupWidth(
-                selectionPaths,
-                DropdownStyle.DefaultLabelStyle,
-                (int) DropdownStyle.GlobalOffset,
-                (int) DropdownStyle.IndentWidth,
-                false);
-
-            return windowWidth < DropdownStyle.MinWindowWidth ? DropdownStyle.MinWindowWidth : windowWidth;
-        }
+        private void OnDestroy() => OnClose?.Invoke();
 
         private void AdjustSizeIfNeeded()
         {
@@ -133,7 +135,5 @@
             if (condition)
                 GUILayout.EndArea();
         }
-
-        private void OnDestroy() => OnClose?.Invoke();
     }
 }
