@@ -11,7 +11,7 @@ namespace TypeReferences.Editor.Drawers
     /// </summary>
     [CustomPropertyDrawer(typeof(TypeReference))]
     [CustomPropertyDrawer(typeof(TypeOptionsAttribute), true)]
-    public sealed class TypeReferencePropertyDrawer : PropertyDrawer
+    public class TypeReferencePropertyDrawer : PropertyDrawer
     {
         public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
         {
@@ -20,11 +20,11 @@ namespace TypeReferences.Editor.Drawers
 
         public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
         {
-            position = ExcludeLabelFromPositionIfNecessary(position, label);
+            position = GetPositionWithoutLabel(position, label);
             DrawTypeReferenceField(position, property);
         }
 
-        private static Rect ExcludeLabelFromPositionIfNecessary(Rect position, GUIContent label)
+        private static Rect GetPositionWithoutLabel(Rect position, GUIContent label)
         {
             if (label == null || label == GUIContent.none)
                 return position;
