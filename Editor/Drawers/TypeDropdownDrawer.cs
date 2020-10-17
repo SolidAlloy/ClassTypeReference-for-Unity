@@ -95,7 +95,7 @@
             return sortedTypes;
         }
 
-        private void IncludeAdditionalAssemblies(ICollection<Assembly> typeRelatedAssemblies)
+        private void IncludeAdditionalAssemblies(List<Assembly> typeRelatedAssemblies)
         {
             foreach (string assemblyName in _attribute.IncludeAdditionalAssemblies)
             {
