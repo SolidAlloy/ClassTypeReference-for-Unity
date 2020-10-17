@@ -11,7 +11,7 @@
 
         public override int GetHashCode(TypeReference obj)
         {
-            if (obj == null || obj.Type == null)
+            if (obj.Type == null)
                 return default;
 
             return string.IsNullOrEmpty(obj.GUID) ? obj.Type.GetHashCode() : obj.GUID.GetHashCode();
