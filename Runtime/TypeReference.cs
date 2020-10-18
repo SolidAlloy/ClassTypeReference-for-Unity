@@ -1,6 +1,7 @@
 ﻿namespace TypeReferences
 {
     using System;
+    using JetBrains.Annotations;
     using UnityEngine;
 
 #if UNITY_EDITOR
@@ -66,7 +67,6 @@
         public Type Type
         {
             get => _type;
-
             set
             {
                 MakeSureTypeHasName(value);
@@ -76,6 +76,31 @@
                 SetClassGuidIfExists(value);
             }
         }
+
+        private void TryUpdatingTypeUsingGUID()
+        {
+#if UNITY_EDITOR
+            if (_type != null || GUID == string.Empty)
+                return;
+
+            string assetPath = AssetDatabase.GUIDToAssetPath(GUID);
+            var script = AssetDatabase.LoadAssetAtPath<MonoScript>(assetPath);
+
+            if (script == null)
+            {
+                LogTypeNotFound();
+                return;
+            }
+
+            _type = script.GetClass();
+            string previousTypeName = _typeNameAndAssembly;
+            _typeNameAndAssembly = GetTypeNameAndAssembly(_type);
+            Debug.Log($"Type reference has been updated from '{previousTypeName}' to '{_typeNameAndAssembly}'.");
+#endif
+        }
+
+        private void LogTypeNotFound() =>
+            Debug.LogWarning($"'{_typeNameAndAssembly}' was referenced but class type was not found.");
 
         public static implicit operator Type(TypeReference typeReference)
         {
@@ -89,20 +114,23 @@
 
         public override string ToString()
         {
-            if (Type != null && Type.FullName != null)
-            {
-                return Type.FullName;
-            }
-            else
-            {
-                return NoneElement;
-            }
+            return (Type != null && Type.FullName != null) ? Type.FullName : NoneElement;
         }
 
-        void ISerializationCallbackReceiver.OnAfterDeserialize() =>
+        void ISerializationCallbackReceiver.OnAfterDeserialize()
+        {
             _type = IsNotEmpty(_typeNameAndAssembly) ? TryGetTypeFromSerializedFields() : null;
+#if UNITY_EDITOR
+            EditorApplication.delayCall += TryUpdatingTypeUsingGUID;
+#endif
+        }
 
-        void ISerializationCallbackReceiver.OnBeforeSerialize() { }
+        void ISerializationCallbackReceiver.OnBeforeSerialize()
+        {
+#if UNITY_EDITOR
+            EditorApplication.delayCall -= TryUpdatingTypeUsingGUID;
+#endif
+        }
 
         internal static string GetTypeNameAndAssembly(Type type)
         {
@@ -150,10 +178,7 @@
 
         private static void MakeSureTypeHasName(Type type)
         {
-            if (type == null)
-                return;
-
-            if (type.FullName == null)
+            if (type != null && type.FullName == null)
                 throw new ArgumentException($"'{type}' does not have full name.", nameof(type));
         }
 
@@ -163,24 +188,21 @@
             {
                 GUID = GetClassGUID(type);
             }
-            // It is thrown on assembly recompiling if field initialization is used on field.
-            catch (UnityException)
+            catch (UnityException) // thrown on assembly recompiling if field initialization is used on field.
             {
                 GuidAssignmentFailed = true;
                 GUID = string.Empty;
             }
         }
 
+        [CanBeNull]
         private Type TryGetTypeFromSerializedFields()
         {
             var type = Type.GetType(_typeNameAndAssembly);
 
-            if (type == null)
-            {
-                Debug.LogWarningFormat(
-                    "'{0}' was referenced but class type was not found.",
-                    _typeNameAndAssembly);
-            }
+            // If GUID is not empty, there is still hope the type will be found in the TryUpdatingTypeUsingGUID method.
+            if (type == null && GUID == string.Empty)
+                LogTypeNotFound();
 
             return type;
         }

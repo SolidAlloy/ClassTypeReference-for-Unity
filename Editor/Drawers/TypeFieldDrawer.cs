@@ -121,12 +121,7 @@
                 return TypeReference.NoneElement;
 
             if (TypeCache.GetType(_serializedTypeRef.TypeNameAndAssembly) == null)
-            {
-                _serializedTypeRef.TryUpdatingTypeUsingGUID();
-
-                if (TypeCache.GetType(_serializedTypeRef.TypeNameAndAssembly) == null)
-                    return typeName + MissingSuffix;
-            }
+                return typeName + MissingSuffix;
 
             return typeName;
         }

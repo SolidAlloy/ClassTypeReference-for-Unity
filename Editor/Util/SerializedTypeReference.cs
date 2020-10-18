@@ -2,7 +2,6 @@
 {
     using System;
     using UnityEditor;
-    using UnityEngine;
 
     /// <summary>
     /// A class that gives access to serialized properties inside <see cref="TypeReference"/>.
@@ -49,35 +48,11 @@
 
         private string GUID
         {
-            get => _guidProperty.stringValue;
             set
             {
                 _guidProperty.stringValue = value;
                 _parentObject.ApplyModifiedProperties();
             }
-        }
-
-        /// <summary>
-        /// Try finding the class type given the GUID of the file where it is located.
-        /// If found, change the ClassTypeReference._typeNameAndAssembly value.
-        /// </summary>
-        public void TryUpdatingTypeUsingGUID()
-        {
-            if (GUID == string.Empty)
-                return;
-
-            string assetPath = AssetDatabase.GUIDToAssetPath(GUID);
-            var script = AssetDatabase.LoadAssetAtPath<MonoScript>(assetPath);
-            if (script == null)
-                return;
-
-            Type type = script.GetClass();
-            string previousValue = TypeNameAndAssembly;
-            TypeNameAndAssembly = TypeReference.GetTypeNameAndAssembly(type);
-            Debug.LogFormat(
-                "Type reference has been updated from '{0}' to '{1}'.",
-                previousValue,
-                TypeNameAndAssembly);
         }
 
         private static string GetClassGuidFromTypeName(string typeName)
