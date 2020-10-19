@@ -77,45 +77,11 @@
             }
         }
 
-        private void TryUpdatingTypeUsingGUID()
-        {
-#if UNITY_EDITOR
-            if (_type != null || GUID == string.Empty)
-                return;
+        public static implicit operator Type(TypeReference typeReference) => typeReference?.Type;
 
-            string assetPath = AssetDatabase.GUIDToAssetPath(GUID);
-            var script = AssetDatabase.LoadAssetAtPath<MonoScript>(assetPath);
+        public static implicit operator TypeReference(Type type) => new TypeReference(type);
 
-            if (script == null)
-            {
-                LogTypeNotFound();
-                return;
-            }
-
-            _type = script.GetClass();
-            string previousTypeName = _typeNameAndAssembly;
-            _typeNameAndAssembly = GetTypeNameAndAssembly(_type);
-            Debug.Log($"Type reference has been updated from '{previousTypeName}' to '{_typeNameAndAssembly}'.");
-#endif
-        }
-
-        private void LogTypeNotFound() =>
-            Debug.LogWarning($"'{_typeNameAndAssembly}' was referenced but class type was not found.");
-
-        public static implicit operator Type(TypeReference typeReference)
-        {
-            return typeReference?.Type;
-        }
-
-        public static implicit operator TypeReference(Type type)
-        {
-            return new TypeReference(type);
-        }
-
-        public override string ToString()
-        {
-            return (Type != null && Type.FullName != null) ? Type.FullName : NoneElement;
-        }
+        public override string ToString() => (Type != null && Type.FullName != null) ? Type.FullName : NoneElement;
 
         void ISerializationCallbackReceiver.OnAfterDeserialize()
         {
@@ -154,7 +120,8 @@
                 return string.Empty;
 
 #if UNITY_EDITOR
-            var guids = AssetDatabase.FindAssets(type.Name);
+            string typeName = GetNameForSearch(type.Name);
+            var guids = AssetDatabase.FindAssets(typeName);
 
             foreach (string guid in guids)
             {
@@ -164,23 +131,56 @@
                 if (asset == null)
                     continue;
 
-                if (asset.GetClass() == type)
+                // asset.GetClass() does not work for generic types derived from UnityEngine.Object,
+                // so we have to rely on asset.name
+                if (asset.GetClass() == type || asset.name == typeName)
                     return guid;
             }
 #endif
             return string.Empty;
         }
 
-        private static bool IsNotEmpty(string value)
-        {
-            return ! string.IsNullOrEmpty(value);
-        }
+        private static string GetNameForSearch(string typeName) => typeName.Split('`')[0];
+
+        private static bool IsNotEmpty(string value) => ! string.IsNullOrEmpty(value);
 
         private static void MakeSureTypeHasName(Type type)
         {
             if (type != null && type.FullName == null)
                 throw new ArgumentException($"'{type}' does not have full name.", nameof(type));
         }
+
+        private void TryUpdatingTypeUsingGUID()
+        {
+#if UNITY_EDITOR
+            if (_type != null || GUID == string.Empty)
+                return;
+
+            string assetPath = AssetDatabase.GUIDToAssetPath(GUID);
+            var script = AssetDatabase.LoadAssetAtPath<MonoScript>(assetPath);
+
+            if (script == null)
+            {
+                LogTypeNotFound();
+                return;
+            }
+
+            var type = script.GetClass();
+            if (type == null)
+            {
+                LogTypeNotFound();
+                return;
+            }
+
+            _type = script.GetClass();
+            string previousTypeName = _typeNameAndAssembly;
+            _typeNameAndAssembly = GetTypeNameAndAssembly(_type);
+            Debug.Log($"Type reference has been updated from '{previousTypeName}' to '{_typeNameAndAssembly}'.");
+#endif
+        }
+
+        private void LogTypeNotFound() =>
+            Debug.LogWarning($"'{_typeNameAndAssembly}' was referenced but class type was not found.");
 
         private void SetClassGuidIfExists(Type type)
         {
