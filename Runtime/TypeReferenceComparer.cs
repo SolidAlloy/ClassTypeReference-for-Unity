@@ -11,10 +11,11 @@
 
         public override int GetHashCode(TypeReference obj)
         {
-            if (obj.Type == null)
-                return default;
+            // Even if Type is null, return the GUID hashcode, because the Type will most likely be found based on GUID.
+            if (obj.GUID != string.Empty)
+                return obj.GUID.GetHashCode();
 
-            return string.IsNullOrEmpty(obj.GUID) ? obj.Type.GetHashCode() : obj.GUID.GetHashCode();
+            return obj.Type == null ? default : obj.Type.GetHashCode();
         }
     }
 
