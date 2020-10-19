@@ -180,7 +180,7 @@
         }
 
         private void LogTypeNotFound() =>
-            Debug.LogWarning($"'{_typeNameAndAssembly}' was referenced but class type was not found.");
+            Debug.LogWarning($"'{_typeNameAndAssembly}' was referenced but such type was not found.");
 
         private void SetClassGuidIfExists(Type type)
         {
