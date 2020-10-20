@@ -2,7 +2,8 @@
     "name": "TypeReferences",
     "rootNamespace": "TypeReferences",
     "references": [
-        "GUID:b73ef07971851e14fa74ae50b76f8225"
+        "GUID:b73ef07971851e14fa74ae50b76f8225",
+        "GUID:48d58eaab94e1de429344393b7653b1f"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

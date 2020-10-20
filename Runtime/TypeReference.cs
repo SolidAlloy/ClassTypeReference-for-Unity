@@ -3,8 +3,8 @@
     using System;
     using JetBrains.Annotations;
     using UnityEngine;
-
 #if UNITY_EDITOR
+    using SolidUtilities.Editor.Extensions;
     using UnityEditor;
 #endif
 
@@ -120,8 +120,7 @@
                 return string.Empty;
 
 #if UNITY_EDITOR
-            string typeName = GetNameForSearch(type.Name);
-            var guids = AssetDatabase.FindAssets(typeName);
+            var guids = AssetDatabase.FindAssets(type.Name);
 
             foreach (string guid in guids)
             {
@@ -131,16 +130,12 @@
                 if (asset == null)
                     continue;
 
-                // asset.GetClass() does not work for generic types derived from UnityEngine.Object,
-                // so we have to rely on asset.name
-                if (asset.GetClass() == type || asset.name == typeName)
+                if (asset.GetClassType() == type)
                     return guid;
             }
 #endif
             return string.Empty;
         }
-
-        private static string GetNameForSearch(string typeName) => typeName.Split('`')[0];
 
         private static bool IsNotEmpty(string value) => ! string.IsNullOrEmpty(value);
 
@@ -165,14 +160,14 @@
                 return;
             }
 
-            var type = script.GetClass();
+            var type = script.GetClassType();
             if (type == null)
             {
                 LogTypeNotFound();
                 return;
             }
 
-            _type = script.GetClass();
+            _type = type;
             string previousTypeName = _typeNameAndAssembly;
             _typeNameAndAssembly = GetTypeNameAndAssembly(_type);
             Debug.Log($"Type reference has been updated from '{previousTypeName}' to '{_typeNameAndAssembly}'.");
