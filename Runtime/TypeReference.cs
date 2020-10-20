@@ -157,6 +157,7 @@
             if (script == null)
             {
                 LogTypeNotFound();
+                GUID = string.Empty;
                 return;
             }
 
@@ -164,6 +165,7 @@
             if (type == null)
             {
                 LogTypeNotFound();
+                GUID = string.Empty;
                 return;
             }
 
