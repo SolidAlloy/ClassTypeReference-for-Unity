@@ -14,9 +14,7 @@
     [Serializable]
     public class TypeReference : ISerializationCallbackReceiver
     {
-        /// <summary>
-        /// Name of the element in the drop-down list that corresponds to null value.
-        /// </summary>
+        /// <summary>Name of the element in the drop-down list that corresponds to null value.</summary>
         internal const string NoneElement = "(None)";
 
         internal const string NameOfTypeNameField = nameof(_typeNameAndAssembly);
