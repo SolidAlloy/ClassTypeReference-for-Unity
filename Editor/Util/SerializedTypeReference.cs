@@ -16,7 +16,7 @@
         public SerializedTypeReference(SerializedProperty typeReferenceProperty)
         {
             _parentObject = typeReferenceProperty.serializedObject;
-            _typeNameProperty = typeReferenceProperty.FindPropertyRelative(TypeReference.NameOfTypeNameField);
+            _typeNameProperty = typeReferenceProperty.FindPropertyRelative(nameof(TypeReference.TypeNameAndAssembly));
             _guidProperty = typeReferenceProperty.FindPropertyRelative(nameof(TypeReference.GUID));
             _guidAssignmentFailedProperty = typeReferenceProperty.FindPropertyRelative(nameof(TypeReference.GuidAssignmentFailed));
 

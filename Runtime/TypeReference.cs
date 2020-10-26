@@ -3,6 +3,7 @@
     using System;
     using JetBrains.Annotations;
     using UnityEngine;
+    using UnityEngine.Serialization;
 #if UNITY_EDITOR
     using SolidUtilities.Editor.Extensions;
     using UnityEditor;
@@ -17,12 +18,11 @@
         /// <summary>Name of the element in the drop-down list that corresponds to null value.</summary>
         internal const string NoneElement = "(None)";
 
-        internal const string NameOfTypeNameField = nameof(_typeNameAndAssembly);
-
         [SerializeField] internal bool GuidAssignmentFailed;
         [SerializeField] internal string GUID;
 
-        [SerializeField] private string _typeNameAndAssembly;
+        [FormerlySerializedAs("_typeNameAndAssembly")]
+        [SerializeField] internal string TypeNameAndAssembly;
 
         private Type _type;
 
@@ -70,7 +70,7 @@
                 MakeSureTypeHasName(value);
 
                 _type = value;
-                _typeNameAndAssembly = GetTypeNameAndAssembly(value);
+                TypeNameAndAssembly = GetTypeNameAndAssembly(value);
                 SetClassGuidIfExists(value);
             }
         }
@@ -83,7 +83,7 @@
 
         void ISerializationCallbackReceiver.OnAfterDeserialize()
         {
-            _type = IsNotEmpty(_typeNameAndAssembly) ? TryGetTypeFromSerializedFields() : null;
+            _type = IsNotEmpty(TypeNameAndAssembly) ? TryGetTypeFromSerializedFields() : null;
 #if UNITY_EDITOR
             EditorApplication.delayCall += TryUpdatingTypeUsingGUID;
 #endif
@@ -168,14 +168,14 @@
             }
 
             _type = type;
-            string previousTypeName = _typeNameAndAssembly;
-            _typeNameAndAssembly = GetTypeNameAndAssembly(_type);
-            Debug.Log($"Type reference has been updated from '{previousTypeName}' to '{_typeNameAndAssembly}'.");
+            string previousTypeName = TypeNameAndAssembly;
+            TypeNameAndAssembly = GetTypeNameAndAssembly(_type);
+            Debug.Log($"Type reference has been updated from '{previousTypeName}' to '{TypeNameAndAssembly}'.");
 #endif
         }
 
         private void LogTypeNotFound() =>
-            Debug.LogWarning($"'{_typeNameAndAssembly}' was referenced but such type was not found.");
+            Debug.LogWarning($"'{TypeNameAndAssembly}' was referenced but such type was not found.");
 
         private void SetClassGuidIfExists(Type type)
         {
@@ -193,7 +193,7 @@
         [CanBeNull]
         private Type TryGetTypeFromSerializedFields()
         {
-            var type = Type.GetType(_typeNameAndAssembly);
+            var type = Type.GetType(TypeNameAndAssembly);
 
             // If GUID is not empty, there is still hope the type will be found in the TryUpdatingTypeUsingGUID method.
             if (type == null && GUID == string.Empty)
