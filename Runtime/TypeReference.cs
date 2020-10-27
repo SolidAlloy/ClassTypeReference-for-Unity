@@ -26,6 +26,8 @@
 
         private Type _type;
 
+        private bool _needToLogTypeNotFound;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="TypeReference"/> class with Type equal to null.
         /// </summary>
@@ -86,6 +88,7 @@
             _type = IsNotEmpty(TypeNameAndAssembly) ? TryGetTypeFromSerializedFields() : null;
 #if UNITY_EDITOR
             EditorApplication.delayCall += TryUpdatingTypeUsingGUID;
+            EditorApplication.delayCall += LogTypeNotFoundIfNeeded;
 #endif
         }
 
@@ -93,6 +96,7 @@
         {
 #if UNITY_EDITOR
             EditorApplication.delayCall -= TryUpdatingTypeUsingGUID;
+            EditorApplication.delayCall -= LogTypeNotFoundIfNeeded;
 #endif
         }
 
@@ -177,6 +181,19 @@
         private void LogTypeNotFound() =>
             Debug.LogWarning($"'{TypeNameAndAssembly}' was referenced but such type was not found.");
 
+        /// <summary>
+        /// Sometimes, the fact that the type disappeared is found during the deserialization. A warning cannot be
+        /// logged during the deserialization, so it must be delayed with help of this method.
+        /// </summary>
+        private void LogTypeNotFoundIfNeeded()
+        {
+            if (! _needToLogTypeNotFound)
+                return;
+
+            LogTypeNotFound();
+            _needToLogTypeNotFound = false;
+        }
+
         private void SetClassGuidIfExists(Type type)
         {
             try
@@ -197,7 +214,7 @@
 
             // If GUID is not empty, there is still hope the type will be found in the TryUpdatingTypeUsingGUID method.
             if (type == null && GUID == string.Empty)
-                LogTypeNotFound();
+                _needToLogTypeNotFound = true;
 
             return type;
         }
