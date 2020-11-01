@@ -4,7 +4,7 @@
   "displayName": "Type References",
   "description": "Property Drawer that allows class selection from drop-down.",
   "dependencies": {
-    "com.solidalloy.util": "1.9.0"
+    "com.solidalloy.util": "1.14.0"
   },
   "keywords": [
     "dropdown",
