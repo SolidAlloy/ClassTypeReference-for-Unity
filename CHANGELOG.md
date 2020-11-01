@@ -1,3 +1,15 @@
+## [2.5.2](https://github.com/SolidAlloy/ClassTypeReference-for-Unity/compare/2.5.1...2.5.2) (2020-11-01)
+
+
+### Bug Fixes
+
+* Added a delayed method to log a warning after unsucessful deserialization ([81e1770](https://github.com/SolidAlloy/ClassTypeReference-for-Unity/commit/81e1770abebe74ba94ec3edf29f10523aed2dece))
+* Adjusted the logic of TypeReferenceComparer ([554fc6f](https://github.com/SolidAlloy/ClassTypeReference-for-Unity/commit/554fc6f46323c29922ec9eb8452d0c1490595fc7))
+* GUID is now emptied if the type was not found, so that it is not searched for again. ([b23cb92](https://github.com/SolidAlloy/ClassTypeReference-for-Unity/commit/b23cb929184b14e9d680a5afbd9d1b19830cf104))
+* Improved TypeReferenceComparer hashcode generator ([5c2ab4f](https://github.com/SolidAlloy/ClassTypeReference-for-Unity/commit/5c2ab4fa60cfdc07187517b5bb82e50fc8862cc5))
+* Started using better method to find class type of the asset. ([bddb117](https://github.com/SolidAlloy/ClassTypeReference-for-Unity/commit/bddb11703d96d66134b48163f21b0a035e2e7a5f))
+* The renamed type is now found as soon as all inspectors are updated ([36fbd1f](https://github.com/SolidAlloy/ClassTypeReference-for-Unity/commit/36fbd1f20a489f942945222916c9dc9582a60e79))
+
 ## [2.5.1](https://github.com/SolidAlloy/ClassTypeReference-for-Unity/compare/2.5.0...2.5.1) (2020-10-17)
 
 
