@@ -24,6 +24,8 @@
         [FormerlySerializedAs("_typeNameAndAssembly")]
         [SerializeField] internal string TypeNameAndAssembly;
 
+        [SerializeField] private bool _suppressLogs;
+
         private Type _type;
 
         private bool _needToLogTypeNotFound;
@@ -31,14 +33,24 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="TypeReference"/> class with Type equal to null.
         /// </summary>
-        public TypeReference() { }
+        /// <param name="suppressLogs">
+        /// Whether to suppress logs that show up when a type disappeared or was renamed. Default is <c>false</c>.
+        /// </param>
+        public TypeReference(bool suppressLogs = false)
+        {
+            _suppressLogs = suppressLogs;
+        }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="TypeReference"/> class
         /// with Type equal to the name of the type passed in.
         /// </summary>
         /// <param name="assemblyQualifiedTypeName">Assembly qualified type name.</param>
-        public TypeReference(string assemblyQualifiedTypeName)
+        /// <param name="suppressLogs">
+        /// Whether to suppress logs that show up when a type disappeared or was renamed. Default is <c>false</c>.
+        /// </param>
+        public TypeReference(string assemblyQualifiedTypeName, bool suppressLogs = false)
+            : this(suppressLogs)
         {
             Type = IsNotEmpty(assemblyQualifiedTypeName)
                 ? Type.GetType(assemblyQualifiedTypeName)
@@ -50,10 +62,14 @@
         /// with Type equal to the passed type.
         /// </summary>
         /// <param name="type">Type.</param>
+        /// <param name="suppressLogs">
+        /// Whether to suppress logs that show up when a type disappeared or was renamed. Default is <c>false</c>.
+        /// </param>
         /// <exception cref="System.ArgumentException">
         /// If <paramref name="type"/> does not have a full name.
         /// </exception>
-        public TypeReference(Type type)
+        public TypeReference(Type type, bool suppressLogs = false)
+            : this(suppressLogs)
         {
             Type = type;
         }
@@ -174,12 +190,17 @@
             _type = type;
             string previousTypeName = TypeNameAndAssembly;
             TypeNameAndAssembly = GetTypeNameAndAssembly(_type);
-            Debug.Log($"Type reference has been updated from '{previousTypeName}' to '{TypeNameAndAssembly}'.");
+
+            if (! _suppressLogs)
+                Debug.Log($"Type reference has been updated from '{previousTypeName}' to '{TypeNameAndAssembly}'.");
 #endif
         }
 
-        private void LogTypeNotFound() =>
-            Debug.LogWarning($"'{TypeNameAndAssembly}' was referenced but such type was not found.");
+        private void LogTypeNotFound()
+        {
+            if (! _suppressLogs)
+                Debug.LogWarning($"'{TypeNameAndAssembly}' was referenced but such type was not found.");
+        }
 
         /// <summary>
         /// Sometimes, the fact that the type disappeared is found during the deserialization. A warning cannot be
