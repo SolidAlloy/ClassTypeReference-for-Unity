@@ -1,3 +1,10 @@
+# [2.6.0](https://github.com/SolidAlloy/ClassTypeReference-for-Unity/compare/2.5.3...2.6.0) (2020-11-03)
+
+
+### Features
+
+* Added 'suppressLogs' optional parameter to the TypeReference constructors ([2d7a2b5](https://github.com/SolidAlloy/ClassTypeReference-for-Unity/commit/2d7a2b5eb377f579dc8e5f59471f4ee59f0b6b92))
+
 ## [2.5.2](https://github.com/SolidAlloy/ClassTypeReference-for-Unity/compare/2.5.1...2.5.2) (2020-11-01)
 
 
