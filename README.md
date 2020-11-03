@@ -3,7 +3,7 @@ Type References for Unity3D
 [![openupm](https://img.shields.io/npm/v/com.solidalloy.type.references?label=openupm&registry_uri=https://package.openupm.com)](https://openupm.com/packages/com.solidalloy.type.references/)
 
 
-A class that provides serializable references to `System.Type` with an accompanying custom property drawer that allows type selection from drop-down.
+A plugin that allows you to choose types from a drop-down menu in the inspector.
 
 ![screenshot](https://raw.githubusercontent.com/SolidAlloy/ClassTypeReference-for-Unity/master/.screenshot.png)
 
