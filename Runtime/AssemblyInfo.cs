@@ -3,3 +3,4 @@
 [assembly: InternalsVisibleTo("TypeReferences.Editor.Tests")]
 [assembly: InternalsVisibleTo("GenericScriptableObjects")]
 [assembly: InternalsVisibleTo("GenericScriptableObjects.Editor")]
+[assembly: InternalsVisibleTo("GenericScriptableObjects.Helper")]
