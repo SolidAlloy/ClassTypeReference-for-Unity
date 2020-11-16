@@ -1,3 +1,10 @@
+## [2.6.2](https://github.com/SolidAlloy/ClassTypeReference-for-Unity/compare/2.6.1...2.6.2) (2020-11-16)
+
+
+### Bug Fixes
+
+* Optimized the Type property setter ([2f2a7f7](https://github.com/SolidAlloy/ClassTypeReference-for-Unity/commit/2f2a7f73a03da0bfecf0d4a8ea9406bbf209b31c))
+
 # [2.6.0](https://github.com/SolidAlloy/ClassTypeReference-for-Unity/compare/2.5.3...2.6.0) (2020-11-03)
 
 
