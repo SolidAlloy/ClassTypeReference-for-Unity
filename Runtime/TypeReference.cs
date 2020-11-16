@@ -29,6 +29,7 @@
         private Type _type;
 
         private bool _needToLogTypeNotFound;
+        private bool _typeChanged;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="TypeReference"/> class with Type equal to null.
@@ -87,9 +88,11 @@
             {
                 MakeSureTypeHasName(value);
 
+                if (_type != value)
+                    _typeChanged = true;
+
                 _type = value;
                 TypeNameAndAssembly = GetTypeNameAndAssembly(value);
-                SetClassGuidIfExists(value);
             }
         }
 
@@ -110,6 +113,12 @@
 
         void ISerializationCallbackReceiver.OnBeforeSerialize()
         {
+            if (_typeChanged)
+            {
+                SetClassGuidIfExists(Type);
+                _typeChanged = false;
+            }
+
 #if UNITY_EDITOR
             EditorApplication.delayCall -= TryUpdatingTypeUsingGUID;
             EditorApplication.delayCall -= LogTypeNotFoundIfNeeded;
@@ -223,6 +232,7 @@
             }
             catch (UnityException) // thrown on assembly recompiling if field initialization is used on field.
             {
+                // GUID will be found in SerializedTypeReference.SetGuidIfAssignmentFailed()
                 GuidAssignmentFailed = true;
                 GUID = string.Empty;
             }
