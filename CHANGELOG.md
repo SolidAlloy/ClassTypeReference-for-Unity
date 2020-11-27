@@ -1,3 +1,10 @@
+## [2.6.3](https://github.com/SolidAlloy/ClassTypeReference-for-Unity/compare/2.6.2...2.6.3) (2020-11-27)
+
+
+### Bug Fixes
+
+* Fixed the dropdown showing up in the top left corner instead of the mouse position ([31ce991](https://github.com/SolidAlloy/ClassTypeReference-for-Unity/commit/31ce991a43d470e0ca280634daf3d02c29a3437f))
+
 ## [2.6.2](https://github.com/SolidAlloy/ClassTypeReference-for-Unity/compare/2.6.1...2.6.2) (2020-11-16)
 
 
