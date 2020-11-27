@@ -45,8 +45,17 @@
 
             // If the window width is smaller than the distance from cursor to the right border of the window, the
             // window will not appear because the cursor is outside of the window and OnGUI will never be called.
-            float distanceToRightBorder = Screen.currentResolution.width - windowPosition.x + 8f;
+            float screenWidth = EditorDrawHelper.GetScreenWidth();
+            float distanceToRightBorder = screenWidth - windowPosition.x + 8f;
             var windowSize = new Vector2(Mathf.Max(distanceToRightBorder, _optimalWidth), windowHeight);
+
+            // If the button is more than twice shorter than the dropdown menu, Unity thinks it does not fit to screen
+            // and moves the dropdown to the top left corner of the screen.
+            if (_optimalWidth > distanceToRightBorder * 2f)
+            {
+                distanceToRightBorder = _optimalWidth / 2f + 1f;
+                windowPosition.x = screenWidth - distanceToRightBorder;
+            }
 
             // ShowAsDropDown usually shows the window under a button, but since we don't need to align the window to
             // any button, we set buttonRect.height to 0f.
@@ -92,7 +101,7 @@
             if (_optimalWidth.DoesNotEqualApproximately(position.width))
                 this.Resize(_optimalWidth);
 
-            if (_preventExpandingHeight || _contentHeight.DoesNotEqualApproximately(position.height))
+            if (_preventExpandingHeight && _contentHeight.DoesNotEqualApproximately(position.height))
                 this.Resize(height: Math.Min(_contentHeight, DropdownStyle.MaxWindowHeight));
         }
 
