@@ -11,6 +11,9 @@
     /// <summary>Creates a dropdown window that shows the <see cref="SelectionTree"/> elements.</summary>
     internal class DropdownWindow : EditorWindow
     {
+        // Unity doesn't show a window if its height is 0f on MacOS, so the minimal height is 1f.
+        private const float MinWindowSize = 1f;
+
         private SelectionTree _selectionTree;
         private PreventExpandingHeight _preventExpandingHeight;
         private float _contentHeight;
@@ -47,7 +50,7 @@
             // window will not appear because the cursor is outside of the window and OnGUI will never be called.
             float screenWidth = EditorDrawHelper.GetScreenWidth();
             float distanceToRightBorder = screenWidth - windowPosition.x + 8f;
-            var windowSize = new Vector2(Mathf.Max(distanceToRightBorder, _optimalWidth), windowHeight);
+            var windowSize = new Vector2(Mathf.Max(distanceToRightBorder, _optimalWidth), windowHeight == 0f ? MinWindowSize : windowHeight);
 
             // If the button is more than twice shorter than the dropdown menu, Unity thinks it does not fit to screen
             // and moves the dropdown to the top left corner of the screen.
@@ -101,7 +104,7 @@
             if (_optimalWidth.DoesNotEqualApproximately(position.width))
                 this.Resize(_optimalWidth);
 
-            if (_preventExpandingHeight && _contentHeight.DoesNotEqualApproximately(position.height))
+            if (_preventExpandingHeight && _contentHeight >= MinWindowSize && _contentHeight.DoesNotEqualApproximately(position.height))
                 this.Resize(height: Math.Min(_contentHeight, DropdownStyle.MaxWindowHeight));
         }
 
@@ -121,7 +124,7 @@
                 float contentHeight = EditorDrawHelper.DrawVertically(_selectionTree.Draw, _preventExpandingHeight,
                     DropdownStyle.BackgroundColor);
 
-                if (_contentHeight == 0f || Event.current.type == EventType.Repaint)
+                if (_contentHeight <= MinWindowSize || Event.current.type == EventType.Repaint)
                     _contentHeight = contentHeight;
 
                 EditorDrawHelper.DrawBorders(position.width, position.height, DropdownStyle.BorderColor);
@@ -137,7 +140,7 @@
         private void DrawInFixedRectIfConditionIsMet(bool condition, Action drawContent)
         {
             if (condition)
-                GUILayout.BeginArea(new Rect(0.0f, 0.0f, position.width, DropdownStyle.MaxWindowHeight));
+                GUILayout.BeginArea(new Rect(0f, 0f, position.width, DropdownStyle.MaxWindowHeight));
 
             drawContent();
 
