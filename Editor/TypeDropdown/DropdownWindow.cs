@@ -11,9 +11,6 @@
     /// <summary>Creates a dropdown window that shows the <see cref="SelectionTree"/> elements.</summary>
     internal class DropdownWindow : EditorWindow
     {
-        // Unity doesn't show a window if its height is 0f on MacOS, so the minimal height is 1f.
-        private const float MinWindowSize = 1f;
-
         private SelectionTree _selectionTree;
         private PreventExpandingHeight _preventExpandingHeight;
         private float _contentHeight;
@@ -50,7 +47,13 @@
             // window will not appear because the cursor is outside of the window and OnGUI will never be called.
             float screenWidth = EditorDrawHelper.GetScreenWidth();
             float distanceToRightBorder = screenWidth - windowPosition.x + 8f;
-            var windowSize = new Vector2(Mathf.Max(distanceToRightBorder, _optimalWidth), windowHeight == 0f ? MinWindowSize : windowHeight);
+
+            // If given less than 100f, the window will re-position to the top left corner. If given 0f on MacOS,
+            // the window may not appear at all. Thus, the minimal value is 100f.
+            const float minHeightOnStart = 100f;
+            windowHeight = windowHeight == 0f ? minHeightOnStart : windowHeight;
+
+            var windowSize = new Vector2(Mathf.Max(distanceToRightBorder, _optimalWidth), windowHeight);
 
             // If the button is more than twice shorter than the dropdown menu, Unity thinks it does not fit to screen
             // and moves the dropdown to the top left corner of the screen.
@@ -104,8 +107,11 @@
             if (_optimalWidth.DoesNotEqualApproximately(position.width))
                 this.Resize(_optimalWidth);
 
-            if (_preventExpandingHeight && _contentHeight >= MinWindowSize && _contentHeight.DoesNotEqualApproximately(position.height))
-                this.Resize(height: Math.Min(_contentHeight, DropdownStyle.MaxWindowHeight));
+
+            float wantedHeight = Math.Min(_contentHeight, DropdownStyle.MaxWindowHeight);
+
+            if (_preventExpandingHeight && wantedHeight != 0f && wantedHeight.DoesNotEqualApproximately(position.height))
+                this.Resize(height: wantedHeight);
         }
 
         private void CloseOnEscPress()
@@ -124,7 +130,7 @@
                 float contentHeight = EditorDrawHelper.DrawVertically(_selectionTree.Draw, _preventExpandingHeight,
                     DropdownStyle.BackgroundColor);
 
-                if (_contentHeight <= MinWindowSize || Event.current.type == EventType.Repaint)
+                if (Event.current.type == EventType.Repaint)
                     _contentHeight = contentHeight;
 
                 EditorDrawHelper.DrawBorders(position.width, position.height, DropdownStyle.BorderColor);
