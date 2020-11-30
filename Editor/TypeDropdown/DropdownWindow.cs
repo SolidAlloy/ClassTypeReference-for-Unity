@@ -38,36 +38,17 @@
             wantsMouseMove = true;
             _selectionTree = selectionTree;
             _selectionTree.SelectionChanged += Close;
-
             _optimalWidth = CalculateOptimalWidth(_selectionTree.SelectionPaths);
-
             _preventExpandingHeight = new PreventExpandingHeight(windowHeight == 0f);
 
-            // If the window width is smaller than the distance from cursor to the right border of the window, the
-            // window will not appear because the cursor is outside of the window and OnGUI will never be called.
-            float screenWidth = EditorDrawHelper.GetScreenWidth();
-            float distanceToRightBorder = screenWidth - windowPosition.x + 8f;
-
-            // If given less than 100f, the window will re-position to the top left corner. If given 0f on MacOS,
-            // the window may not appear at all. Thus, the minimal value is 100f.
-            const float minHeightOnStart = 100f;
-            windowHeight = windowHeight == 0f ? minHeightOnStart : windowHeight;
-
-            var windowSize = new Vector2(Mathf.Max(distanceToRightBorder, _optimalWidth), windowHeight);
-
-            // If the button is more than twice shorter than the dropdown menu, Unity thinks it does not fit to screen
-            // and moves the dropdown to the top left corner of the screen.
-            if (_optimalWidth > distanceToRightBorder * 2f)
-            {
-                distanceToRightBorder = _optimalWidth / 2f + 1f;
-                windowPosition.x = screenWidth - distanceToRightBorder;
-            }
+            Rect windowRect = GetWindowRect(windowPosition, windowHeight);
 
             // ShowAsDropDown usually shows the window under a button, but since we don't need to align the window to
             // any button, we set buttonRect.height to 0f.
-            var buttonRect = new Rect(windowPosition, new Vector2(distanceToRightBorder, 0f));
+            Rect buttonRect = new Rect(windowRect) { height = 0f };
+
             Debug.Log($"window X position on creation: {buttonRect.x}");
-            ShowAsDropDown(buttonRect, windowSize);
+            ShowAsDropDown(buttonRect, windowRect.size);
         }
 
         public static float CalculateOptimalWidth(IEnumerable<string> selectionPaths)
@@ -86,6 +67,30 @@
         {
             GUIUtility.hotControl = 0;
             GUIUtility.keyboardControl = 0;
+        }
+
+        private Rect GetWindowRect(Vector2 windowPosition, float windowHeight)
+        {
+            // If the window width is smaller than the distance from cursor to the right border of the window, the
+            // window will not appear because the cursor is outside of the window and OnGUI will never be called.
+            float screenWidth = EditorDrawHelper.GetScreenWidth();
+            windowPosition.x -= 8f; // This will make the window appear so that foldout arrows are precisely below the cursor.
+            float distanceToRightBorder = screenWidth - windowPosition.x;
+
+            if (_optimalWidth > distanceToRightBorder)
+            {
+                distanceToRightBorder = _optimalWidth;
+                windowPosition.x = screenWidth - _optimalWidth;
+            }
+
+            // If given less than 100f, the window will re-position to the top left corner. If given 0f on MacOS,
+            // the window may not appear at all. Thus, the minimal value is 100f.
+            const float minHeightOnStart = 100f;
+            windowHeight = windowHeight == 0f ? minHeightOnStart : windowHeight;
+
+            var windowSize = new Vector2(distanceToRightBorder, windowHeight);
+
+            return new Rect(windowPosition, windowSize);
         }
 
         private void OnGUI()
