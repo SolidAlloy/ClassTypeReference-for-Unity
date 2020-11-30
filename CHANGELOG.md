@@ -1,3 +1,15 @@
+## [2.6.5](https://github.com/SolidAlloy/ClassTypeReference-for-Unity/compare/2.6.4...2.6.5) (2020-11-30)
+
+
+### Bug Fixes
+
+* Made window height non-zero on the drop-down creation. ([dc87667](https://github.com/SolidAlloy/ClassTypeReference-for-Unity/commit/dc876670785e02e55930262aa7a854922fab26f4))
+
+
+### Performance Improvements
+
+* Reduced the number of Resize calls inside AdjustSizeIfNeeded to one. ([dea3048](https://github.com/SolidAlloy/ClassTypeReference-for-Unity/commit/dea3048f29090d45b736609deae4be1363b93ebe))
+
 ## [2.6.3](https://github.com/SolidAlloy/ClassTypeReference-for-Unity/compare/2.6.2...2.6.3) (2020-11-27)
 
 
