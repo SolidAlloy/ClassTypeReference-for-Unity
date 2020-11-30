@@ -1,3 +1,10 @@
+## [2.6.6](https://github.com/SolidAlloy/ClassTypeReference-for-Unity/compare/2.6.5...2.6.6) (2020-11-30)
+
+
+### Bug Fixes
+
+* Fixed TypeReference deserialization issue in IL2CPP builds ([4a34093](https://github.com/SolidAlloy/ClassTypeReference-for-Unity/commit/4a34093e9657486e97b89044c121c93a28d35c1c))
+
 ## [2.6.5](https://github.com/SolidAlloy/ClassTypeReference-for-Unity/compare/2.6.4...2.6.5) (2020-11-30)
 
 
