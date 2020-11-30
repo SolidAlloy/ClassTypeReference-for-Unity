@@ -34,6 +34,18 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="TypeReference"/> class with Type equal to null.
         /// </summary>
+        /// <remarks>
+        /// The fully empty constructor without even named parameters is needed for the class to be deserialized in
+        /// IL2CPP builds. For some reason, if the class doesn't have a fully empty constructor, OnAfterDeserialize
+        /// will not be called in IL2CPP builds.</remarks>
+        public TypeReference()
+        {
+            _suppressLogs = false;
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="TypeReference"/> class with Type equal to null.
+        /// </summary>
         /// <param name="suppressLogs">
         /// Whether to suppress logs that show up when a type disappeared or was renamed. Default is <c>false</c>.
         /// </param>
