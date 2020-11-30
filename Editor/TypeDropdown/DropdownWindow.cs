@@ -66,6 +66,7 @@
             // ShowAsDropDown usually shows the window under a button, but since we don't need to align the window to
             // any button, we set buttonRect.height to 0f.
             var buttonRect = new Rect(windowPosition, new Vector2(distanceToRightBorder, 0f));
+            Debug.Log($"window X position on creation: {buttonRect.x}");
             ShowAsDropDown(buttonRect, windowSize);
         }
 
@@ -118,7 +119,9 @@
             if (widthToSet == -1f && heightToSet == -1f)
                 return;
 
+            Debug.Log($"window X position before resizing: {position.x}");
             this.Resize(widthToSet, heightToSet);
+            Debug.Log($"window X position after resizing: {position.x}");
         }
 
         private void CloseOnEscPress()
