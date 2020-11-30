@@ -104,14 +104,21 @@
 
         private void AdjustSizeIfNeeded()
         {
-            if (_optimalWidth.DoesNotEqualApproximately(position.width))
-                this.Resize(_optimalWidth);
+            float widthToSet = -1f;
+            float heightToSet = -1f;
 
+            if (_optimalWidth.DoesNotEqualApproximately(position.width))
+                widthToSet = _optimalWidth;
 
             float wantedHeight = Math.Min(_contentHeight, DropdownStyle.MaxWindowHeight);
 
             if (_preventExpandingHeight && wantedHeight != 0f && wantedHeight.DoesNotEqualApproximately(position.height))
-                this.Resize(height: wantedHeight);
+                heightToSet = wantedHeight;
+
+            if (widthToSet == -1f && heightToSet == -1f)
+                return;
+
+            this.Resize(widthToSet, heightToSet);
         }
 
         private void CloseOnEscPress()
