@@ -187,7 +187,7 @@
         private void TryUpdatingTypeUsingGUID()
         {
 #if UNITY_EDITOR
-            if (_type != null || GUID == string.Empty)
+            if (_type != null || string.IsNullOrEmpty(GUID))
                 return;
 
             string assetPath = AssetDatabase.GUIDToAssetPath(GUID);
