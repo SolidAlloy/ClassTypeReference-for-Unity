@@ -144,6 +144,8 @@
 
         private void DisableSearchMode()
         {
+            // Without GUI.changed, the change will take place only on mouse move.
+            GUI.changed = true;
             DrawInSearchMode = false;
             _scrollbar.RequestScrollToNode(SelectedNode);
         }
