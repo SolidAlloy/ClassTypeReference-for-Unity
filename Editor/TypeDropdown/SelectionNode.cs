@@ -4,7 +4,8 @@
     using System.Collections.Generic;
     using System.Linq;
     using SolidUtilities.Editor;
-    using SolidUtilities.Editor.EditorIconsRelated;
+    using SolidUtilities.Editor.Helpers;
+    using SolidUtilities.Editor.Helpers.EditorIconsRelated;
     using SolidUtilities.Extensions;
     using UnityEditor;
     using UnityEngine;
