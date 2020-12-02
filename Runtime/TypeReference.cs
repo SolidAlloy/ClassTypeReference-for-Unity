@@ -1,22 +1,21 @@
 ﻿namespace TypeReferences
 {
     using System;
+    using System.Collections.Generic;
     using JetBrains.Annotations;
     using UnityEngine;
     using UnityEngine.Serialization;
-#if UNITY_EDITOR
-    using SolidUtilities.Editor.Extensions;
-    using UnityEditor;
-#endif
 
     /// <summary>
     /// Reference to a class <see cref="System.Type"/> with support for Unity serialization.
     /// </summary>
     [Serializable]
-    public class TypeReference : ISerializationCallbackReceiver
+    public partial class TypeReference : ISerializationCallbackReceiver
     {
         /// <summary>Name of the element in the drop-down list that corresponds to null value.</summary>
         internal const string NoneElement = "(None)";
+
+        private static readonly HashSet<string> ReportedMissingValues = new HashSet<string>();
 
         [SerializeField] internal bool GuidAssignmentFailed;
         [SerializeField] internal string GUID;
@@ -117,10 +116,7 @@
         void ISerializationCallbackReceiver.OnAfterDeserialize()
         {
             _type = IsNotEmpty(TypeNameAndAssembly) ? TryGetTypeFromSerializedFields() : null;
-#if UNITY_EDITOR
-            EditorApplication.delayCall += TryUpdatingTypeUsingGUID;
-            EditorApplication.delayCall += LogTypeNotFoundIfNeeded;
-#endif
+            SubscribeToDelayCall();
         }
 
         void ISerializationCallbackReceiver.OnBeforeSerialize()
@@ -131,10 +127,7 @@
                 _typeChanged = false;
             }
 
-#if UNITY_EDITOR
-            EditorApplication.delayCall -= TryUpdatingTypeUsingGUID;
-            EditorApplication.delayCall -= LogTypeNotFoundIfNeeded;
-#endif
+            UnsubscribeFromDelayCall();
         }
 
         internal static string GetTypeNameAndAssembly(Type type)
@@ -153,27 +146,13 @@
         /// </summary>
         /// <param name="type">Type of the class to search for.</param>
         /// <returns>String representing the GUID of the file, or empty string if no file found.</returns>
+        [NotNull]
         internal static string GetClassGUID(Type type)
         {
             if (type == null || type.FullName == null)
                 return string.Empty;
 
-#if UNITY_EDITOR
-            var guids = AssetDatabase.FindAssets(type.Name);
-
-            foreach (string guid in guids)
-            {
-                string assetPath = AssetDatabase.GUIDToAssetPath(guid);
-                var asset = AssetDatabase.LoadAssetAtPath<MonoScript>(assetPath);
-
-                if (asset == null)
-                    continue;
-
-                if (asset.GetClassType() == type)
-                    return guid;
-            }
-#endif
-            return string.Empty;
+            return GetGUIDFromType(type);
         }
 
         private static bool IsNotEmpty(string value) => ! string.IsNullOrEmpty(value);
@@ -184,43 +163,17 @@
                 throw new ArgumentException($"'{type}' does not have full name.", nameof(type));
         }
 
-        private void TryUpdatingTypeUsingGUID()
-        {
-#if UNITY_EDITOR
-            if (_type != null || string.IsNullOrEmpty(GUID))
-                return;
-
-            string assetPath = AssetDatabase.GUIDToAssetPath(GUID);
-            var script = AssetDatabase.LoadAssetAtPath<MonoScript>(assetPath);
-
-            if (script == null)
-            {
-                LogTypeNotFound();
-                GUID = string.Empty;
-                return;
-            }
-
-            var type = script.GetClassType();
-            if (type == null)
-            {
-                LogTypeNotFound();
-                GUID = string.Empty;
-                return;
-            }
-
-            _type = type;
-            string previousTypeName = TypeNameAndAssembly;
-            TypeNameAndAssembly = GetTypeNameAndAssembly(_type);
-
-            if (! _suppressLogs)
-                Debug.Log($"Type reference has been updated from '{previousTypeName}' to '{TypeNameAndAssembly}'.");
-#endif
-        }
-
         private void LogTypeNotFound()
         {
-            if (! _suppressLogs)
-                Debug.LogWarning($"'{TypeNameAndAssembly}' was referenced but such type was not found.");
+            if (_suppressLogs)
+                return;
+
+            if (ReportedMissingValues.Contains(TypeNameAndAssembly))
+                return;
+
+            Debug.LogWarning($"'{TypeNameAndAssembly}' was referenced but such type was not found.");
+            ReportObjectsWithMissingValue();
+            ReportedMissingValues.Add(TypeNameAndAssembly);
         }
 
         /// <summary>
