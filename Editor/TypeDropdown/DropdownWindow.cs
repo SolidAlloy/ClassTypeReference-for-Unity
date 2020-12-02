@@ -16,6 +16,9 @@
         private float _contentHeight;
         private float _optimalWidth;
 
+        private Rect _positionOnCreation;
+        private bool _positionWasSetAfterCreation;
+
         public event Action OnClose;
 
         public static DropdownWindow Create(SelectionTree selectionTree, int windowHeight, Vector2 windowPosition)
@@ -41,14 +44,14 @@
             _optimalWidth = CalculateOptimalWidth(_selectionTree.SelectionPaths);
             _preventExpandingHeight = new PreventExpandingHeight(windowHeight == 0f);
 
-            Rect windowRect = GetWindowRect(windowPosition, windowHeight);
+            _positionOnCreation = GetWindowRect(windowPosition, windowHeight);
 
             // ShowAsDropDown usually shows the window under a button, but since we don't need to align the window to
             // any button, we set buttonRect.height to 0f.
-            Rect buttonRect = new Rect(windowRect) { height = 0f };
+            Rect buttonRect = new Rect(_positionOnCreation) { height = 0f };
 
             Debug.Log($"window X position on creation: {buttonRect.x}");
-            ShowAsDropDown(buttonRect, windowRect.size);
+            ShowAsDropDown(buttonRect, _positionOnCreation.size);
         }
 
         public static float CalculateOptimalWidth(IEnumerable<string> selectionPaths)
@@ -102,6 +105,12 @@
 
         private void Update()
         {
+            if (!_positionWasSetAfterCreation)
+            {
+                _positionWasSetAfterCreation = true;
+                position = _positionOnCreation;
+            }
+
             // If called in OnGUI, the dropdown blinks before appearing for some reason. Thus, it works well only in Update.
             AdjustSizeIfNeeded();
         }
