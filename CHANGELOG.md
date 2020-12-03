@@ -1,3 +1,19 @@
+# [2.7.0](https://github.com/SolidAlloy/ClassTypeReference-for-Unity/compare/2.6.6...2.7.0) (2020-12-03)
+
+
+### Bug Fixes
+
+* Fixed the dropdown window position resetting to 0 after its creation for some users. ([f3e1f66](https://github.com/SolidAlloy/ClassTypeReference-for-Unity/commit/f3e1f665968504e4aeb8e0bc2ffb4ce131926006))
+* Fixed the warnings when opening the Usage Sample scene ([b2c5568](https://github.com/SolidAlloy/ClassTypeReference-for-Unity/commit/b2c55689aea08803a4a4491f3bc495ddb9d15622))
+* Fixed TypeReference deserialization issue in IL2CPP builds ([f912853](https://github.com/SolidAlloy/ClassTypeReference-for-Unity/commit/f912853e64c8add9775b209b54093a02f9a6097d))
+* Made the interface change immediate when search string is cleared ([76daf56](https://github.com/SolidAlloy/ClassTypeReference-for-Unity/commit/76daf560a525f7c3f6adb5de4dff933c8c7c09b6))
+* Started setting the correct position.x at the window creation. ([44d80f1](https://github.com/SolidAlloy/ClassTypeReference-for-Unity/commit/44d80f1599638c6d57b9a4c00e77bd6a85fb1ed8))
+
+
+### Features
+
+* Added reporting of the objects that have the missing type ([0bba3e6](https://github.com/SolidAlloy/ClassTypeReference-for-Unity/commit/0bba3e6bc4070a0728d10415633569890d105ea1))
+
 ## [2.6.6](https://github.com/SolidAlloy/ClassTypeReference-for-Unity/compare/2.6.5...2.6.6) (2020-11-30)
 
 
