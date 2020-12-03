@@ -50,7 +50,6 @@
             // any button, we set buttonRect.height to 0f.
             Rect buttonRect = new Rect(_positionOnCreation) { height = 0f };
 
-            Debug.Log($"window X position on creation: {buttonRect.x}");
             ShowAsDropDown(buttonRect, _positionOnCreation.size);
         }
 
@@ -105,6 +104,8 @@
 
         private void Update()
         {
+            // Sometimes, Unity resets the window position to 0,0 after showing it as a drop-down, so it is necessary
+            // to set it again once the window was created.
             if (!_positionWasSetAfterCreation)
             {
                 _positionWasSetAfterCreation = true;
@@ -133,9 +134,7 @@
             if (widthToSet == -1f && heightToSet == -1f)
                 return;
 
-            Debug.Log($"window X position before resizing: {position.x}");
             this.Resize(widthToSet, heightToSet);
-            Debug.Log($"window X position after resizing: {position.x}");
         }
 
         private void CloseOnEscPress()
