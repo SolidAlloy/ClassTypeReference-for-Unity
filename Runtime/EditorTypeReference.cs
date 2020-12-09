@@ -48,9 +48,9 @@
             return string.Empty;
         }
 
-        [Conditional("UNITY_EDITOR")]
         private void TryUpdatingTypeUsingGUID()
         {
+#if UNITY_EDITOR
             if (_type != null || string.IsNullOrEmpty(GUID))
                 return;
 
@@ -78,6 +78,7 @@
 
             if (! _suppressLogs)
                 Debug.Log($"Type reference has been updated from '{previousTypeName}' to '{TypeNameAndAssembly}'.");
+#endif
         }
 
         [Conditional("UNITY_EDITOR")]
