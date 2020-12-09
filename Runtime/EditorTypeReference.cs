@@ -1,10 +1,10 @@
 ﻿namespace TypeReferences
 {
     using System;
+    using System.Diagnostics;
     using System.Linq;
     using JetBrains.Annotations;
-    using UnityEngine;
-
+    using Debug = UnityEngine.Debug;
 #if UNITY_EDITOR
     using SolidUtilities.Editor.Extensions;
     using SolidUtilities.Editor.Helpers.AssetSearch;
@@ -14,20 +14,18 @@
     // This part of the class contains only the methods that are meant to be executed in Editor and not in builds.
     public partial class TypeReference
     {
+        [Conditional("UNITY_EDITOR")]
         private void SubscribeToDelayCall()
         {
-#if UNITY_EDITOR
             EditorApplication.delayCall += TryUpdatingTypeUsingGUID;
             EditorApplication.delayCall += LogTypeNotFoundIfNeeded;
-#endif
         }
 
+        [Conditional("UNITY_EDITOR")]
         private void UnsubscribeFromDelayCall()
         {
-#if UNITY_EDITOR
             EditorApplication.delayCall -= TryUpdatingTypeUsingGUID;
             EditorApplication.delayCall -= LogTypeNotFoundIfNeeded;
-#endif
         }
 
         private static string GetGUIDFromType([NotNull] Type type)
@@ -50,9 +48,9 @@
             return string.Empty;
         }
 
+        [Conditional("UNITY_EDITOR")]
         private void TryUpdatingTypeUsingGUID()
         {
-#if UNITY_EDITOR
             if (_type != null || string.IsNullOrEmpty(GUID))
                 return;
 
@@ -80,12 +78,11 @@
 
             if (! _suppressLogs)
                 Debug.Log($"Type reference has been updated from '{previousTypeName}' to '{TypeNameAndAssembly}'.");
-#endif
         }
 
+        [Conditional("UNITY_EDITOR")]
         private void ReportObjectsWithMissingValue()
         {
-#if UNITY_EDITOR
             var foundObjects = AssetSearcher.FindObjectsWithValue(nameof(TypeNameAndAssembly), TypeNameAndAssembly);
             Debug.Log("The value is set in the following objects:");
 
@@ -96,7 +93,6 @@
 
                 Debug.Log($"[{foundObject.Type}] {string.Join(", ", details)}");
             }
-#endif
         }
     }
 }
