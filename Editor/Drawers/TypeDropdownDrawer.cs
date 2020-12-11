@@ -4,6 +4,7 @@
     using System.Collections.Generic;
     using System.Linq;
     using System.Reflection;
+    using SolidUtilities.Helpers;
     using TypeDropdown;
     using UnityEngine;
     using Util;
@@ -89,7 +90,7 @@
                     continue;
 
                 if (replaceBuiltInNames)
-                    TypeNameFormatter.TryReplaceWithBuiltInName(ref fullTypeName);
+                    fullTypeName = fullTypeName.ReplaceWithBuiltInName(true);
 
                 sortedTypes.Add(new TypeItem(type, fullTypeName, _attribute.Grouping));
             }

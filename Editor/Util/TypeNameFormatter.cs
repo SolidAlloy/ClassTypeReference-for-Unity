@@ -1,7 +1,6 @@
 ﻿namespace TypeReferences.Editor.Util
 {
     using System;
-    using System.Collections.Generic;
     using System.Linq;
     using TypeReferences;
     using UnityEngine;
@@ -12,27 +11,6 @@
     /// </summary>
     internal static class TypeNameFormatter
     {
-        private const string BuiltInTypesPrefix = "Built-in.";
-
-        private static readonly Dictionary<string, string> BuiltInTypes = new Dictionary<string, string>
-        {
-            { "System.Boolean", "bool" },
-            { "System.Byte", "byte" },
-            { "System.SByte", "sbyte" },
-            { "System.Char", "char" },
-            { "System.Decimal", "decimal" },
-            { "System.Double", "double" },
-            { "System.Single", "float" },
-            { "System.Int32", "int" },
-            { "System.UInt32", "uint" },
-            { "System.Int64", "long" },
-            { "System.UInt64", "ulong" },
-            { "System.Int16", "short" },
-            { "System.UInt16", "ushort" },
-            { "System.Object", "object" },
-            { "System.String", "string" }
-        };
-
         /// <summary>Generates a path for a dropdown item according to <paramref name="grouping"/>.</summary>
         /// <param name="type">Type to generate the path for.</param>
         /// <param name="fullTypeName">Full name of the type.</param>
@@ -56,30 +34,6 @@
                 case Grouping.ByAddComponentMenu:
                     return FormatByAddComponentMenu(type, fullTypeName);
             }
-        }
-
-        /// <summary>
-        /// Replaces <paramref name="fullTypeName"/> with a built-in name if the built-in analogue exists.
-        /// </summary>
-        /// <param name="fullTypeName">Full name of the type.</param>
-        /// <param name="withoutFolder">Whether to append a folder to the built-in type.</param>
-        /// <returns>Name of the built-in type.</returns>
-        /// <example><code>
-        /// string intName = typeof(System.Int32).FullName;
-        /// if (TryReplaceWithBuiltInName(intName))
-        ///     Debug.Log(intName); // prints "Built-in.int"
-        ///
-        /// string intName = typeof(System.Int32).FullName;
-        /// if (TryReplaceWithBuiltInName(intName), true)
-        ///     Debug.Log(intName); // prints "int"
-        /// </code></example>
-        public static bool TryReplaceWithBuiltInName(ref string fullTypeName, bool withoutFolder = false)
-        {
-            if ( ! BuiltInTypes.TryGetValue(fullTypeName, out string builtInName))
-                return false;
-
-            fullTypeName = withoutFolder ? builtInName : BuiltInTypesPrefix + builtInName;
-            return true;
         }
 
         /// <summary>Gets the name of the type without its namespace.</summary>

@@ -2,6 +2,7 @@
 {
     using System;
     using SolidUtilities.Editor.Helpers;
+    using SolidUtilities.Helpers;
     using TypeReferences;
     using UnityEditor;
     using UnityEngine;
@@ -111,8 +112,12 @@
 
         private string GetTypeToShow(string typeName)
         {
-            if (_useBuiltInNames && TypeNameFormatter.TryReplaceWithBuiltInName(ref typeName, true))
-                return typeName;
+            if (_useBuiltInNames)
+            {
+                string builtInName = typeName.ReplaceWithBuiltInName();
+                if (builtInName != typeName)
+                    return builtInName;
+            }
 
             if (_showShortName)
                 typeName = TypeNameFormatter.GetShortName(typeName);
