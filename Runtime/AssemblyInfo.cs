@@ -1,6 +1,5 @@
 ﻿using System.Runtime.CompilerServices;
 [assembly: InternalsVisibleTo("TypeReferences.Editor")]
 [assembly: InternalsVisibleTo("TypeReferences.Editor.Tests")]
-[assembly: InternalsVisibleTo("GenericScriptableObjects")]
-[assembly: InternalsVisibleTo("GenericScriptableObjects.Editor")]
-[assembly: InternalsVisibleTo("GenericScriptableObjects.Helper")]
+[assembly: InternalsVisibleTo("GenericUnityObjects")]
+[assembly: InternalsVisibleTo("GenericUnityObjects.Editor")]
