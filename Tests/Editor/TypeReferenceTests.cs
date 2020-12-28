@@ -12,7 +12,8 @@
             return typeof(IEnumerable<>).GetGenericArguments().First();
         }
 
-        private struct NotAClass { }
+        private readonly struct NotAClass { }
+
         private class ClassExample { }
 
         internal class TheConstructor

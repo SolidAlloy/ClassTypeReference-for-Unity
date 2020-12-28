@@ -2,6 +2,7 @@
 {
     using System;
     using System.Linq;
+    using JetBrains.Annotations;
     using SolidUtilities.Extensions;
 
     /// <summary>
@@ -21,6 +22,7 @@
         /// <param name="additionalBaseTypes">
         /// Additional types the selectable types must inherit from (e.g. multiple interfaces).
         /// </param>
+        [PublicAPI]
         public InheritsAttribute(Type baseType, params Type[] additionalBaseTypes)
         {
             int additionalTypesLength = additionalBaseTypes.Length;
@@ -38,6 +40,7 @@
         /// <param name="baseTypes">
         /// Types the selectable types must inherit from (e.g. parent class and additional interfaces).
         /// </param>
+        [PublicAPI]
         public InheritsAttribute(Type[] baseTypes)
         {
             _baseTypes = baseTypes;
@@ -47,12 +50,14 @@
         /// Allows to choose the base type from the drop-down as well.
         /// Defaults to a value of <c>false</c> unless explicitly specified.
         /// </summary>
+        [PublicAPI]
         public bool IncludeBaseType { get; set; }
 
         /// <summary>
         /// Allows abstract classes and interfaces to be selected from drop-down.
         /// Defaults to a value of <c>false</c> unless explicitly specified.
         /// </summary>
+        [PublicAPI]
         public bool AllowAbstract { get; set; }
 
         /// <inheritdoc/>

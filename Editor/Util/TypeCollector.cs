@@ -102,10 +102,7 @@
 
         private static bool FilterConstraintIsSatisfied(TypeOptionsAttribute filter, Type type)
         {
-            if (filter == null)
-                return true;
-
-            return filter.MatchesRequirements(type);
+            return filter == null || filter.MatchesRequirements(type);
         }
     }
 }

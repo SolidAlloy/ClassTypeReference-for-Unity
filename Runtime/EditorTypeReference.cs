@@ -48,6 +48,7 @@
             return string.Empty;
         }
 
+        // A method added to a delegate cannot have the Conditional attribute.
         private void TryUpdatingTypeUsingGUID()
         {
 #if UNITY_EDITOR
@@ -65,6 +66,7 @@
             }
 
             var type = script.GetClassType();
+
             if (type == null)
             {
                 LogTypeNotFound();
@@ -75,6 +77,7 @@
             _type = type;
             string previousTypeName = TypeNameAndAssembly;
             TypeNameAndAssembly = GetTypeNameAndAssembly(_type);
+            TypeRestoredFromGUID?.Invoke(this);
 
             if (! _suppressLogs)
                 Debug.Log($"Type reference has been updated from '{previousTypeName}' to '{TypeNameAndAssembly}'.");

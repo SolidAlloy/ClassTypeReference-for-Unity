@@ -7,7 +7,7 @@
     using UnityEngine.Serialization;
 
     /// <summary>
-    /// Reference to a class <see cref="System.Type"/> with support for Unity serialization.
+    /// Reference to <see cref="System.Type"/> with support for Unity serialization.
     /// </summary>
     [Serializable]
     public partial class TypeReference : ISerializationCallbackReceiver
@@ -58,15 +58,18 @@
         /// with Type equal to the name of the type passed in.
         /// </summary>
         /// <param name="assemblyQualifiedTypeName">Assembly qualified type name.</param>
+        /// <param name="guid">The GUID of a script where the type is located. If null, it will be found automatically.</param>
         /// <param name="suppressLogs">
         /// Whether to suppress logs that show up when a type disappeared or was renamed. Default is <c>false</c>.
         /// </param>
-        public TypeReference(string assemblyQualifiedTypeName, bool suppressLogs = false)
+        public TypeReference(string assemblyQualifiedTypeName, string guid = null, bool suppressLogs = false)
             : this(suppressLogs)
         {
             Type = IsNotEmpty(assemblyQualifiedTypeName)
                 ? Type.GetType(assemblyQualifiedTypeName)
                 : null;
+
+            GUID = guid;
         }
 
         /// <summary>
@@ -74,17 +77,21 @@
         /// with Type equal to the passed type.
         /// </summary>
         /// <param name="type">Type.</param>
+        /// <param name="guid">The GUID of a script where the type is located. If null, it will be found automatically.</param>
         /// <param name="suppressLogs">
         /// Whether to suppress logs that show up when a type disappeared or was renamed. Default is <c>false</c>.
         /// </param>
         /// <exception cref="System.ArgumentException">
         /// If <paramref name="type"/> does not have a full name.
         /// </exception>
-        public TypeReference(Type type, bool suppressLogs = false)
+        public TypeReference(Type type, string guid = null, bool suppressLogs = false)
             : this(suppressLogs)
         {
             Type = type;
+            GUID = guid;
         }
+
+        public static event Action<TypeReference> TypeRestoredFromGUID;
 
         /// <summary>
         /// Gets or sets type of class reference.
@@ -100,10 +107,11 @@
                 MakeSureTypeHasName(value);
 
                 if (_type != value)
+                {
+                    _type = value;
+                    TypeNameAndAssembly = GetTypeNameAndAssembly(value);
                     _typeChanged = true;
-
-                _type = value;
-                TypeNameAndAssembly = GetTypeNameAndAssembly(value);
+                }
             }
         }
 
@@ -209,7 +217,7 @@
             var type = Type.GetType(TypeNameAndAssembly);
 
             // If GUID is not empty, there is still hope the type will be found in the TryUpdatingTypeUsingGUID method.
-            if (type == null && GUID == string.Empty)
+            if (type == null && GUID.Length == 0)
                 _needToLogTypeNotFound = true;
 
             return type;

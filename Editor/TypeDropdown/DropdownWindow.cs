@@ -7,6 +7,7 @@
     using SolidUtilities.Extensions;
     using UnityEditor;
     using UnityEngine;
+    using Util;
 
     /// <summary>Creates a dropdown window that shows the <see cref="SelectionTree"/> elements.</summary>
     internal class DropdownWindow : EditorWindow
@@ -53,7 +54,7 @@
             ShowAsDropDown(buttonRect, _positionOnCreation.size);
         }
 
-        public static float CalculateOptimalWidth(IEnumerable<string> selectionPaths)
+        public static float CalculateOptimalWidth(string[] selectionPaths)
         {
             float windowWidth = PopupHelper.CalculatePopupWidth(
                 selectionPaths,

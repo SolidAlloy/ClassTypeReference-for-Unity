@@ -5,9 +5,13 @@
     internal class TypeOptionsAttributeTests
     {
         private TypeOptionsAttribute _attribute;
+
         private interface IExampleInterface { }
-        private struct StructExample { }
+
+        private readonly struct StructExample { }
+
         private abstract class AbstractClass { }
+
         private class NormalClass { }
 
         [SetUp]

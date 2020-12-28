@@ -3,7 +3,6 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
-    using SolidUtilities;
     using SolidUtilities.Editor.Helpers;
     using SolidUtilities.Extensions;
     using SolidUtilities.Helpers;

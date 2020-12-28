@@ -68,10 +68,15 @@
         private static readonly Color LightSeparatorLineLightSkin = new Color(1f, 1f, 1f, 0.323f);
 
         public static Color HighlightedColor => DarkSkin ? HighlightedColorDarkSkin : HighlightedColorLightSkin;
+
         public static Color SelectedColor => DarkSkin ? SelectedColorDarkSkin : SelectedColorLightSkin;
+
         public static Color BorderColor => DarkSkin ? BorderColorDarkSkin : BorderColorLightSkin;
+
         public static Color BackgroundColor => DarkSkin ? BackgroundColorDarkSkin : BackgroundColorLightSkin;
+
         public static Color DarkSeparatorLine => DarkSkin ? DarkSeparatorLineDarkSkin : DarkSeparatorLineLightSkin;
+
         public static Color LightSeparatorLine => DarkSkin ? LightSeparatorLineDarkSkin : LightSeparatorLineLightSkin;
 
         private static bool DarkSkin => EditorGUIUtility.isProSkin;

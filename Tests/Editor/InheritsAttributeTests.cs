@@ -5,10 +5,14 @@
     internal class InheritsAttributeTests
     {
         private interface IParentInterface { }
+
         private interface IChildInterface : IParentInterface { }
+
         private abstract class ParentAbstractClass : IParentInterface { }
+
         private class ChildClass : ParentAbstractClass { }
-        private struct ChildStruct : IParentInterface { }
+
+        private readonly struct ChildStruct : IParentInterface { }
 
         [Test]
         public void When_interface_is_base_type_classes_that_implement_interface_match_requirements()

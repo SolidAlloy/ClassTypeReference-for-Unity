@@ -17,7 +17,7 @@
                 CreateDropdownItem(item);
         }
 
-        private void CreateDropdownItem(TypeItem item)
+        private void CreateDropdownItem(in TypeItem item)
         {
             (string namespaceName, string typeName) = SplitFullTypeName(item.Path);
 
@@ -27,7 +27,7 @@
             directParentOfNewNode.CreateChildItem(typeName, item.Type, item.FullTypeName);
         }
 
-        private static (string, string) SplitFullTypeName(string nodePath)
+        private static (string namespaceName, string typeName) SplitFullTypeName(string nodePath)
         {
             string namespaceName, typeName;
             int indexOfLastSeparator = nodePath.LastIndexOf('/');
