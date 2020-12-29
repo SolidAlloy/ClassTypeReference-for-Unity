@@ -1,7 +1,6 @@
 ﻿namespace TypeReferences
 {
     using System;
-    using System.Diagnostics;
     using System.Linq;
     using JetBrains.Annotations;
     using Debug = UnityEngine.Debug;
@@ -14,18 +13,24 @@
     // This part of the class contains only the methods that are meant to be executed in Editor and not in builds.
     public partial class TypeReference
     {
-        [Conditional("UNITY_EDITOR")]
+#if UNITY_EDITOR
+        public static event Action<TypeReference> TypeRestoredFromGUID;
+#endif
+
         private void SubscribeToDelayCall()
         {
+#if UNITY_EDITOR
             EditorApplication.delayCall += TryUpdatingTypeUsingGUID;
             EditorApplication.delayCall += LogTypeNotFoundIfNeeded;
+#endif
         }
 
-        [Conditional("UNITY_EDITOR")]
         private void UnsubscribeFromDelayCall()
         {
+#if UNITY_EDITOR
             EditorApplication.delayCall -= TryUpdatingTypeUsingGUID;
             EditorApplication.delayCall -= LogTypeNotFoundIfNeeded;
+#endif
         }
 
         private static string GetGUIDFromType([NotNull] Type type)
@@ -84,9 +89,9 @@
 #endif
         }
 
-        [Conditional("UNITY_EDITOR")]
         private void ReportObjectsWithMissingValue()
         {
+#if UNITY_EDITOR
             var foundObjects = AssetSearcher.FindObjectsWithValue(nameof(TypeNameAndAssembly), TypeNameAndAssembly);
             Debug.Log("The value is set in the following objects:");
 
@@ -97,6 +102,7 @@
 
                 Debug.Log($"[{foundObject.Type}] {string.Join(", ", details)}");
             }
+#endif
         }
     }
 }
