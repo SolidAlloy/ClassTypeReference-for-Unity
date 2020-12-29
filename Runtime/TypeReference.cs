@@ -91,6 +91,8 @@
             GUID = guid;
         }
 
+        public static event Action<TypeReference> TypeRestoredFromGUID;
+
         /// <summary>
         /// Gets or sets type of class reference.
         /// </summary>

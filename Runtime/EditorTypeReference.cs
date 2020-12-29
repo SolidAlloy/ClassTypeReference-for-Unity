@@ -13,10 +13,6 @@
     // This part of the class contains only the methods that are meant to be executed in Editor and not in builds.
     public partial class TypeReference
     {
-#if UNITY_EDITOR
-        public static event Action<TypeReference> TypeRestoredFromGUID;
-#endif
-
         private void SubscribeToDelayCall()
         {
 #if UNITY_EDITOR
