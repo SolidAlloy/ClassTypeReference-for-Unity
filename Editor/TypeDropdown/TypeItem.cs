@@ -2,7 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
-    using NUnit.Framework;
+    using UnityEngine.Assertions;
     using Util;
 
     /// <summary>
