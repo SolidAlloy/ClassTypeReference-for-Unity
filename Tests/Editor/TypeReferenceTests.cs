@@ -191,7 +191,7 @@
             {
                 var exampleType = typeof(ClassExample);
                 string typeAndAssembly = TypeReference.GetTypeNameAndAssembly(exampleType);
-                Assert.That(typeAndAssembly.Contains(exampleType.FullName));
+                Assert.That(typeAndAssembly.Contains(exampleType.FullName ?? string.Empty));
                 Assert.That(typeAndAssembly.Contains(exampleType.Assembly.GetName().Name));
             }
 

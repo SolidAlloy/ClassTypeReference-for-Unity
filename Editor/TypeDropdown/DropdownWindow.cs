@@ -1,7 +1,6 @@
 ﻿namespace TypeReferences.Editor.TypeDropdown
 {
     using System;
-    using System.Collections.Generic;
     using SolidUtilities.Editor.Extensions;
     using SolidUtilities.Editor.Helpers;
     using SolidUtilities.Extensions;

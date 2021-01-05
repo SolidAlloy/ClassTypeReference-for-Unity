@@ -1,6 +1,5 @@
 ﻿namespace TypeReferences.Editor.Tests
 {
-    using System;
     using System.Collections.Generic;
     using NUnit.Framework;
 
@@ -53,34 +52,6 @@
             var secondSet = new HashSet<TypeReference> { firstTypeRef, thirdTypeRef };
 
             Assert.IsFalse(firstSet.SetEquals(secondSet));
-        }
-
-        [Test]
-        public void TypeReference_with_missing_type_but_existing_GUID_can_be_found_in_HashSet_later()
-        {
-            var missingTypeRef = new TypeReference((Type) null, "testGUID");
-
-            var testSet = new HashSet<TypeReference> { missingTypeRef };
-
-            void ReAddItem(TypeReference typeRef)
-            {
-                var previousTypeRef = new TypeReference( (Type)null, typeRef.GUID);
-
-                if (!testSet.Contains(previousTypeRef))
-                    return;
-
-                testSet.Remove(previousTypeRef);
-                testSet.Add(typeRef);
-            }
-
-            TypeReference.TypeRestoredFromGUID += ReAddItem;
-
-            var existingTypeRef = new TypeReference(typeof(FirstClass));
-
-            missingTypeRef.Type = typeof(FirstClass);
-            ReAddItem(missingTypeRef);
-
-            Assert.IsTrue(testSet.Contains(existingTypeRef));
         }
     }
 }

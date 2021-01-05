@@ -6,7 +6,7 @@
     using Debug = UnityEngine.Debug;
 #if UNITY_EDITOR
     using SolidUtilities.Editor.Extensions;
-    using SolidUtilities.Editor.Helpers.AssetSearch;
+    using SolidUtilities.Editor.Helpers;
     using UnityEditor;
 #endif
 
@@ -47,6 +47,7 @@
             }
 #endif
             return string.Empty;
+#endif
         }
 
         // A method added to a delegate cannot have the Conditional attribute.
@@ -78,7 +79,6 @@
             _type = type;
             string previousTypeName = TypeNameAndAssembly;
             TypeNameAndAssembly = GetTypeNameAndAssembly(_type);
-            TypeRestoredFromGUID?.Invoke(this);
 
             if (! _suppressLogs)
                 Debug.Log($"Type reference has been updated from '{previousTypeName}' to '{TypeNameAndAssembly}'.");
