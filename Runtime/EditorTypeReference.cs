@@ -2,8 +2,8 @@
 {
     using System;
     using System.Linq;
-    using JetBrains.Annotations;
     using Debug = UnityEngine.Debug;
+
 #if UNITY_EDITOR
     using SolidUtilities.Editor.Extensions;
     using SolidUtilities.Editor.Helpers;
@@ -29,23 +29,11 @@
 #endif
         }
 
-        private static string GetGUIDFromType([NotNull] Type type)
+        private static string GetGUIDFromType(Type type)
         {
 #if UNITY_EDITOR
-            var guids = AssetDatabase.FindAssets(type.Name);
-
-            foreach (string guid in guids)
-            {
-                string assetPath = AssetDatabase.GUIDToAssetPath(guid);
-                var asset = AssetDatabase.LoadAssetAtPath<MonoScript>(assetPath);
-
-                if (asset == null)
-                    continue;
-
-                if (asset.GetClassType() == type)
-                    return guid;
-            }
-#endif
+            return AssetSearcher.GetClassGUID(type);
+#else
             return string.Empty;
 #endif
         }
