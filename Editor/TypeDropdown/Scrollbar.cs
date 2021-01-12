@@ -1,11 +1,10 @@
 ﻿namespace TypeReferences.Editor.TypeDropdown
 {
     using System;
-    using System.Reflection;
     using SolidUtilities.Editor.Helpers;
+    using SolidUtilities.UnityEngineInternals;
     using UnityEditor;
     using UnityEngine;
-    using UnityEngine.Assertions;
 
     /// <summary>
     /// This class automates drawing the scrollbar next to a large list and scrolling to the selected node.
@@ -19,8 +18,6 @@
         private Rect _windowRect;
 
         private static bool ScrollCannotBePerformed => Event.current.type != EventType.Repaint;
-
-        private static Rect VisibleRect => VisibleRectGetter.Get();
 
         /// <summary>Draws elements with scrollbar if the list is large enough.</summary>
         /// <param name="drawContent">
@@ -36,7 +33,7 @@
 
                 DrawInScrollView(() =>
                 {
-                    Rect newWholeListRect = EditorDrawHelper.DrawVertically(() => { drawContent(VisibleRect); });
+                    Rect newWholeListRect = EditorDrawHelper.DrawVertically(() => drawContent(GUIClip.GetVisibleRect()));
 
                     if (_wholeListRect.height == 0f || Event.current.type == EventType.Repaint)
                     {
@@ -95,22 +92,6 @@
         {
             float windowHalfHeight = _windowRect.height * 0.5f; // This is needed to center the item vertically.
             _position.y = nodeRect.y - windowHalfHeight; // This scrolls to the node but places it in the center of the window.
-        }
-
-        private static class VisibleRectGetter
-        {
-            private static readonly PropertyInfo VisibleRectProperty = GetProperty();
-
-            public static Rect Get() => (Rect) VisibleRectProperty.GetValue(null);
-
-            private static PropertyInfo GetProperty()
-            {
-                const BindingFlags flags = BindingFlags.Static | BindingFlags.NonPublic;
-                Type guiClipType = typeof(GUI).Assembly.GetType("UnityEngine.GUIClip");
-                PropertyInfo property = guiClipType.GetProperty("visibleRect", flags);
-                Assert.IsNotNull(property);
-                return property;
-            }
         }
     }
 }

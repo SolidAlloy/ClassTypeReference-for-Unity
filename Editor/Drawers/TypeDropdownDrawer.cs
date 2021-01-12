@@ -78,7 +78,7 @@
                 _attribute);
 
             bool replaceBuiltInNames = _attribute.UseBuiltInNames && typeRelatedAssemblies
-                .Any(assembly => assembly.GetName().Name == "mscorlib");
+                .Any(assembly => assembly.FullName.Contains("mscorlib"));
 
             var sortedTypes = new SortedSet<TypeItem>(new TypeItemComparer());
 
