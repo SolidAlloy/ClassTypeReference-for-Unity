@@ -15,7 +15,7 @@
         /// <summary>Name of the element in the drop-down list that corresponds to null value.</summary>
         internal const string NoneElement = "(None)";
 
-        private static readonly HashSet<string> ReportedMissingValues = new HashSet<string>();
+        private static readonly HashSet<string> _reportedMissingValues = new HashSet<string>();
 
         [SerializeField] internal bool GuidAssignmentFailed;
         [SerializeField] internal string GUID;
@@ -174,12 +174,12 @@
             if (_suppressLogs)
                 return;
 
-            if (ReportedMissingValues.Contains(TypeNameAndAssembly))
+            if (_reportedMissingValues.Contains(TypeNameAndAssembly))
                 return;
 
             Debug.LogWarning($"'{TypeNameAndAssembly}' was referenced but such type was not found.");
             ReportObjectsWithMissingValue();
-            ReportedMissingValues.Add(TypeNameAndAssembly);
+            _reportedMissingValues.Add(TypeNameAndAssembly);
         }
 
         /// <summary>
