@@ -41,9 +41,10 @@
 
         public void Draw()
         {
-            EditorDrawHelper.WhileShowingMixedValue(
-                _serializedTypeRef.TypeNameHasMultipleDifferentValues,
-                DrawTypeSelectionControl);
+            using (new EditorDrawHelper.MixedValue(_serializedTypeRef.TypeNameHasMultipleDifferentValues))
+            {
+                DrawTypeSelectionControl();
+            }
         }
 
         private void DrawTypeSelectionControl()

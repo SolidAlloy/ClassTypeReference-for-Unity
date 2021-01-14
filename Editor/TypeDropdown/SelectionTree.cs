@@ -79,7 +79,10 @@
             }
 
             if (_drawSearchbar)
-                EditorDrawHelper.DrawWithSearchToolbarStyle(DrawSearchToolbar, DropdownStyle.SearchToolbarHeight);
+            {
+                using (new EditorDrawHelper.SearchToolbarStyle(DropdownStyle.SearchToolbarHeight))
+                    DrawSearchToolbar();
+            }
 
             if ( ! DrawInSearchMode)
                 _noneElement?.Draw();
@@ -89,10 +92,10 @@
 
         private static void DrawInfoMessage()
         {
-            DrawHelper.DrawVertically(DropdownStyle.NoPadding, () =>
+            using (new DrawHelper.VerticalBlock(DropdownStyle.NoPadding))
             {
                 EditorDrawHelper.DrawInfoMessage("No types to select.");
-            });
+            }
         }
 
         private IEnumerable<SelectionNode> EnumerateTree() => _root.GetChildNodesRecursive();
