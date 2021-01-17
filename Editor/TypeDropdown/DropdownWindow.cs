@@ -148,16 +148,19 @@
 
         private void DrawContent()
         {
-            DrawInFixedRectIfConditionIsMet(_preventExpandingHeight, () =>
+            using (new FixedRect(_preventExpandingHeight, position.width))
             {
-                float contentHeight = EditorDrawHelper.DrawVertically(_selectionTree.Draw, _preventExpandingHeight,
-                    DropdownStyle.BackgroundColor);
+                using (new EditorDrawHelper.VerticalBlock(_preventExpandingHeight,
+                    DropdownStyle.BackgroundColor, out float contentHeight))
+                {
+                    _selectionTree.Draw();
 
-                if (Event.current.type == EventType.Repaint)
-                    _contentHeight = contentHeight;
+                    if (Event.current.type == EventType.Repaint)
+                        _contentHeight = contentHeight;
+                }
 
                 EditorDrawHelper.DrawBorders(position.width, position.height, DropdownStyle.BorderColor);
-            });
+            }
         }
 
         private void RepaintIfMouseWasUsed()
@@ -166,15 +169,23 @@
                 Repaint();
         }
 
-        private void DrawInFixedRectIfConditionIsMet(bool condition, Action drawContent)
+        private readonly struct FixedRect : IDisposable
         {
-            if (condition)
-                GUILayout.BeginArea(new Rect(0f, 0f, position.width, DropdownStyle.MaxWindowHeight));
+            private readonly bool _enable;
 
-            drawContent();
+            public FixedRect(bool enable, float windowWidth)
+            {
+                _enable = enable;
 
-            if (condition)
-                GUILayout.EndArea();
+                if (_enable)
+                    GUILayout.BeginArea(new Rect(0f, 0f, windowWidth, DropdownStyle.MaxWindowHeight));
+            }
+
+            public void Dispose()
+            {
+                if (_enable)
+                    GUILayout.EndArea();
+            }
         }
     }
 }

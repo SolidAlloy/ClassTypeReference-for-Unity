@@ -6,6 +6,8 @@
     using SolidUtilities.Editor.Helpers;
     using SolidUtilities.Extensions;
     using SolidUtilities.Helpers;
+    using SolidUtilities.UnityEngineInternals;
+    using UnityEditor;
     using UnityEngine;
 
     /// <summary>
@@ -87,7 +89,10 @@
             if ( ! DrawInSearchMode)
                 _noneElement?.Draw();
 
-            _scrollbar.DrawWithScrollbar(DrawTree);
+            using (_scrollbar.Draw())
+            {
+                DrawTree(GUIClip.GetVisibleRect());
+            }
         }
 
         private static void DrawInfoMessage()
@@ -126,10 +131,9 @@
         {
             Rect innerToolbarArea = GetInnerToolbarArea();
 
-            bool changed = EditorDrawHelper.CheckIfChanged(() =>
-            {
-                _searchString = DrawSearchField(innerToolbarArea, _searchString);
-            });
+            EditorGUI.BeginChangeCheck();
+            _searchString = DrawSearchField(innerToolbarArea, _searchString);
+            bool changed = EditorGUI.EndChangeCheck();
 
             if ( ! changed)
                 return;

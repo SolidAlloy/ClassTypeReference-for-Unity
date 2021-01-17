@@ -172,13 +172,11 @@
         /// <returns>True if there is no need to draw the contents.</returns>
         protected bool ReserveSpaceAndStop()
         {
-            Rect buttonRect = GUILayoutUtility.GetRect(0f, DropdownStyle.NodeHeight);
-
             if (Event.current.type == EventType.Layout)
                 return true;
 
             if (Event.current.type == EventType.Repaint || _rect.width == 0f)
-                _rect = buttonRect;
+                _rect = GUILayoutUtility.GetRect(0f, DropdownStyle.NodeHeight);
 
             return false;
         }

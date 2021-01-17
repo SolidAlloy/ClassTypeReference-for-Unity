@@ -2,8 +2,6 @@
 {
     using System;
     using SolidUtilities.Editor.Helpers;
-    using SolidUtilities.UnityEngineInternals;
-    using UnityEditor;
     using UnityEngine;
 
     /// <summary>
@@ -20,31 +18,10 @@
         private static bool ScrollCannotBePerformed => Event.current.type != EventType.Repaint;
 
         /// <summary>Draws elements with scrollbar if the list is large enough.</summary>
-        /// <param name="drawContent">
-        /// Action that takes a visible rect as an argument. Visible rect is the rect where GUI elements are in the
-        /// window borders and are shown on screen.
-        /// </param>
-        public void DrawWithScrollbar(Action<Rect> drawContent)
-        {
-            EditorDrawHelper.DrawVertically(windowRect =>
-            {
-                if (Event.current.type == EventType.Repaint)
-                    _windowRect = windowRect;
-
-                DrawInScrollView(() =>
-                {
-                    Rect newWholeListRect = EditorDrawHelper.DrawVertically(() => drawContent(GUIClip.GetVisibleRect()));
-
-                    if (_wholeListRect.height == 0f || Event.current.type == EventType.Repaint)
-                    {
-                        _visible = _wholeListRect.height > _windowRect.height;
-                        _wholeListRect = newWholeListRect;
-                    }
-                });
-            });
-
-            ScrollToNodeIfNeeded();
-        }
+        /// <returns>
+        /// A scrollbar scope that automatically lays out elements inside the list and places a thumb in the correct position.
+        /// </returns>
+        public ScrollbarScope Draw() => new ScrollbarScope(this);
 
         /// <summary>Move thumb to the beginning of the list.</summary>
         public void ToTop() => _position.y = 0f;
@@ -77,21 +54,49 @@
             _nodeToScrollTo = null;
         }
 
-        private void DrawInScrollView(Action drawContent)
-        {
-            _position = _visible
-                ? EditorGUILayout.BeginScrollView(_position, GUILayout.ExpandHeight(false))
-                : EditorGUILayout.BeginScrollView(_position, GUIStyle.none, GUIStyle.none, GUILayout.ExpandHeight(false));
-
-            drawContent();
-
-            EditorGUILayout.EndScrollView();
-        }
-
         private void ScrollToNode(Rect nodeRect)
         {
             float windowHalfHeight = _windowRect.height * 0.5f; // This is needed to center the item vertically.
             _position.y = nodeRect.y - windowHalfHeight; // This scrolls to the node but places it in the center of the window.
+        }
+
+        /// <summary>Draws elements with scrollbar if the list is large enough.</summary>
+        public readonly struct ScrollbarScope : IDisposable
+        {
+            private readonly Scrollbar _scrollbar;
+            private readonly EditorDrawHelper.VerticalBlock _outerVerticalBlock;
+            private readonly EditorDrawHelper.ScrollView _scrollView;
+            private readonly EditorDrawHelper.VerticalBlock _innerVerticalBlock;
+            private readonly Rect _newWholeListRect;
+
+            public ScrollbarScope(Scrollbar scrollbar)
+            {
+                _scrollbar = scrollbar;
+
+                _outerVerticalBlock = new EditorDrawHelper.VerticalBlock(out Rect windowRect);
+
+                if (Event.current.type == EventType.Repaint)
+                    _scrollbar._windowRect = windowRect;
+
+                _scrollView = new EditorDrawHelper.ScrollView(ref _scrollbar._position, _scrollbar._visible);
+
+                _innerVerticalBlock = new EditorDrawHelper.VerticalBlock(out _newWholeListRect);
+            }
+
+            public void Dispose()
+            {
+                if (_scrollbar._wholeListRect.height == 0f || Event.current.type == EventType.Repaint)
+                {
+                    _scrollbar._visible = _scrollbar._wholeListRect.height > _scrollbar._windowRect.height;
+                    _scrollbar._wholeListRect = _newWholeListRect;
+                }
+
+                _innerVerticalBlock.Dispose();
+                _scrollView.Dispose();
+                _outerVerticalBlock.Dispose();
+
+                _scrollbar.ScrollToNodeIfNeeded();
+            }
         }
     }
 }

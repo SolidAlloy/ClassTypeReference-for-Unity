@@ -16,6 +16,7 @@
     {
         private const string MissingSuffix = " {Missing}";
         private static readonly int _controlHint = typeof(TypeReferencePropertyDrawer).GetHashCode();
+        private static readonly ContentCache _contentCache = new ContentCache();
 
         private readonly SerializedTypeReference _serializedTypeRef;
         private readonly TypeDropdownDrawer _dropdownDrawer;
@@ -37,7 +38,7 @@
             _dropdownDrawer = dropdownDrawer;
             _showShortName = showShortName;
             _useBuiltInNames = useBuiltInNames;
-            _triggerDropDown = false; // check back later
+            _triggerDropDown = false; // TODO: check back later
         }
 
         public void Draw()
@@ -107,9 +108,9 @@
 
         private void DrawFieldContent(int controlID)
         {
-            var typeParts = _serializedTypeRef.TypeNameAndAssembly.Split(',');
-            string fullTypeName = typeParts[0].Trim();
-            var fieldContent = new GUIContent(GetTypeToShow(fullTypeName));
+            int indexOfComma = _serializedTypeRef.TypeNameAndAssembly.IndexOf(',');
+            string fullTypeName = _serializedTypeRef.TypeNameAndAssembly.Substring(0, indexOfComma);
+            var fieldContent = _contentCache.GetItem(GetTypeToShow(fullTypeName));
             EditorStyles.popup.Draw(_position, fieldContent, controlID);
         }
 
