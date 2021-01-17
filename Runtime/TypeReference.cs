@@ -3,6 +3,7 @@
     using System;
     using System.Collections.Generic;
     using JetBrains.Annotations;
+    using SolidUtilities.Extensions;
     using UnityEngine;
     using UnityEngine.Serialization;
 
@@ -117,7 +118,7 @@
 
         public static implicit operator TypeReference(Type type) => new TypeReference(type);
 
-        public override string ToString() => (Type != null && Type.FullName != null) ? Type.FullName : NoneElement;
+        public override string ToString() => (Type == null || Type.FullName == null) ? NoneElement : Type.FullName;
 
         void ISerializationCallbackReceiver.OnAfterDeserialize()
         {
@@ -141,7 +142,7 @@
             MakeSureTypeHasName(type);
 
             return type != null
-                ? type.FullName + ", " + type.Assembly.GetName().Name
+                ? $"{type.FullName}, {type.GetShortAssemblyName()}"
                 : string.Empty;
         }
 
