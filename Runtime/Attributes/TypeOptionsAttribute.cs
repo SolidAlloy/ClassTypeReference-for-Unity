@@ -13,6 +13,10 @@
     [AttributeUsage(AttributeTargets.Field)]
     public class TypeOptionsAttribute : PropertyAttribute
     {
+        private static readonly TypeOptionsAttribute _defaultInstance = new TypeOptionsAttribute();
+
+        public static TypeOptionsAttribute Default => _defaultInstance;
+
         /// <summary>
         /// Gets or sets grouping of selectable types. Defaults to <see><cref>Grouping.ByNamespaceFlat</cref></see>
         /// unless explicitly specified.

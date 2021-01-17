@@ -13,8 +13,10 @@
     /// This class gathers needed types from assemblies based on the attribute options, and creates a popup window with
     /// the collected types.
     /// </summary>
-    internal class TypeDropdownDrawer
+    internal readonly struct TypeDropdownDrawer
     {
+        private static readonly List<TypeItem> _emptyList = new List<TypeItem>(0);
+
         private readonly TypeOptionsAttribute _attribute;
         private readonly Type _declaringType;
         private readonly Type _selectedType;
@@ -53,14 +55,16 @@
             var typesToInclude = _attribute.IncludeTypes;
 
             if (typesToInclude == null)
-                return new List<TypeItem>();
+                return _emptyList;
 
             var typeItems = new List<TypeItem>(typesToInclude.Length);
 
             foreach (Type typeToInclude in _attribute.IncludeTypes)
             {
-                if (typeToInclude != null && typeToInclude.FullName != null)
-                    typeItems.Add(new TypeItem(typeToInclude, _attribute.Grouping));
+                if (typeToInclude == null || typeToInclude.FullName == null)
+                    continue;
+
+                typeItems.Add(new TypeItem(typeToInclude, _attribute.Grouping));
             }
 
             return typeItems;

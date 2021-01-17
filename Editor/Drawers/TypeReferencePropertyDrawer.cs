@@ -12,7 +12,7 @@ namespace TypeReferences.Editor.Drawers
     /// <remarks>The class is public because it is used in the Samples package.</remarks>
     [CustomPropertyDrawer(typeof(TypeReference))]
     [CustomPropertyDrawer(typeof(TypeOptionsAttribute), true)]
-    public class TypeReferencePropertyDrawer : PropertyDrawer
+    internal class TypeReferencePropertyDrawer : PropertyDrawer
     {
         public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
         {
@@ -30,13 +30,12 @@ namespace TypeReferences.Editor.Drawers
             if (label == null || label == GUIContent.none)
                 return position;
 
-            var fieldRectWithoutLabel = EditorGUI.PrefixLabel(position, label);
-            return fieldRectWithoutLabel;
+            return EditorGUI.PrefixLabel(position, label);
         }
 
         private void DrawTypeReferenceField(Rect position, SerializedProperty property)
         {
-            var typeOptionsAttribute = attribute as TypeOptionsAttribute ?? new TypeOptionsAttribute();
+            var typeOptionsAttribute = attribute as TypeOptionsAttribute ?? TypeOptionsAttribute.Default;
             var serializedTypeRef = new SerializedTypeReference(property);
 
             var selectedType = TypeCache.GetType(serializedTypeRef.TypeNameAndAssembly);

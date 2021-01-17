@@ -12,17 +12,17 @@
     /// <summary>
     /// Draws a <see cref="TypeReference"/> field and handles control over the drop-down list.
     /// </summary>
-    internal class TypeFieldDrawer
+    internal struct TypeFieldDrawer
     {
         private const string MissingSuffix = " {Missing}";
-        private static readonly int ControlHint = typeof(TypeReferencePropertyDrawer).GetHashCode();
+        private static readonly int _controlHint = typeof(TypeReferencePropertyDrawer).GetHashCode();
 
         private readonly SerializedTypeReference _serializedTypeRef;
         private readonly TypeDropdownDrawer _dropdownDrawer;
         private readonly bool _showShortName;
         private readonly bool _useBuiltInNames;
 
-        private Rect _position;
+        private readonly Rect _position;
         private bool _triggerDropDown;
 
         public TypeFieldDrawer(
@@ -37,6 +37,7 @@
             _dropdownDrawer = dropdownDrawer;
             _showShortName = showShortName;
             _useBuiltInNames = useBuiltInNames;
+            _triggerDropDown = false; // check back later
         }
 
         public void Draw()
@@ -49,7 +50,7 @@
 
         private void DrawTypeSelectionControl()
         {
-            int controlID = GUIUtility.GetControlID(ControlHint, FocusType.Keyboard, _position);
+            int controlID = GUIUtility.GetControlID(_controlHint, FocusType.Keyboard, _position);
             _triggerDropDown = false;
             ReactToCurrentEvent(controlID);
 
@@ -79,6 +80,7 @@
 
         private void OnMouseDown(int controlID)
         {
+            // ReSharper disable once PossiblyImpureMethodCallOnReadonlyVariable
             bool mouseFocusedOnElement = GUI.enabled && _position.Contains(Event.current.mousePosition);
             if (! mouseFocusedOnElement)
                 return;
