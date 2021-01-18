@@ -86,7 +86,9 @@
 
             var sortedTypes = new SortedSet<TypeItem>(new TypeItemComparer());
 
-            for (int i = 0; i < filteredTypes.Count; i++)
+            int filteredTypesLength = filteredTypes.Count;
+
+            for (int i = 0; i < filteredTypesLength; i++)
             {
                 var type = filteredTypes[i];
                 string fullTypeName = type.FullName;
