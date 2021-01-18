@@ -1,7 +1,6 @@
 ﻿namespace TypeReferences.Editor.TypeDropdown
 {
     using System;
-    using System.Collections.Generic;
     using UnityEngine.Assertions;
     using Util;
 
@@ -9,7 +8,7 @@
     /// Item that contains <see cref="System.Type"/>, its full name, and path (full type name, formatted according to
     /// <see cref="Grouping"/>).
     /// </summary>
-    internal readonly struct TypeItem
+    internal class TypeItem
     {
         public readonly string Path;
         public readonly Type Type;
@@ -24,14 +23,6 @@
             FullTypeName = fullTypeName;
             Type = type;
             Path = TypeNameFormatter.Format(Type, FullTypeName, grouping);
-        }
-    }
-
-    internal class TypeItemComparer : IComparer<TypeItem>
-    {
-        public int Compare(TypeItem x, TypeItem y)
-        {
-            return string.Compare(x.Path, y.Path, StringComparison.Ordinal);
         }
     }
 }

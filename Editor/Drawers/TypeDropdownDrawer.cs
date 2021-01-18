@@ -2,11 +2,11 @@
 {
     using System;
     using System.Collections.Generic;
-    using System.Linq;
     using System.Reflection;
     using SolidUtilities.Helpers;
     using TypeDropdown;
     using UnityEngine;
+    using UnityEngine.Assertions;
     using Util;
 
     /// <summary>
@@ -15,8 +15,6 @@
     /// </summary>
     internal readonly struct TypeDropdownDrawer
     {
-        private static readonly List<TypeItem> _emptyList = new List<TypeItem>(0);
-
         private readonly TypeOptionsAttribute _attribute;
         private readonly Type _declaringType;
         private readonly Type _selectedType;
@@ -40,68 +38,80 @@
             DropdownWindow.Create(selectionTree, _attribute.DropdownHeight, dropdownPosition);
         }
 
-        public SortedSet<TypeItem> GetDropdownItems()
+        public TypeItem[] GetDropdownItems()
         {
             var types = GetFilteredTypes();
 
-            foreach (var typeItem in GetIncludedTypes())
-                types.Add(typeItem);
+            var includedTypes = GetIncludedTypes();
 
-            return types;
+            if (includedTypes.Length == 0)
+                return types;
+
+            var totalTypes = new TypeItem[types.Length + includedTypes.Length];
+            types.CopyTo(totalTypes, 0);
+            includedTypes.CopyTo(totalTypes, types.Length);
+            return totalTypes;
         }
 
-        private List<TypeItem> GetIncludedTypes()
+        private TypeItem[] GetIncludedTypes()
         {
-            var typesToInclude = _attribute.IncludeTypes;
+            if (_attribute.IncludeTypes == null)
+                return Array.Empty<TypeItem>();
 
-            if (typesToInclude == null)
-                return _emptyList;
+            var typeItems = new TypeItem[_attribute.IncludeTypes.Length];
 
-            var typeItems = new List<TypeItem>(typesToInclude.Length);
-
-            foreach (Type typeToInclude in _attribute.IncludeTypes)
+            for (int i = 0; i < _attribute.IncludeTypes.Length; i++)
             {
-                if (typeToInclude == null || typeToInclude.FullName == null)
-                    continue;
+                Type type = _attribute.IncludeTypes[i];
 
-                typeItems.Add(new TypeItem(typeToInclude, _attribute.Grouping));
+                if (type != null)
+                {
+                    typeItems[i] = new TypeItem(type, _attribute.Grouping);
+                }
+                else
+                {
+                    throw new ArgumentException("IncludeTypes must not contain null.");
+                }
             }
 
             return typeItems;
         }
 
-        private SortedSet<TypeItem> GetFilteredTypes()
+        private TypeItem[] GetFilteredTypes()
         {
-            var typeRelatedAssemblies = TypeCollector.GetAssembliesTypeHasAccessTo(_declaringType);
+            bool containsMSCorLib = false;
+
+            var typeRelatedAssemblies = _attribute.UseBuiltInNames
+                ? TypeCollector.GetAssembliesTypeHasAccessTo(_declaringType, out containsMSCorLib)
+                : TypeCollector.GetAssembliesTypeHasAccessTo(_declaringType);
 
             if (_attribute.IncludeAdditionalAssemblies != null)
                 IncludeAdditionalAssemblies(typeRelatedAssemblies);
 
-            var filteredTypes = TypeCollector.GetFilteredTypesFromAssemblies(
-                typeRelatedAssemblies,
-                _attribute);
+            var filteredTypes = TypeCollector.GetFilteredTypesFromAssemblies(typeRelatedAssemblies, _attribute);
 
-            bool replaceBuiltInNames = _attribute.UseBuiltInNames && typeRelatedAssemblies
-                .Any(assembly => assembly.FullName.Contains("mscorlib"));
-
-            var sortedTypes = new SortedSet<TypeItem>(new TypeItemComparer());
+            bool replaceBuiltInNames = _attribute.UseBuiltInNames && containsMSCorLib;
 
             int filteredTypesLength = filteredTypes.Count;
+
+            var typeItems = new TypeItem[filteredTypesLength];
 
             for (int i = 0; i < filteredTypesLength; i++)
             {
                 var type = filteredTypes[i];
+
                 string fullTypeName = type.FullName;
-                if (fullTypeName == null)
-                    continue;
+                Assert.IsNotNull(fullTypeName);
 
                 if (replaceBuiltInNames)
                     fullTypeName = fullTypeName.ReplaceWithBuiltInName(true);
 
-                sortedTypes.Add(new TypeItem(type, fullTypeName, _attribute.Grouping));
+                typeItems[i] = new TypeItem(type, fullTypeName, _attribute.Grouping);
             }
 
-            return sortedTypes;
+            Sedgewick.SortInPlace(typeItems);
+
+            return typeItems;
         }
 
         private void IncludeAdditionalAssemblies(List<Assembly> typeRelatedAssemblies)

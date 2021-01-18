@@ -1,5 +1,6 @@
 ﻿namespace TypeReferences.Editor.TypeDropdown
 {
+    using System;
     using System.Collections.Generic;
 
     /**
@@ -8,7 +9,7 @@
      */
     internal partial class SelectionTree
     {
-        private void FillTreeWithItems(SortedSet<TypeItem> items)
+        private void FillTreeWithItems(TypeItem[] items)
         {
             if (items == null)
                 return;
@@ -19,18 +20,18 @@
 
         private void CreateDropdownItem(in TypeItem item)
         {
-            (string namespaceName, string typeName) = SplitFullTypeName(item.Path);
+            SplitFullTypeName(item.Path, out string namespaceName, out string typeName);
 
             SelectionNode directParentOfNewNode =
-                string.IsNullOrEmpty(namespaceName) ? _root : CreateFoldersInPathIfNecessary(namespaceName);
+                namespaceName.Length == 0 ? _root : CreateFoldersInPathIfNecessary(namespaceName);
 
             directParentOfNewNode.CreateChildItem(typeName, item.Type, item.FullTypeName);
         }
 
-        private static (string namespaceName, string typeName) SplitFullTypeName(string nodePath)
+        private static void SplitFullTypeName(string nodePath, out string namespaceName, out string typeName)
         {
-            string namespaceName, typeName;
             int indexOfLastSeparator = nodePath.LastIndexOf('/');
+
             if (indexOfLastSeparator == -1)
             {
                 namespaceName = string.Empty;
@@ -41,22 +42,16 @@
                 namespaceName = nodePath.Substring(0, indexOfLastSeparator);
                 typeName = nodePath.Substring(indexOfLastSeparator + 1);
             }
-
-            return (namespaceName, typeName);
         }
 
         private SelectionNode CreateFoldersInPathIfNecessary(string path)
         {
             SelectionNode parentNode = _root;
 
-            foreach (string folderName in path.Split('/'))
+            foreach (var folderName in path.AsSpan().Split('/'))
             {
-                SelectionNode folderNode = parentNode.FindChild(folderName);
-
-                if (folderNode == null)
-                    folderNode = parentNode.CreateChildFolder(folderName);
-
-                parentNode = folderNode;
+                parentNode = parentNode.FindChild(folderName)
+                             ?? parentNode.CreateChildFolder(folderName.ToString());
             }
 
             return parentNode;

@@ -147,11 +147,11 @@
         /// </remarks>
         /// <param name="name">Name of the node to find.</param>
         /// <returns>Direct child node with the matching name or null.</returns>
-        public SelectionNode FindChild(string name)
+        public SelectionNode FindChild(ReadOnlySpan<char> name)
         {
             for (int index = ChildNodes.Count - 1; index >= 0; --index)
             {
-                if (ChildNodes[index]._name == name)
+                if (name.Equals(ChildNodes[index]._name.AsSpan(), StringComparison.Ordinal))
                     return ChildNodes[index];
             }
 

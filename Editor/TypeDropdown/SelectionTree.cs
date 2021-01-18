@@ -28,7 +28,7 @@
         private SelectionNode _selectedNode;
 
         public SelectionTree(
-            SortedSet<TypeItem> items,
+            TypeItem[] items,
             Type selectedType,
             Action<Type> onTypeSelected,
             int searchbarMinItemsCount,
@@ -41,7 +41,7 @@
 
             SelectionPaths = items.Select(item => item.Path).ToArray();
             FillTreeWithItems(items);
-            _drawSearchbar = items.Count >= searchbarMinItemsCount;
+            _drawSearchbar = items.Length >= searchbarMinItemsCount;
 
             SetSelection(items, selectedType);
             _onTypeSelected = onTypeSelected;
@@ -105,7 +105,7 @@
 
         private IEnumerable<SelectionNode> EnumerateTree() => _root.GetChildNodesRecursive();
 
-        private void SetSelection(SortedSet<TypeItem> items, Type selectedType)
+        private void SetSelection(TypeItem[] items, Type selectedType)
         {
             if (selectedType == null)
             {
@@ -113,14 +113,20 @@
                 return;
             }
 
-            string nameOfItemToSelect = items.First(item => item.Type == selectedType).Path;
+            ReadOnlySpan<char> nameOfItemToSelect = default;
 
-            if (string.IsNullOrEmpty(nameOfItemToSelect))
+            foreach (TypeItem item in items)
+            {
+                if (item.Type == selectedType)
+                    nameOfItemToSelect = item.Path.AsSpan();
+            }
+
+            if (nameOfItemToSelect == default)
                 return;
 
             SelectionNode itemToSelect = _root;
 
-            foreach (string part in nameOfItemToSelect.Split('/'))
+            foreach (var part in nameOfItemToSelect.Split('/'))
                 itemToSelect = itemToSelect.FindChild(part);
 
             itemToSelect.Select();

@@ -39,20 +39,77 @@
                                                 "script in the Assets folder so that the assembly is generated.");
             }
 
-            return typeAssembly.GetReferencedAssemblies()
-                .Select(Assembly.Load)
-                .Append(typeAssembly)
-                .ToList();
+            var referencedAssemblies = typeAssembly.GetReferencedAssemblies();
+            var assemblies = new List<Assembly>(referencedAssemblies.Length + 1);
+
+            for (int i = 0; i < referencedAssemblies.Length; i++)
+            {
+                assemblies[i] = Assembly.Load(referencedAssemblies[i]);
+            }
+
+            assemblies[referencedAssemblies.Length] = typeAssembly;
+
+            return assemblies;
+        }
+
+        public static List<Assembly> GetAssembliesTypeHasAccessTo(Type type, out bool containsMSCorLib)
+        {
+            containsMSCorLib = false;
+            Assembly typeAssembly;
+
+            try
+            {
+                typeAssembly = type == null ? Assembly.Load("Assembly-CSharp") : type.Assembly;
+            }
+            catch (FileNotFoundException)
+            {
+                throw new FileNotFoundException("Assembly-CSharp.dll was not found. Please create any " +
+                                                "script in the Assets folder so that the assembly is generated.");
+            }
+
+            var referencedAssemblies = typeAssembly.GetReferencedAssemblies();
+            var assemblies = new List<Assembly>(referencedAssemblies.Length + 1);
+
+            for (int i = 0; i < referencedAssemblies.Length; i++)
+            {
+                var assemblyName = referencedAssemblies[i];
+
+                if ( ! containsMSCorLib && assemblyName.Name == "mscorlib")
+                {
+                    containsMSCorLib = true;
+                }
+
+                assemblies.Add(Assembly.Load(assemblyName));
+            }
+
+            if ( ! containsMSCorLib && typeAssembly.FullName.Contains("mscorlib"))
+            {
+                containsMSCorLib = true;
+            }
+
+            assemblies.Add(typeAssembly);
+
+            return assemblies;
         }
 
         public static List<Type> GetFilteredTypesFromAssemblies(
-            IEnumerable<Assembly> assemblies,
+            List<Assembly> assemblies,
             TypeOptionsAttribute filter)
         {
-            var types = new List<Type>();
+            int assembliesCount = assemblies.Count;
 
-            foreach (var assembly in assemblies)
-                types.AddRange(GetFilteredTypesFromAssembly(assembly, filter));
+            var types = new List<Type>(assembliesCount * 20);
+
+            for (int i = 0; i < assembliesCount; i++)
+            {
+                var filteredTypes = GetFilteredTypesFromAssembly(assemblies[i], filter);
+                int filteredTypesCount = filteredTypes.Count;
+
+                for (int j = 0; j < filteredTypesCount; j++)
+                {
+                    types.Add(filteredTypes[j]);
+                }
+            }
 
             return types;
         }
@@ -84,19 +141,47 @@
             return assembly;
         }
 
-        private static IEnumerable<Type> GetFilteredTypesFromAssembly(Assembly assembly, TypeOptionsAttribute filter)
-            => GetVisibleTypesFromAssembly(assembly).Where(type => FilterConstraintIsSatisfied(filter, type));
+        private static List<Type> GetFilteredTypesFromAssembly(Assembly assembly, TypeOptionsAttribute filter)
+        {
+            var visibleTypes = GetVisibleTypesFromAssembly(assembly);
+            var filteredTypes = new List<Type>();
+            int visibleTypesCount = visibleTypes.Count;
 
-        private static IEnumerable<Type> GetVisibleTypesFromAssembly(Assembly assembly)
+            for (int i = 0; i < visibleTypesCount; i++)
+            {
+                Type type = visibleTypes[i];
+
+                if (FilterConstraintIsSatisfied(filter, type))
+                {
+                    filteredTypes.Add(type);
+                }
+            }
+
+            return filteredTypes;
+        }
+
+        private static List<Type> GetVisibleTypesFromAssembly(Assembly assembly)
         {
             try
             {
-                return assembly.GetTypes().Where(type => type.IsVisible);
+                var assemblyTypes = assembly.GetTypes();
+
+                var visibleTypes = new List<Type>(assemblyTypes.Length);
+
+                for (int i = 0; i < assemblyTypes.Length; i++)
+                {
+                    Type type = assemblyTypes[i];
+
+                    if (type.IsVisible)
+                        visibleTypes.Add(type);
+                }
+
+                return visibleTypes;
             }
             catch (ReflectionTypeLoadException e)
             {
                 Debug.LogError($"Types could not be extracted from assembly {assembly}: {e.Message}");
-                return new Type[0];
+                return new List<Type>(0);
             }
         }
 
