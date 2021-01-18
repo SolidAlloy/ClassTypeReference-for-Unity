@@ -2,7 +2,6 @@
 {
     using System;
     using JetBrains.Annotations;
-    using SolidUtilities.Editor.Helpers;
     using UnityEngine;
 
     /// <summary>Helps to draw a popup window.</summary>
@@ -13,6 +12,14 @@
 
         /// <summary>This makes a little indent after the longest item so that it is readable.</summary>
         private const int RightIndent = 5;
+
+        private static readonly GUIContent _tempContent = new GUIContent();
+
+        private static GUIContent TempContent(string text)
+        {
+            _tempContent.text = text;
+            return _tempContent;
+        }
 
         /// <summary>
         /// Calculates recommended width for a popup window with a tree of items so that all items in the tree
@@ -35,47 +42,79 @@
         [PublicAPI]
         public static int CalculatePopupWidth(string[] items, GUIStyle style, int globalOffsetWidth, int indentWidth, bool flatTree)
         {
-            int maxItemWidth = 0;
+            if (items.Length == 0)
+                return 0;
 
-            if ( items.Length == 0)
-                return maxItemWidth;
+            float charsPerIndent = GetCharsPerIndent(indentWidth, style);
+
+            Item maxItem = default;
 
             foreach (string item in items)
             {
-                int itemWidth = GetItemWidth(item, style, indentWidth, flatTree);
-                if (itemWidth > maxItemWidth)
-                    maxItemWidth = itemWidth;
+                Item itemStruct = GetMaxPart(item, charsPerIndent, flatTree);
+
+                if (itemStruct > maxItem)
+                {
+                    maxItem = itemStruct;
+                }
             }
 
-            maxItemWidth += globalOffsetWidth + ScrollbarWidth + RightIndent;
-            return maxItemWidth;
+            return maxItem.GetStringWidthInPixels(style, indentWidth) + globalOffsetWidth + ScrollbarWidth + RightIndent;
         }
 
-        private static int GetItemWidth(string item, GUIStyle style, int indentWidth, bool flatTree)
+        private static float GetCharsPerIndent(int indentWidth, GUIStyle style)
         {
+            const string testString = "test";
+            GUIContent testContent = TempContent(testString);
+            float contentWidth = style.CalcSize(testContent).x;
+            return indentWidth / contentWidth * testString.Length;
+        }
+
+        private static Item GetMaxPart(string item, float charsPerIndent, bool flatTree)
+        {
+            int indent = 0;
+
             if (flatTree)
-                return GetStringWidthInPixels(item, style);
+                return new Item(item.AsSpan(), indent, charsPerIndent);
 
-            var parts = item.Split(Separator);
-            int partsCount = parts.Length;
-            int maxPartWidth = 0;
+            Item maxPart = default;
 
-            for (int i = 0; i < partsCount; i++)
+            foreach (var part in item.AsSpan().Split(Separator))
             {
-                int partWidth = GetStringWidthInPixels(parts[i], style) + i * indentWidth;
+                var partItem = new Item(part, indent++, charsPerIndent);
 
-                if (partWidth > maxPartWidth)
-                    maxPartWidth = partWidth;
+                if (partItem > maxPart)
+                {
+                    maxPart = partItem;
+                }
             }
 
-            return maxPartWidth;
+            return maxPart;
         }
 
-        private static int GetStringWidthInPixels(string item, GUIStyle style)
+        private readonly ref struct Item
         {
-            GUIContent itemContent = EditorDrawHelper.ContentCache.GetItem(item);
-            Vector2 size = style.CalcSize(itemContent);
-            return Convert.ToInt32(size.x);
+            private readonly ReadOnlySpan<char> _string;
+            private readonly int _indent;
+            private readonly float _charsNumber;
+
+            public Item(ReadOnlySpan<char> str, int indent, float charsPerIndent)
+            {
+                _string = str;
+                _indent = indent;
+                _charsNumber = _string.Length + charsPerIndent * _indent;
+            }
+
+            public int GetStringWidthInPixels(GUIStyle style, int indentWidth)
+            {
+                GUIContent itemContent = TempContent(_string.ToString());
+                int stringWidth = (int) style.CalcSize(itemContent).x;
+                return stringWidth + _indent * indentWidth;
+            }
+
+            public static bool operator >(Item left, Item right) => left._charsNumber > right._charsNumber;
+
+            public static bool operator <(Item left, Item right) => ! (left > right);
         }
     }
 }

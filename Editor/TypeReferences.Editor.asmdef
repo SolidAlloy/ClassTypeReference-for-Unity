@@ -11,8 +11,12 @@
     ],
     "excludePlatforms": [],
     "allowUnsafeCode": false,
-    "overrideReferences": false,
-    "precompiledReferences": [],
+    "overrideReferences": true,
+    "precompiledReferences": [
+        "System.Memory.dll",
+        "UnityEngineInternals.dll",
+        "System.Runtime.CompilerServices.Unsafe.dll"
+    ],
     "autoReferenced": true,
     "defineConstraints": [],
     "versionDefines": [],

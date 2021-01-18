@@ -41,7 +41,7 @@
             wantsMouseMove = true;
             _selectionTree = selectionTree;
             _selectionTree.SelectionChanged += Close;
-            _optimalWidth = CalculateOptimalWidth(_selectionTree.SelectionPaths);
+            _optimalWidth = CalculateOptimalWidth(_selectionTree.SelectionPaths); //
             _preventExpandingHeight = new PreventExpandingHeight(windowHeight == 0f);
 
             _positionOnCreation = GetWindowRect(windowPosition, windowHeight);
