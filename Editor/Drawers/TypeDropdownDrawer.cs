@@ -40,16 +40,17 @@
 
         public TypeItem[] GetDropdownItems()
         {
-            var types = GetFilteredTypes();
-
+            var filteredTypes = GetFilteredTypes();
             var includedTypes = GetIncludedTypes();
 
-            if (includedTypes.Length == 0)
-                return types;
+            return includedTypes.Length == 0 ? filteredTypes : MergeArrays(filteredTypes, includedTypes);
+        }
 
-            var totalTypes = new TypeItem[types.Length + includedTypes.Length];
-            types.CopyTo(totalTypes, 0);
-            includedTypes.CopyTo(totalTypes, types.Length);
+        private TypeItem[] MergeArrays(TypeItem[] filteredTypes, TypeItem[] includedTypes)
+        {
+            var totalTypes = new TypeItem[filteredTypes.Length + includedTypes.Length];
+            filteredTypes.CopyTo(totalTypes, 0);
+            includedTypes.CopyTo(totalTypes, filteredTypes.Length);
             return totalTypes;
         }
 

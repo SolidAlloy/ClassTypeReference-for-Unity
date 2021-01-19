@@ -38,7 +38,7 @@
             _dropdownDrawer = dropdownDrawer;
             _showShortName = showShortName;
             _useBuiltInNames = useBuiltInNames;
-            _triggerDropDown = false; // TODO: check back later
+            _triggerDropDown = false;
         }
 
         public void Draw()
@@ -109,8 +109,8 @@
         private void DrawFieldContent(int controlID)
         {
             int indexOfComma = _serializedTypeRef.TypeNameAndAssembly.IndexOf(',');
-            string fullTypeName = _serializedTypeRef.TypeNameAndAssembly.Substring(0, indexOfComma);
-            var fieldContent = _contentCache.GetItem(GetTypeToShow(fullTypeName));
+            string fullTypeName = indexOfComma == -1 ? string.Empty : _serializedTypeRef.TypeNameAndAssembly.Substring(0, indexOfComma);
+            GUIContent fieldContent = _contentCache.GetItem(GetTypeToShow(fullTypeName));
             EditorStyles.popup.Draw(_position, fieldContent, controlID);
         }
 
