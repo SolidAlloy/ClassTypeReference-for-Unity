@@ -38,7 +38,6 @@
 #endif
         }
 
-        // A method added to a delegate cannot have the Conditional attribute.
         private void TryUpdatingTypeUsingGUID()
         {
 #if UNITY_EDITOR
