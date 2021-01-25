@@ -39,7 +39,11 @@
         /// <summary>Gets the name of the type without its namespace.</summary>
         /// <param name="fullTypeName">Full name of the type including its namespace.</param>
         /// <returns>The type name without namespaces.</returns>
-        public static string GetShortName(string fullTypeName) => fullTypeName.Split('.').Last();
+        public static string GetShortName(string fullTypeName)
+        {
+            int afterLastDot = fullTypeName.LastIndexOf('.') + 1;
+            return fullTypeName.Substring(afterLastDot, fullTypeName.Length - afterLastDot);
+        }
 
         private static string FormatByNamespace(string name)
         {
@@ -48,20 +52,20 @@
 
         private static string FormatByNamespaceFlat(string name)
         {
-            int lastPeriodIndex = name.LastIndexOf('.');
-            if (lastPeriodIndex != -1)
-                name = name.Substring(0, lastPeriodIndex) + "/" + name.Substring(lastPeriodIndex + 1);
+            int lastDotIndex = name.LastIndexOf('.');
 
-            return name;
+            return lastDotIndex == -1
+                ? name
+                : $"{name.Substring(0, lastDotIndex)}/{name.Substring(lastDotIndex + 1)}";
         }
 
         private static string FormatByAddComponentMenu(Type type, string name)
         {
             var addComponentMenuAttributes = type.GetCustomAttributes(typeof(AddComponentMenu), false);
-            if (addComponentMenuAttributes.Length == 1)
-                return ((AddComponentMenu) addComponentMenuAttributes[0]).componentMenu;
 
-            return "Scripts/" + FormatByNamespace(name);
+            return addComponentMenuAttributes.Length == 1
+                ? ((AddComponentMenu) addComponentMenuAttributes[0]).componentMenu
+                : "Scripts/" + FormatByNamespace(name);
         }
     }
 }
