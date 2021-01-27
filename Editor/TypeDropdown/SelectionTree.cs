@@ -19,7 +19,7 @@
         private readonly List<SelectionNode> _searchModeTree = new List<SelectionNode>();
         private readonly SelectionNode _root;
         private readonly NoneElement _noneElement;
-        private readonly string _searchFieldControlName = Guid.NewGuid().ToString();
+        private readonly string _searchFieldControlName = GUID.Generate().ToString();
         private readonly Action<Type> _onTypeSelected;
         private readonly Scrollbar _scrollbar = new Scrollbar();
         private readonly bool _drawSearchbar;
