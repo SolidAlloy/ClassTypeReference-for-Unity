@@ -23,15 +23,18 @@
         /// Additional types the selectable types must inherit from (e.g. multiple interfaces).
         /// </param>
         [PublicAPI]
-        public InheritsAttribute(Type baseType, params Type[] additionalBaseTypes)
+        public InheritsAttribute(Type baseType, [CanBeNull] params Type[] additionalBaseTypes)
         {
-            int additionalTypesLength = additionalBaseTypes.Length;
-            _baseTypes = new Type[additionalTypesLength+1];
-
-            for (int i = 0; i < additionalTypesLength; i++)
-                _baseTypes[i] = additionalBaseTypes[i];
-
-            _baseTypes[additionalTypesLength] = baseType;
+            if (additionalBaseTypes == null || additionalBaseTypes.Length == 0)
+            {
+                _baseTypes = new[] { baseType };
+            }
+            else
+            {
+                _baseTypes = new Type[additionalBaseTypes.Length+1];
+                additionalBaseTypes.CopyTo(_baseTypes, 0);
+                _baseTypes[additionalBaseTypes.Length] = baseType;
+            }
         }
 
         /// <summary>
