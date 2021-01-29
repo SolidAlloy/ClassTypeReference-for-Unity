@@ -12,7 +12,7 @@
     /// <summary>
     /// Draws a <see cref="TypeReference"/> field and handles control over the drop-down list.
     /// </summary>
-    internal struct TypeFieldDrawer
+    internal class TypeFieldDrawer
     {
         private const string MissingSuffix = " {Missing}";
         private static readonly int _controlHint = typeof(TypeReferencePropertyDrawer).GetHashCode();
@@ -22,8 +22,9 @@
         private readonly TypeDropdownDrawer _dropdownDrawer;
         private readonly bool _showShortName;
         private readonly bool _useBuiltInNames;
-
         private readonly Rect _position;
+        private readonly Action<Type> _onTypeSelected;
+
         private bool _triggerDropDown;
 
         public TypeFieldDrawer(
@@ -31,14 +32,17 @@
             Rect position,
             TypeDropdownDrawer dropdownDrawer,
             bool showShortName,
-            bool useBuiltInNames)
+            bool useBuiltInNames,
+            Action<Type> onTypeSelected = null,
+            bool triggerDropDown = false)
         {
             _serializedTypeRef = serializedTypeRef;
             _position = position;
             _dropdownDrawer = dropdownDrawer;
             _showShortName = showShortName;
             _useBuiltInNames = useBuiltInNames;
-            _triggerDropDown = false;
+            _onTypeSelected = onTypeSelected;
+            _triggerDropDown = triggerDropDown;
         }
 
         public void Draw()
@@ -52,13 +56,18 @@
         private void DrawTypeSelectionControl()
         {
             int controlID = GUIUtility.GetControlID(_controlHint, FocusType.Keyboard, _position);
-            _triggerDropDown = false;
             ReactToCurrentEvent(controlID);
 
             if ( ! _triggerDropDown)
                 return;
 
-            _dropdownDrawer.Draw(OnTypeSelected);
+            _triggerDropDown = false;
+
+            _dropdownDrawer.Draw(type =>
+            {
+                OnTypeSelected(type);
+                _onTypeSelected?.Invoke(type);
+            });
         }
 
         private void ReactToCurrentEvent(int controlID)
