@@ -51,7 +51,7 @@
 
             int r;
 
-            for (; ; )
+            while (true)
             {
                 while (pb <= pc && (r = empty ? (input[pb].Path.Length - depth) : ((depth == input[pb].Path.Length) ? -1 : (input[pb].Path[depth] - partVal))) <= 0)
                 {

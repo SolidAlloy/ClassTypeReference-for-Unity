@@ -12,7 +12,7 @@
     [AttributeUsage(AttributeTargets.Field)]
     public class InheritsAttribute : TypeOptionsAttribute
     {
-        private readonly Type[] _baseTypes;
+        public Type[] BaseTypes;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="InheritsAttribute"/> class using one base type and optional
@@ -27,13 +27,13 @@
         {
             if (additionalBaseTypes == null || additionalBaseTypes.Length == 0)
             {
-                _baseTypes = new[] { baseType };
+                BaseTypes = new[] { baseType };
             }
             else
             {
-                _baseTypes = new Type[additionalBaseTypes.Length+1];
-                additionalBaseTypes.CopyTo(_baseTypes, 0);
-                _baseTypes[additionalBaseTypes.Length] = baseType;
+                BaseTypes = new Type[additionalBaseTypes.Length+1];
+                additionalBaseTypes.CopyTo(BaseTypes, 0);
+                BaseTypes[additionalBaseTypes.Length] = baseType;
             }
         }
 
@@ -46,7 +46,7 @@
         [PublicAPI]
         public InheritsAttribute(Type[] baseTypes)
         {
-            _baseTypes = baseTypes;
+            BaseTypes = baseTypes;
         }
 
         /// <summary>
@@ -66,7 +66,7 @@
         /// <inheritdoc/>
         internal override bool MatchesRequirements(Type type)
         {
-            if (_baseTypes.Contains(type) && !IncludeBaseType)
+            if (BaseTypes.Contains(type) && !IncludeBaseType)
             {
                 return false;
             }
@@ -74,12 +74,12 @@
             // Include base type in the drop-down even if it is abstract.
             // If the user set IncludeBaseType to true, they probably want to include the base type in the dropdown
             // even though it is abstract.
-            if (_baseTypes.Contains(type))
+            if (BaseTypes.Contains(type))
                 return true;
 
             bool passesAbstractConstraint = AllowAbstract || !type.IsAbstract;
 
-            return _baseTypes.All(type.InheritsFrom) && passesAbstractConstraint && base.MatchesRequirements(type);
+            return BaseTypes.All(type.InheritsFrom) && passesAbstractConstraint && base.MatchesRequirements(type);
         }
     }
 }

@@ -198,6 +198,13 @@
 
         private void SetClassGuidIfExists(Type type)
         {
+            // common case optimization
+            if (TypeCannotHaveGUID())
+            {
+                GUID = string.Empty;
+                return;
+            }
+
             try
             {
                 GUID = GetClassGUID(type);
@@ -208,6 +215,26 @@
                 GuidAssignmentFailed = true;
                 GUID = string.Empty;
             }
+        }
+
+        private bool TypeCannotHaveGUID()
+        {
+            if (string.IsNullOrEmpty(TypeNameAndAssembly))
+                return false;
+
+            int charAfterWhiteSpace = TypeNameAndAssembly.IndexOf(' ') + 1;
+
+            string assemblyName = TypeNameAndAssembly.Substring(
+                charAfterWhiteSpace,
+                TypeNameAndAssembly.Length - charAfterWhiteSpace);
+
+            return assemblyName == "mscorlib"
+                   || assemblyName == "netstandard"
+                   || assemblyName.StartsWith("System.")
+                   || assemblyName.StartsWith("Microsoft.")
+                   || assemblyName.StartsWith("Unity.")
+                   || assemblyName.StartsWith("UnityEngine.")
+                   || assemblyName.StartsWith("UnityEditor.");
         }
 
         [CanBeNull]
