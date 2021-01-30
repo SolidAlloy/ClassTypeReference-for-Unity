@@ -1,8 +1,7 @@
 ﻿namespace TypeReferences.Demo.Editor
 {
-    using System;
     using System.Reflection;
-    using SolidUtilities.Editor.Extensions;
+    using SolidUtilities.UnityEditorInternals;
     using TypeReferences.Editor.Drawers;
     using UnityEditor;
     using UnityEngine;
@@ -33,14 +32,14 @@
 
         private void SetInheritsAttributeIfFound(MemberInfo field)
         {
-            var inheritsAttribute = (InheritsAttribute) Attribute.GetCustomAttribute(field, typeof(InheritsAttribute));
+            var inheritsAttribute = field.GetCustomAttribute<InheritsAttribute>();
             if (inheritsAttribute != null)
                 _fieldDrawer.SetAttribute(inheritsAttribute);
         }
 
         private void SetTypeOptionsAttributeIfFound(MemberInfo field)
         {
-            var typeOptionsAttribute = (TypeOptionsAttribute) Attribute.GetCustomAttribute(field, typeof(TypeOptionsAttribute));
+            var typeOptionsAttribute = field.GetCustomAttribute<TypeOptionsAttribute>();
             if (typeOptionsAttribute != null)
                 _fieldDrawer.SetAttribute(typeOptionsAttribute);
         }

@@ -1,5 +1,6 @@
 ﻿namespace TypeReferences.Demo.Look_Customization
 {
+    using UnityEngine;
     using Utils;
 
     public class GroupingModes : TypeReferenceExample
@@ -15,6 +16,7 @@
 
         [InfoBox("Finally, types can be grouped in the same way as Unity does for its component menu. This " +
                  "grouping method must only be used for MonoBehaviour types. Enable it with Grouping.ByAddComponentMenu.")]
-        [TypeOptions(Grouping = Grouping.ByAddComponentMenu)] public TypeReference LikeAddComponent;
+        [Inherits(typeof(MonoBehaviour), Grouping = Grouping.ByAddComponentMenu)]
+        public TypeReference LikeAddComponent;
     }
 }

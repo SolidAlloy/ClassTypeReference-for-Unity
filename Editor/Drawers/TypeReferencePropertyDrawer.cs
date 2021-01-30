@@ -11,8 +11,7 @@ namespace TypeReferences.Editor.Drawers
     /// </summary>
     /// <remarks>The class is public because it is used in the Samples package.</remarks>
     [CustomPropertyDrawer(typeof(TypeReference))]
-    [CustomPropertyDrawer(typeof(TypeOptionsAttribute), true)]
-    internal class TypeReferencePropertyDrawer : PropertyDrawer
+    public class TypeReferencePropertyDrawer : PropertyDrawer
     {
         public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
         {

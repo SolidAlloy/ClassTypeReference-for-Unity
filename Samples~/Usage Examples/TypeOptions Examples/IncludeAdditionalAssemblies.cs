@@ -5,7 +5,7 @@
     public class IncludeAdditionalAssemblies : TypeReferenceExample
     {
         [InfoBox("By default, only the types the class can reference directly are included in the drop-down " +
-                 "list. In this example, CustomAssembly only has access to the TypeReferences assembly.")]
+                 "list. In this example, CustomAssembly only has access to the System and TypeReferences assemblies.")]
         public NoAttributeStruct NoAttribute;
 
         [InfoBox("But when we use [TypeOptions(IncludeAdditionalAssemblies = new []{ \"Assembly-CSharp\" })], " +
