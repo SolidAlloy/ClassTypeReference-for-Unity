@@ -13,9 +13,9 @@
     "allowUnsafeCode": false,
     "overrideReferences": true,
     "precompiledReferences": [
-        "System.Memory.dll",
         "UnityEngineInternals.dll",
-        "System.Runtime.CompilerServices.Unsafe.dll"
+        "TypeReference_System.Memory.dll",
+        "TypeReference_System.Runtime.CompilerServices.Unsafe.dll"
     ],
     "autoReferenced": true,
     "defineConstraints": [],
