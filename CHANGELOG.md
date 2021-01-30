@@ -1,3 +1,32 @@
+# [2.8.0](https://github.com/SolidAlloy/ClassTypeReference-for-Unity/compare/2.7.0...2.8.0) (2021-01-30)
+
+
+### Bug Fixes
+
+* Fixed ArgumentOutOfRange exception when drawing a field with no type. ([faa54e2](https://github.com/SolidAlloy/ClassTypeReference-for-Unity/commit/faa54e269cda7500811c74595f5e15a4e3e7b4b2))
+* Fixed errors at the build compilation ([26ba65e](https://github.com/SolidAlloy/ClassTypeReference-for-Unity/commit/26ba65eda57564f4a1187f3b0b616be247fae5a6))
+* Started allocating less garbage by using new methods from SolidUtilities ([c368a87](https://github.com/SolidAlloy/ClassTypeReference-for-Unity/commit/c368a874715945c3e781d8d8535e68cf393850ee))
+* Started using SolidUtilities AssetSearcher.GetClassGUID method instead of implementing its own ([dac05c3](https://github.com/SolidAlloy/ClassTypeReference-for-Unity/commit/dac05c3e87e30e2a5e657494b2e8cb0a70c69eef))
+
+
+### Features
+
+* Added optional GUID parameter to the constructor and added the TypeRestoredFromGUID event ([5e625da](https://github.com/SolidAlloy/ClassTypeReference-for-Unity/commit/5e625da23e64e2446f48281f23ae5d65f4e5fd5a))
+* Allowed making additional actions on type selection and manually triggering dropdown ([209d461](https://github.com/SolidAlloy/ClassTypeReference-for-Unity/commit/209d4614f457808241acf9f725d4f8c867649575))
+* Made the InheritsAttribute constructor accept null arrays ([cf7ca6e](https://github.com/SolidAlloy/ClassTypeReference-for-Unity/commit/cf7ca6e5c11cc3228d9f386dec4f996901ac6618))
+
+
+### Performance Improvements
+
+* Decreased serialization time of TypeReference ([0ae12b7](https://github.com/SolidAlloy/ClassTypeReference-for-Unity/commit/0ae12b798a1080f2e2d7c0df5648186776e00890))
+* Minimized memory allocations in TypeFieldDrawer.Draw() and DropdownWindow.OnGUI() ([1e3d433](https://github.com/SolidAlloy/ClassTypeReference-for-Unity/commit/1e3d433b9e8f03c278049545b15c1a8d5e901651))
+* Minor CPU and garbage improvement in TypeNameFormatter ([fd184c2](https://github.com/SolidAlloy/ClassTypeReference-for-Unity/commit/fd184c2a695f387b9ef83434b5d9d9be1955eb56))
+* Removed an accidental NUnit using statement ([8da61e8](https://github.com/SolidAlloy/ClassTypeReference-for-Unity/commit/8da61e87af9f5b293edae1094939448de78ba011))
+* Replaced System.Guid with UnityEngine.GUID ([e5631e3](https://github.com/SolidAlloy/ClassTypeReference-for-Unity/commit/e5631e3d3595d19ac4daaf0db5a734467e11eb7c))
+* Significantly decreased time spent on sorting items when showing a drop-down window ([c0e1fd4](https://github.com/SolidAlloy/ClassTypeReference-for-Unity/commit/c0e1fd4cc1a080377abeb619bcbb975540c0b911))
+* Slightly decreased deserialization time of TypeReference ([3ba1566](https://github.com/SolidAlloy/ClassTypeReference-for-Unity/commit/3ba1566d92428dc67b93daa593a4c3fdc522f093))
+* Vastly increased speed of CalculatePopupWidth() ([d07ac32](https://github.com/SolidAlloy/ClassTypeReference-for-Unity/commit/d07ac32c227491d58d608aff4bd01287674bff70))
+
 # [2.7.0](https://github.com/SolidAlloy/ClassTypeReference-for-Unity/compare/2.6.6...2.7.0) (2020-12-03)
 
 
