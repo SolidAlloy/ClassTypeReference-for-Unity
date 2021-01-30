@@ -1,5 +1,5 @@
 {
-  "name": "com.solidalloy.type.references",
+  "name": "com.solidalloy.type-references",
   "version": "2.8.0",
   "displayName": "Type References",
   "description": "A plugin that allows selecting a type from a drop-down menu in the inspector.",
