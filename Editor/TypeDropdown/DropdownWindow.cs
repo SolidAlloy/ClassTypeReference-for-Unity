@@ -41,7 +41,7 @@
             wantsMouseMove = true;
             _selectionTree = selectionTree;
             _selectionTree.SelectionChanged += Close;
-            _optimalWidth = CalculateOptimalWidth(_selectionTree.SelectionPaths); //
+            _optimalWidth = CalculateOptimalWidth(_selectionTree.SelectionPaths);
             _preventExpandingHeight = new PreventExpandingHeight(windowHeight == 0f);
 
             _positionOnCreation = GetWindowRect(windowPosition, windowHeight);
@@ -88,7 +88,14 @@
             // If given less than 100f, the window will re-position to the top left corner. If given 0f on MacOS,
             // the window may not appear at all. Thus, the minimal value is 100f.
             const float minHeightOnStart = 100f;
-            windowHeight = windowHeight == 0f ? minHeightOnStart : windowHeight;
+            windowHeight = windowHeight < 100f ? minHeightOnStart : windowHeight;
+
+            float distanceToBottomBorder = EditorDrawHelper.GetMainWindowPosition().yMax - windowPosition.y;
+
+            if (distanceToBottomBorder < windowHeight)
+            {
+                windowPosition.y = EditorDrawHelper.GetMainWindowPosition().yMax - windowHeight;
+            }
 
             var windowSize = new Vector2(distanceToRightBorder, windowHeight);
 
