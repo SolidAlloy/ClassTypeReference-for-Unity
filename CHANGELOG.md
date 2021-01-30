@@ -1,3 +1,12 @@
+## [2.8.1](https://github.com/SolidAlloy/ClassTypeReference-for-Unity/compare/2.8.0...2.8.1) (2021-01-30)
+
+
+### Bug Fixes
+
+* Fixed compilation errors in Usage Examples and applied a few minor fixes to them ([eec6fae](https://github.com/SolidAlloy/ClassTypeReference-for-Unity/commit/eec6faef4abe6d9f95c2eca10fb9be6ad98a5c16))
+* Fixed dropdown window position resetting if the distance to bottom of the screen is less than 100 pixels ([1d3eb5c](https://github.com/SolidAlloy/ClassTypeReference-for-Unity/commit/1d3eb5c443a7ee7c41460320167bd614154f1282))
+* Renamed DLLs so that they don't cause conflicts ([bbc1af1](https://github.com/SolidAlloy/ClassTypeReference-for-Unity/commit/bbc1af1b8b2a66709f18d7469f8779c817f67395))
+
 # [2.8.0](https://github.com/SolidAlloy/ClassTypeReference-for-Unity/compare/2.7.0...2.8.0) (2021-01-30)
 
 
