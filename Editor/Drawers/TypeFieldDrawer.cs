@@ -25,7 +25,7 @@
         private readonly Rect _position;
         private readonly Action<Type> _onTypeSelected;
 
-        private bool _triggerDropDown;
+        private bool _triggerDropdown;
 
         public TypeFieldDrawer(
             SerializedTypeReference serializedTypeRef,
@@ -34,7 +34,7 @@
             bool showShortName,
             bool useBuiltInNames,
             Action<Type> onTypeSelected = null,
-            bool triggerDropDown = false)
+            bool triggerDropdown = false)
         {
             _serializedTypeRef = serializedTypeRef;
             _position = position;
@@ -42,7 +42,7 @@
             _showShortName = showShortName;
             _useBuiltInNames = useBuiltInNames;
             _onTypeSelected = onTypeSelected;
-            _triggerDropDown = triggerDropDown;
+            _triggerDropdown = triggerDropdown;
         }
 
         public void Draw()
@@ -58,10 +58,10 @@
             int controlID = GUIUtility.GetControlID(_controlHint, FocusType.Keyboard, _position);
             ReactToCurrentEvent(controlID);
 
-            if ( ! _triggerDropDown)
+            if ( ! _triggerDropdown)
                 return;
 
-            _triggerDropDown = false;
+            _triggerDropdown = false;
 
             _dropdownDrawer.Draw(type =>
             {
@@ -96,7 +96,7 @@
                 return;
 
             GUIUtility.keyboardControl = controlID;
-            _triggerDropDown = true;
+            _triggerDropdown = true;
             Event.current.Use();
         }
 
@@ -110,7 +110,7 @@
 
             if (keyboardFocusIsOnElement && necessaryKeyIsDown)
             {
-                _triggerDropDown = true;
+                _triggerDropdown = true;
                 Event.current.Use();
             }
         }

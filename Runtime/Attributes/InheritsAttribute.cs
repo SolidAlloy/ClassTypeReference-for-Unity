@@ -12,7 +12,7 @@
     [AttributeUsage(AttributeTargets.Field)]
     public class InheritsAttribute : TypeOptionsAttribute
     {
-        public Type[] BaseTypes;
+        protected Type[] BaseTypes;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="InheritsAttribute"/> class using one base type and optional
