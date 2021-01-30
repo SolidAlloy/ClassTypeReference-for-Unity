@@ -1,6 +1,6 @@
 Type References for Unity3D
 ======
-[![openupm](https://img.shields.io/npm/v/com.solidalloy.type.references?label=openupm&registry_uri=https://package.openupm.com)](https://openupm.com/packages/com.solidalloy.type.references/)
+[![openupm](https://img.shields.io/npm/v/com.solidalloy.type-references?label=openupm&registry_uri=https://package.openupm.com)](https://openupm.com/packages/com.solidalloy.type-references/)
 
 
 A plugin that allows you to choose types from a drop-down menu in the inspector.
