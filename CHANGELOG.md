@@ -1,3 +1,10 @@
+## [2.8.3](https://github.com/SolidAlloy/ClassTypeReference-for-Unity/compare/2.8.2...2.8.3) (2021-02-01)
+
+
+### Bug Fixes
+
+* Fixed "type 'MonoScript' is defined in a not referenced assembly" in Unity 2019 ([7fcd735](https://github.com/SolidAlloy/ClassTypeReference-for-Unity/commit/7fcd735c5072c3e536ed614b1c26d35a4e6224e6))
+
 ## [2.8.1](https://github.com/SolidAlloy/ClassTypeReference-for-Unity/compare/2.8.0...2.8.1) (2021-01-30)
 
 
