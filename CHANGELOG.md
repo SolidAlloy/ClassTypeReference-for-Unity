@@ -1,3 +1,10 @@
+## [2.8.4](https://github.com/SolidAlloy/ClassTypeReference-for-Unity/compare/2.8.3...2.8.4) (2021-02-01)
+
+
+### Bug Fixes
+
+* Fixed incorrect define constraints in managed plugins ([436d009](https://github.com/SolidAlloy/ClassTypeReference-for-Unity/commit/436d009b3c33d377f90c2d013b3ef153deae02a3))
+
 ## [2.8.3](https://github.com/SolidAlloy/ClassTypeReference-for-Unity/compare/2.8.2...2.8.3) (2021-02-01)
 
 
