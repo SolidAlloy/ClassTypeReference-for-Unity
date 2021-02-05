@@ -1,3 +1,10 @@
+## [2.8.5](https://github.com/SolidAlloy/ClassTypeReference-for-Unity/compare/2.8.4...2.8.5) (2021-02-05)
+
+
+### Bug Fixes
+
+* Fixed attribute options not being applied to the dropdown ([93dd61b](https://github.com/SolidAlloy/ClassTypeReference-for-Unity/commit/93dd61b2e283f0d8aa0cf8d1f562116d17dcbab3))
+
 ## [2.8.4](https://github.com/SolidAlloy/ClassTypeReference-for-Unity/compare/2.8.3...2.8.4) (2021-02-01)
 
 
