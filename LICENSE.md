@@ -1,10 +1,10 @@
-MIT License
+MIT License modified with Commons Clause Restriction
 
-Copyright (c) 2020 SolidAlloy
+Copyright (c) 2021 SolidAlloy
 
 Copyright for portions of project ClassTypeReference-for-Unity are held by Rotorz, 2014
 as part of project "ClassTypeReference for Unity". All other copyright for project
-ClassTypeReference-for-Unity are held by SolidAlloy, 2020.
+ClassTypeReference-for-Unity are held by SolidAlloy, 2021.
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -23,3 +23,19 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
+
+Commons Clause Restriction
+
+The Software is provided to you by the Licensor under the License, as defined below, subject to
+the following condition.
+Without limiting other conditions in the License, the grant of rights under the License will not
+include, and the License does not grant to you, the right to Sell the Software.
+For purposes of the foregoing, “Sell” means practicing any or all of the rights granted to you
+under the License to provide to third parties, for a fee or other consideration (including without
+limitation fees for hosting or consulting/ support services related to the Software), a product or
+service whose value derives, entirely or substantially, from the functionality of the Software.
+Any license notice or attribution required by the License must also include this Commons Cause
+License Condition notice.
+
+For purposes of the clause above, the “Licensor” is SolidAlloy, the “License” is the MIT License and the Software is the ClassTypeReference-for-Unity software provided with this
+notice.
