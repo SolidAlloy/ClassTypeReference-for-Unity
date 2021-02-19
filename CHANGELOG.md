@@ -1,3 +1,11 @@
+## [2.8.6](https://github.com/SolidAlloy/ClassTypeReference-for-Unity/compare/2.8.5...2.8.6) (2021-02-19)
+
+
+### Bug Fixes
+
+* Fixed compilation errors for Unity 2019 ([7fa0e0a](https://github.com/SolidAlloy/ClassTypeReference-for-Unity/commit/7fa0e0a0b5e7f11f3431b0839d8ebf1c1296203a))
+* Removed System.Numerics.Vectors DLL file ([734d234](https://github.com/SolidAlloy/ClassTypeReference-for-Unity/commit/734d234fafe707032a9512eddb8f0fdfeb391b7b))
+
 ## [2.8.5](https://github.com/SolidAlloy/ClassTypeReference-for-Unity/compare/2.8.4...2.8.5) (2021-02-05)
 
 
