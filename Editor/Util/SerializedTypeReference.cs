@@ -1,6 +1,8 @@
 ﻿namespace TypeReferences.Editor.Util
 {
     using System;
+    using System.Diagnostics.CodeAnalysis;
+    using JetBrains.Annotations;
     using UnityEditor;
 
     /// <summary>
@@ -20,18 +22,13 @@
             _guidProperty = typeReferenceProperty.FindPropertyRelative(nameof(TypeReference.GUID));
             _guidAssignmentFailedProperty = typeReferenceProperty.FindPropertyRelative(nameof(TypeReference.GuidAssignmentFailed));
 
-            SetGuidIfAssignmentFailed();
+            FindGuidIfAssignmentFailed();
         }
 
         public string TypeNameAndAssembly
         {
             get => _typeNameProperty.stringValue;
-            set
-            {
-                _typeNameProperty.stringValue = value;
-                _guidProperty.stringValue = GetClassGuidFromTypeName(value);
-                _parentObject.ApplyModifiedProperties();
-            }
+            set => SetTypeNameAndAssembly(value);
         }
 
         public bool TypeNameHasMultipleDifferentValues => _typeNameProperty.hasMultipleDifferentValues;
@@ -39,20 +36,32 @@
         private bool GuidAssignmentFailed
         {
             get => _guidAssignmentFailedProperty.boolValue;
-            set
-            {
-                _guidAssignmentFailedProperty.boolValue = value;
-                _parentObject.ApplyModifiedProperties();
-            }
+            // Used in C# 8
+            [UsedImplicitly] set => SetGUIDAssignmentFailed(value);
         }
 
-        private string GUID
+        // Used in C# 8
+        [UsedImplicitly] private string GUID { set => SetGUID(value); }
+
+        [SuppressMessage("ReSharper", "MemberCanBePrivate.Global",
+            Justification = "The method is used by TypeFieldDrawer in C# 7")]
+        public void SetTypeNameAndAssembly(string value)
         {
-            set
-            {
-                _guidProperty.stringValue = value;
-                _parentObject.ApplyModifiedProperties();
-            }
+            _typeNameProperty.stringValue = value;
+            _guidProperty.stringValue = GetClassGuidFromTypeName(value);
+            _parentObject.ApplyModifiedProperties();
+        }
+
+        private void SetGUIDAssignmentFailed(bool value)
+        {
+            _guidAssignmentFailedProperty.boolValue = value;
+            _parentObject.ApplyModifiedProperties();
+        }
+
+        private void SetGUID(string value)
+        {
+            _guidProperty.stringValue = value;
+            _parentObject.ApplyModifiedProperties();
         }
 
         private static string GetClassGuidFromTypeName(string typeName)
@@ -61,13 +70,20 @@
             return TypeReference.GetClassGUID(type);
         }
 
-        private void SetGuidIfAssignmentFailed()
+        private void FindGuidIfAssignmentFailed()
         {
             if ( ! GuidAssignmentFailed || string.IsNullOrEmpty(TypeNameAndAssembly))
                 return;
 
+            // C# 7 is dumb and doesn't know that we don't change member variables in the property setter
+
+#if UNITY_2020_2_OR_NEWER
             GuidAssignmentFailed = false;
             GUID = GetClassGuidFromTypeName(TypeNameAndAssembly);
+#else
+            SetGUIDAssignmentFailed(false);
+            SetGUID(GetClassGuidFromTypeName(TypeNameAndAssembly));
+#endif
         }
     }
 }

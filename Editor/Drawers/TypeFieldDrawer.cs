@@ -151,7 +151,13 @@
             if (_serializedTypeRef.TypeNameAndAssembly == selectedTypeNameAndAssembly)
                 return;
 
+            // C# 7 is dumb and doesn't know that we don't change member variables in the property setter
+#if UNITY_2020_2_OR_NEWER
             _serializedTypeRef.TypeNameAndAssembly = selectedTypeNameAndAssembly;
+#else
+            _serializedTypeRef.SetTypeNameAndAssembly(selectedTypeNameAndAssembly);
+#endif
+
             GUI.changed = true;
         }
     }
