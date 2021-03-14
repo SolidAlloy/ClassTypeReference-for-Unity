@@ -54,18 +54,14 @@
 
         public static List<Assembly> GetAssembliesTypeHasAccessTo(Type type, out bool containsMSCorLib)
         {
-            containsMSCorLib = false;
-            Assembly typeAssembly;
+            if (type == null)
+            {
+                containsMSCorLib = true;
+                return GetAllAssemblies();
+            }
 
-            try
-            {
-                typeAssembly = type == null ? Assembly.Load("Assembly-CSharp") : type.Assembly;
-            }
-            catch (FileNotFoundException)
-            {
-                throw new FileNotFoundException("Assembly-CSharp.dll was not found. Please create any " +
-                                                "script in the Assets folder so that the assembly is generated.");
-            }
+            containsMSCorLib = false;
+            Assembly typeAssembly = type.Assembly;
 
             var referencedAssemblies = typeAssembly.GetReferencedAssemblies();
             var assemblies = new List<Assembly>(referencedAssemblies.Length + 1);
@@ -90,6 +86,11 @@
             assemblies.Add(typeAssembly);
 
             return assemblies;
+        }
+
+        private static List<Assembly> GetAllAssemblies()
+        {
+            return new List<Assembly>(AppDomain.CurrentDomain.GetAssemblies());
         }
 
         public static List<Type> GetFilteredTypesFromAssemblies(
