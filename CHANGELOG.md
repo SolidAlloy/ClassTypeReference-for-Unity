@@ -1,3 +1,11 @@
+## [2.8.7](https://github.com/SolidAlloy/ClassTypeReference-for-Unity/compare/2.8.6...2.8.7) (2021-03-19)
+
+
+### Bug Fixes
+
+* Downgraded CompilerServices.Unsafe from 5.0.0 to 4.5.3 ([0b513ac](https://github.com/SolidAlloy/ClassTypeReference-for-Unity/commit/0b513ac082a0737171dbaf193bea238ff4a83346))
+* Fixed FileNotFound exception when Assembly-CSharp is not generated in a project ([00ee76d](https://github.com/SolidAlloy/ClassTypeReference-for-Unity/commit/00ee76d2b3bb269c69b19df68debdcb2a83badf7))
+
 ## [2.8.6](https://github.com/SolidAlloy/ClassTypeReference-for-Unity/compare/2.8.5...2.8.6) (2021-02-19)
 
 
