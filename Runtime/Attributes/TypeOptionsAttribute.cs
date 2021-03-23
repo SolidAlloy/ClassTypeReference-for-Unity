@@ -74,6 +74,11 @@
         [PublicAPI] public bool SerializableOnly;
 
         /// <summary>
+        /// If enabled, includes internal types in the drop-down. By default, only public ones are shown.
+        /// </summary>
+        [PublicAPI] public bool AllowInternal;
+
+        /// <summary>
         /// Determines whether the specified <see cref="Type"/> matches requirements set in the attribute.
         /// </summary>
         /// <param name="type">Type to test.</param>

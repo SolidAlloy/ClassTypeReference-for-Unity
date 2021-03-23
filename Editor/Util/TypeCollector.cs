@@ -3,6 +3,7 @@
     using System;
     using System.Collections.Generic;
     using System.IO;
+    using System.Linq;
     using System.Reflection;
     using TypeReferences;
     using UnityEngine;
@@ -143,12 +144,18 @@
 
         private static List<Type> GetFilteredTypesFromAssembly(Assembly assembly, TypeOptionsAttribute filter)
         {
-            var visibleTypes = GetVisibleTypesFromAssembly(assembly);
+            List<Type> assemblyTypes;
+
+            assemblyTypes = filter.AllowInternal
+                ? GetAllTypesFromAssembly(assembly)
+                : GetVisibleTypesFromAssembly(assembly);
+
             var filteredTypes = new List<Type>();
-            int visibleTypesCount = visibleTypes.Count;
+            int visibleTypesCount = assemblyTypes.Count;
+
             for (int i = 0; i < visibleTypesCount; i++)
             {
-                Type type = visibleTypes[i];
+                Type type = assemblyTypes[i];
                 if (FilterConstraintIsSatisfied(filter, type))
                 {
                     filteredTypes.Add(type);
@@ -171,6 +178,19 @@
                         visibleTypes.Add(type);
                 }
                 return visibleTypes;
+            }
+            catch (ReflectionTypeLoadException e)
+            {
+                Debug.LogError($"Types could not be extracted from assembly {assembly}: {e.Message}");
+                return new List<Type>(0);
+            }
+        }
+
+        private static List<Type> GetAllTypesFromAssembly(Assembly assembly)
+        {
+            try
+            {
+                return assembly.GetTypes().ToList();
             }
             catch (ReflectionTypeLoadException e)
             {
