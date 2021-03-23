@@ -8,6 +8,8 @@
     using UnityEngine;
     using Util;
 
+    internal enum DropdownWindowType { Dropdown, Popup }
+
     /// <summary>Creates a dropdown window that shows the <see cref="SelectionTree"/> elements.</summary>
     internal class DropdownWindow : EditorWindow
     {
@@ -19,12 +21,10 @@
         private Rect _positionOnCreation;
         private bool _positionWasSetAfterCreation;
 
-        public event Action OnClose;
-
-        public static DropdownWindow Create(SelectionTree selectionTree, int windowHeight, Vector2 windowPosition)
+        public static DropdownWindow Create(SelectionTree selectionTree, int windowHeight, Vector2 windowPosition, DropdownWindowType windowType)
         {
             var window = CreateInstance<DropdownWindow>();
-            window.OnCreate(selectionTree, windowHeight, windowPosition);
+            window.OnCreate(selectionTree, windowHeight, windowPosition, windowType);
             return window;
         }
 
@@ -35,7 +35,7 @@
         /// <param name="selectionTree">Tree that contains the dropdown items to show.</param>
         /// <param name="windowHeight">Height of the window. If set to 0, it will be auto-adjusted.</param>
         /// <param name="windowPosition">Position of the window to set.</param>
-        private void OnCreate(SelectionTree selectionTree, float windowHeight, Vector2 windowPosition)
+        private void OnCreate(SelectionTree selectionTree, float windowHeight, Vector2 windowPosition, DropdownWindowType windowType)
         {
             ResetControl();
             wantsMouseMove = true;
@@ -46,11 +46,22 @@
 
             _positionOnCreation = GetWindowRect(windowPosition, windowHeight);
 
-            // ShowAsDropDown usually shows the window under a button, but since we don't need to align the window to
-            // any button, we set buttonRect.height to 0f.
-            Rect buttonRect = new Rect(_positionOnCreation) { height = 0f };
-
-            ShowAsDropDown(buttonRect, _positionOnCreation.size);
+            if (windowType == DropdownWindowType.Dropdown)
+            {
+                // ShowAsDropDown usually shows the window under a button, but since we don't need to align the window to
+                // any button, we set buttonRect.height to 0f.
+                Rect buttonRect = new Rect(_positionOnCreation) { height = 0f };
+                ShowAsDropDown(buttonRect, _positionOnCreation.size);
+            }
+            else if (windowType == DropdownWindowType.Popup)
+            {
+                position = _positionOnCreation;
+                ShowPopup();
+            }
+            else
+            {
+                throw new Exception("Unknown window type");
+            }
         }
 
         public static float CalculateOptimalWidth(string[] selectionPaths)
@@ -123,7 +134,7 @@
             AdjustSizeIfNeeded();
         }
 
-        private void OnDestroy() => OnClose?.Invoke();
+        private void OnLostFocus() => Close();
 
         private void AdjustSizeIfNeeded()
         {

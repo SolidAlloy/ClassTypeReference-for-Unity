@@ -34,7 +34,7 @@
             if (_attribute.ExpandAllFolders)
                 selectionTree.ExpandAllFolders();
 
-            DropdownWindow.Create(selectionTree, _attribute.DropdownHeight, GUIUtility.GUIToScreenPoint(Event.current.mousePosition));
+            DropdownWindow.Create(selectionTree, _attribute.DropdownHeight, GUIUtility.GUIToScreenPoint(Event.current.mousePosition), DropdownWindowType.Dropdown);
         }
 
         public TypeItem[] GetDropdownItems()
