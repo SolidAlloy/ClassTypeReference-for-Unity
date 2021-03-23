@@ -1,3 +1,18 @@
+# [2.9.0](https://github.com/SolidAlloy/ClassTypeReference-for-Unity/compare/2.8.7...2.9.0) (2021-03-23)
+
+
+### Bug Fixes
+
+* Fixed ArgumentException when using DropdownStyle outside of OnGUI ([912576e](https://github.com/SolidAlloy/ClassTypeReference-for-Unity/commit/912576e001a2c09de5f9d09868c0146a1b3c113a))
+
+
+### Features
+
+* Added AllowInternal option to TypeOptionsAttribute to include internal types into the dropdown ([e3b3bfa](https://github.com/SolidAlloy/ClassTypeReference-for-Unity/commit/e3b3bfa9734c93d0a0859c4b7d7329b7d66df5a1))
+* Added DropdownWindow popup option ([48fce05](https://github.com/SolidAlloy/ClassTypeReference-for-Unity/commit/48fce05e906bfebec69391962779e7af9691e6fd))
+* Removed the non-visible types restriction ([03ab613](https://github.com/SolidAlloy/ClassTypeReference-for-Unity/commit/03ab6135e3f376e480aba40164e64b941ca0809b))
+* Returned the internal types restriction ([56bbfef](https://github.com/SolidAlloy/ClassTypeReference-for-Unity/commit/56bbfef88eebf6221f6c4340214005481ddd5d10))
+
 ## [2.8.7](https://github.com/SolidAlloy/ClassTypeReference-for-Unity/compare/2.8.6...2.8.7) (2021-03-19)
 
 
