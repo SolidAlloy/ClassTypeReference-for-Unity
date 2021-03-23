@@ -143,24 +143,12 @@
 
         private static List<Type> GetFilteredTypesFromAssembly(Assembly assembly, TypeOptionsAttribute filter)
         {
-            Type[] assemblyTypes;
-
-            try
-            {
-                assemblyTypes = assembly.GetTypes();
-            }
-            catch (ReflectionTypeLoadException e)
-            {
-                Debug.LogError($"Types could not be extracted from assembly {assembly}: {e.Message}");
-                return new List<Type>(0);
-            }
-
+            var visibleTypes = GetVisibleTypesFromAssembly(assembly);
             var filteredTypes = new List<Type>();
-
-            for (int i = 0; i < assemblyTypes.Length; i++)
+            int visibleTypesCount = visibleTypes.Count;
+            for (int i = 0; i < visibleTypesCount; i++)
             {
-                Type type = assemblyTypes[i];
-
+                Type type = visibleTypes[i];
                 if (FilterConstraintIsSatisfied(filter, type))
                 {
                     filteredTypes.Add(type);
@@ -168,6 +156,27 @@
             }
 
             return filteredTypes;
+        }
+
+        private static List<Type> GetVisibleTypesFromAssembly(Assembly assembly)
+        {
+            try
+            {
+                var assemblyTypes = assembly.GetTypes();
+                var visibleTypes = new List<Type>(assemblyTypes.Length);
+                for (int i = 0; i < assemblyTypes.Length; i++)
+                {
+                    Type type = assemblyTypes[i];
+                    if (type.IsVisible)
+                        visibleTypes.Add(type);
+                }
+                return visibleTypes;
+            }
+            catch (ReflectionTypeLoadException e)
+            {
+                Debug.LogError($"Types could not be extracted from assembly {assembly}: {e.Message}");
+                return new List<Type>(0);
+            }
         }
 
         private static bool FilterConstraintIsSatisfied(TypeOptionsAttribute filter, Type type)
