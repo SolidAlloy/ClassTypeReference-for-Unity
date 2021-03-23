@@ -155,7 +155,7 @@ public TypeReference attribute;
 
 &nbsp;  
 
-If you are not satisfied with the auto-adjusted height, you can set the custom one with the DropdownHeight option. Use it like this: 
+If you are not satisfied with the auto-adjusted height, you can set the custom one with the *DropdownHeight* option. Use it like this: 
 
 ```csharp
 [Inherits(typeof(IGreetingLogger), DropdownHeight = 300)]
@@ -164,7 +164,7 @@ public TypeReference greetingLoggerType;
 
 &nbsp;  
 
-By default, folders are closed. If you want them all to be expanded when you open the dropdown, use ExpandAllFolders = true:
+By default, folders are closed. If you want them all to be expanded when you open the dropdown, use ***ExpandAllFolders*** = true:
 
 ```csharp
 [TypeOptions(ExpandAllFolders = true)]
@@ -173,7 +173,7 @@ public TypeReference allTypes;
 
 &nbsp;  
 
-By default, the searchbar appears when you have more than 10 types in the dropdown list. You can change this behaviour with the SearchbarMinItemsCount option. Here we used SearchbarMinItemsCount = 0 to make searchbar appear even though there are less than 10 types to choose from.
+By default, the searchbar appears when you have more than 10 types in the dropdown list. You can change this behaviour with the ***SearchbarMinItemsCount*** option. Here we used SearchbarMinItemsCount = 0 to make searchbar appear even though there are less than 10 types to choose from.
 
 ```csharp
 [Inherits(typeof(IGreetingLogger), SearchbarMinItemsCount = 0)]
@@ -190,16 +190,20 @@ You can make the field show just the type name without its namespace. For exampl
 
 &nbsp;  
 
-By default, the field shows built-in types by their keyword name instead of the full name (e.g. `int` instead of `System.Int32`). You can change this by setting the *UseBuiltInNames* option to false.
+By default, the field shows built-in types by their keyword name instead of the full name (e.g. `int` instead of `System.Int32`). You can change this by setting the ***UseBuiltInNames*** option to false.
 
 &nbsp;  
 
-The *SerializableOnly* option allows you to show only the classes that can be serialized by Unity. It is useful when creating custom generic classes using the types selected from the dropdown. It is a [new feature in Unity 2020](https://unity.com/releases/2020-1/programmer-tools#create-fields-generic-types-directly).
+The ***SerializableOnly*** option allows you to show only the classes that can be serialized by Unity. It is useful when creating custom generic classes using the types selected from the dropdown. It is a [new feature in Unity 2020](https://unity.com/releases/2020-1/programmer-tools#create-fields-generic-types-directly).
 
 ```csharp
 [SerializeField, TypeOptions(SerializableOnly = true)]
 private TypeReference serializableTypes;
 ```
+
+&nbsp;  
+
+***AllowInternal*** option makes internal types appear in the drop-down. By default, only public ones are shown.
 
 &nbsp;  
 
