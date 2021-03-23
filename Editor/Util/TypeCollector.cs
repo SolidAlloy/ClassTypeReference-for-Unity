@@ -3,7 +3,6 @@
     using System;
     using System.Collections.Generic;
     using System.IO;
-    using System.Linq;
     using System.Reflection;
     using TypeReferences;
     using UnityEngine;
@@ -144,13 +143,23 @@
 
         private static List<Type> GetFilteredTypesFromAssembly(Assembly assembly, TypeOptionsAttribute filter)
         {
-            var visibleTypes = GetVisibleTypesFromAssembly(assembly);
-            var filteredTypes = new List<Type>();
-            int visibleTypesCount = visibleTypes.Count;
+            Type[] assemblyTypes;
 
-            for (int i = 0; i < visibleTypesCount; i++)
+            try
             {
-                Type type = visibleTypes[i];
+                assemblyTypes = assembly.GetTypes();
+            }
+            catch (ReflectionTypeLoadException e)
+            {
+                Debug.LogError($"Types could not be extracted from assembly {assembly}: {e.Message}");
+                return new List<Type>(0);
+            }
+
+            var filteredTypes = new List<Type>();
+
+            for (int i = 0; i < assemblyTypes.Length; i++)
+            {
+                Type type = assemblyTypes[i];
 
                 if (FilterConstraintIsSatisfied(filter, type))
                 {
@@ -159,31 +168,6 @@
             }
 
             return filteredTypes;
-        }
-
-        private static List<Type> GetVisibleTypesFromAssembly(Assembly assembly)
-        {
-            try
-            {
-                var assemblyTypes = assembly.GetTypes();
-
-                var visibleTypes = new List<Type>(assemblyTypes.Length);
-
-                for (int i = 0; i < assemblyTypes.Length; i++)
-                {
-                    Type type = assemblyTypes[i];
-
-                    if (type.IsVisible)
-                        visibleTypes.Add(type);
-                }
-
-                return visibleTypes;
-            }
-            catch (ReflectionTypeLoadException e)
-            {
-                Debug.LogError($"Types could not be extracted from assembly {assembly}: {e.Message}");
-                return new List<Type>(0);
-            }
         }
 
         private static bool FilterConstraintIsSatisfied(TypeOptionsAttribute filter, Type type)
