@@ -156,8 +156,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   GreetingLoggerType:
     GuidAssignmentFailed: 0
-    _typeNameAndAssembly: TypeReferences.Demo.Utils.AbstractGreetingLogger, Assembly-CSharp
-    _GUID: 
+    GUID: 
+    TypeNameAndAssembly: TypeReferences.Demo.Utils.AbstractGreetingLogger, Assembly-CSharp
+    _suppressLogs: 0
 --- !u!114 &1162487827
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -172,8 +173,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   GreetingLoggerType:
     GuidAssignmentFailed: 0
-    _typeNameAndAssembly: TypeReferences.Demo.Utils.IGreetingLogger, Assembly-CSharp
-    _GUID: 
+    GUID: 
+    TypeNameAndAssembly: TypeReferences.Demo.Utils.IGreetingLogger, Assembly-CSharp
+    _suppressLogs: 0
 --- !u!114 &1162487828
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -188,16 +190,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   GreetingLoggerType:
     GuidAssignmentFailed: 0
-    _typeNameAndAssembly: 
-    _GUID: 
+    GUID: 
+    TypeNameAndAssembly: 
+    _suppressLogs: 0
   OnlyMonoBehaviours:
     GuidAssignmentFailed: 0
-    _typeNameAndAssembly: 
-    _GUID: 
+    GUID: 
+    TypeNameAndAssembly: 
+    _suppressLogs: 0
   NoneExcluded:
     GuidAssignmentFailed: 0
-    _typeNameAndAssembly: 
-    _GUID: 
+    GUID: 
+    TypeNameAndAssembly: 
+    _suppressLogs: 0
 --- !u!4 &1162487829
 Transform:
   m_ObjectHideFlags: 0
@@ -247,8 +252,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   GreetingLoggerType:
     GuidAssignmentFailed: 0
-    _typeNameAndAssembly: 
-    _GUID: 
+    GUID: 
+    TypeNameAndAssembly: 
+    _suppressLogs: 0
 --- !u!114 &1980899713
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -263,8 +269,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   AllTypes:
     GuidAssignmentFailed: 0
-    _typeNameAndAssembly: 
-    _GUID: 
+    GUID: 
+    TypeNameAndAssembly: 
+    _suppressLogs: 0
 --- !u!114 &1980899714
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -279,8 +286,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   GreetingLoggerType:
     GuidAssignmentFailed: 0
-    _typeNameAndAssembly: 
-    _GUID: 
+    GUID: 
+    TypeNameAndAssembly: 
+    _suppressLogs: 0
 --- !u!4 &1980899715
 Transform:
   m_ObjectHideFlags: 0
@@ -309,8 +317,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   GreetingLoggerType:
     GuidAssignmentFailed: 0
-    _typeNameAndAssembly: TypeReferences.Demo.Utils.DefaultGreetingLogger, Assembly-CSharp
-    _GUID: 
+    GUID: 
+    TypeNameAndAssembly: TypeReferences.Demo.Utils.DefaultGreetingLogger, Assembly-CSharp
+    _suppressLogs: 0
 --- !u!114 &1980899717
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -325,16 +334,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   FlatList:
     GuidAssignmentFailed: 0
-    _typeNameAndAssembly: 
-    _GUID: 
+    GUID: 
+    TypeNameAndAssembly: 
+    _suppressLogs: 0
   GroupedInFolders:
     GuidAssignmentFailed: 0
-    _typeNameAndAssembly: 
-    _GUID: 
+    GUID: 
+    TypeNameAndAssembly: 
+    _suppressLogs: 0
   LikeAddComponent:
     GuidAssignmentFailed: 0
-    _typeNameAndAssembly: 
-    _GUID: 
+    GUID: 
+    TypeNameAndAssembly: 
+    _suppressLogs: 0
 --- !u!1 &2073488519
 GameObject:
   m_ObjectHideFlags: 0
@@ -349,6 +361,7 @@ GameObject:
   - component: {fileID: 2073488526}
   - component: {fileID: 2073488525}
   - component: {fileID: 2073488524}
+  - component: {fileID: 2073488522}
   m_Layer: 0
   m_Name: TypeOptions Attribute Examples
   m_TagString: Untagged
@@ -370,8 +383,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   GreetingLoggerType:
     GuidAssignmentFailed: 0
-    _typeNameAndAssembly: TypeReferences.Demo.Utils.DefaultGreetingLogger, Assembly-CSharp
-    _GUID: 
+    GUID: 
+    TypeNameAndAssembly: TypeReferences.Demo.Utils.DefaultGreetingLogger, Assembly-CSharp
+    _suppressLogs: 0
 --- !u!4 &2073488521
 Transform:
   m_ObjectHideFlags: 0
@@ -386,6 +400,23 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2073488522
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2073488519}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 821c7c408b4b487e9e783628a102348a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  GreetingLoggerType:
+    GuidAssignmentFailed: 0
+    GUID: 
+    TypeNameAndAssembly: 
+    _suppressLogs: 0
 --- !u!114 &2073488523
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -400,8 +431,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   AnyType:
     GuidAssignmentFailed: 0
-    _typeNameAndAssembly: 
-    _GUID: 
+    GUID: 
+    TypeNameAndAssembly: 
+    _suppressLogs: 0
 --- !u!114 &2073488524
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -414,16 +446,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8cd5df17388c43ef9b4e71d15395e894, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  noAttribute:
+  NoAttribute:
     NoAttribute:
       GuidAssignmentFailed: 0
-      _typeNameAndAssembly: 
-      _GUID: 
+      GUID: 
+      TypeNameAndAssembly: 
+      _suppressLogs: 0
   DefaultAssemblyIncluded:
     DefaultAssemblyIncluded:
       GuidAssignmentFailed: 0
-      _typeNameAndAssembly: 
-      _GUID: 
+      GUID: 
+      TypeNameAndAssembly: 
+      _suppressLogs: 0
 --- !u!114 &2073488525
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -438,8 +472,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   GreetingLoggerType:
     GuidAssignmentFailed: 0
-    _typeNameAndAssembly: 
-    _GUID: 
+    GUID: 
+    TypeNameAndAssembly: 
+    _suppressLogs: 0
 --- !u!114 &2073488526
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -454,5 +489,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   LoggerWithMonoBehaviourAndWithoutDefault:
     GuidAssignmentFailed: 0
-    _typeNameAndAssembly: 
-    _GUID: 
+    GUID: 
+    TypeNameAndAssembly: 
+    _suppressLogs: 0

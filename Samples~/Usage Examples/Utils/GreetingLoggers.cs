@@ -23,6 +23,14 @@
         }
     }
 
+    internal class InternalGreetingLogger : IGreetingLogger
+    {
+        public void LogGreeting()
+        {
+            Debug.Log("I am internal.");
+        }
+    }
+
     public abstract class AbstractGreetingLogger : IGreetingLogger
     {
         public abstract void LogGreeting();
