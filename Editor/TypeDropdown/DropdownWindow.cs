@@ -86,7 +86,7 @@
         {
             // If the window width is smaller than the distance from cursor to the right border of the window, the
             // window will not appear because the cursor is outside of the window and OnGUI will never be called.
-            float screenWidth = EditorDrawHelper.GetScreenWidth();
+            float screenWidth = EditorGUIUtilityHelper.GetScreenWidth();
             windowPosition.x -= 8f; // This will make the window appear so that foldout arrows are precisely below the cursor.
             float distanceToRightBorder = screenWidth - windowPosition.x;
 
@@ -101,11 +101,11 @@
             const float minHeightOnStart = 100f;
             windowHeight = windowHeight < 100f ? minHeightOnStart : windowHeight;
 
-            float distanceToBottomBorder = EditorDrawHelper.GetMainWindowPosition().yMax - windowPosition.y;
+            float distanceToBottomBorder = EditorGUIUtilityHelper.GetMainWindowPosition().yMax - windowPosition.y;
 
             if (distanceToBottomBorder < windowHeight)
             {
-                windowPosition.y = EditorDrawHelper.GetMainWindowPosition().yMax - windowHeight;
+                windowPosition.y = EditorGUIUtilityHelper.GetMainWindowPosition().yMax - windowHeight;
             }
 
             var windowSize = new Vector2(distanceToRightBorder, windowHeight);
@@ -168,7 +168,7 @@
         {
             using (new FixedRect(_preventExpandingHeight, position.width))
             {
-                using (new EditorDrawHelper.VerticalBlock(_preventExpandingHeight,
+                using (EditorGUILayoutHelper.VerticalBlock(_preventExpandingHeight,
                     DropdownStyle.BackgroundColor, out float contentHeight))
                 {
                     _selectionTree.Draw();
@@ -177,7 +177,7 @@
                         _contentHeight = contentHeight;
                 }
 
-                EditorDrawHelper.DrawBorders(position.width, position.height, DropdownStyle.BorderColor);
+                EditorGUIHelper.DrawBorders(position.width, position.height, DropdownStyle.BorderColor);
             }
         }
 

@@ -64,23 +64,23 @@
         public readonly struct ScrollbarScope : IDisposable
         {
             private readonly Scrollbar _scrollbar;
-            private readonly EditorDrawHelper.VerticalBlock _outerVerticalBlock;
-            private readonly EditorDrawHelper.ScrollView _scrollView;
-            private readonly EditorDrawHelper.VerticalBlock _innerVerticalBlock;
+            private readonly EditorGUILayoutHelper.Vertical _outerVerticalBlock;
+            private readonly EditorGUILayoutHelper.ScrollView _scrollView;
+            private readonly EditorGUILayoutHelper.Vertical _innerVerticalBlock;
             private readonly Rect _newWholeListRect;
 
             public ScrollbarScope(Scrollbar scrollbar)
             {
                 _scrollbar = scrollbar;
 
-                _outerVerticalBlock = new EditorDrawHelper.VerticalBlock(out Rect windowRect);
+                _outerVerticalBlock = EditorGUILayoutHelper.VerticalBlock(out Rect windowRect);
 
                 if (Event.current.type == EventType.Repaint)
                     _scrollbar._windowRect = windowRect;
 
-                _scrollView = new EditorDrawHelper.ScrollView(ref _scrollbar._position, _scrollbar._visible);
+                _scrollView = EditorGUILayoutHelper.ScrollViewBlock(ref _scrollbar._position, _scrollbar._visible);
 
-                _innerVerticalBlock = new EditorDrawHelper.VerticalBlock(out _newWholeListRect);
+                _innerVerticalBlock = EditorGUILayoutHelper.VerticalBlock(out _newWholeListRect);
             }
 
             public void Dispose()

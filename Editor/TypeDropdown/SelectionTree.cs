@@ -97,9 +97,9 @@
 
         private static void DrawInfoMessage()
         {
-            using (new DrawHelper.VerticalBlock(DropdownStyle.NoPadding))
+            using (new GUILayoutHelper.Vertical(DropdownStyle.NoPadding))
             {
-                EditorDrawHelper.DrawInfoMessage("No types to select.");
+                EditorGUILayoutHelper.DrawInfoMessage("No types to select.");
             }
         }
 
@@ -187,7 +187,7 @@
             Rect outerToolbarArea = GUILayoutUtility.GetRect(
                 0f,
                 DropdownStyle.SearchToolbarHeight,
-                DrawHelper.ExpandWidth(true));
+                GUILayoutHelper.ExpandWidth(true));
 
             Rect innerToolbarArea = outerToolbarArea
                 .AddHorizontalPadding(10f, 2f)
@@ -208,10 +208,10 @@
         {
             (Rect searchFieldArea, Rect buttonRect) = innerToolbarArea.CutVertically(DropdownStyle.IconSize, true);
 
-            searchText = EditorDrawHelper.FocusedTextField(searchFieldArea, searchText, "Search",
+            searchText = EditorGUIHelper.FocusedTextField(searchFieldArea, searchText, "Search",
                 DropdownStyle.SearchToolbarStyle, _searchFieldControlName);
 
-            if (DrawHelper.CloseButton(buttonRect))
+            if (GUIHelper.CloseButton(buttonRect))
             {
                 searchText = string.Empty;
                 GUI.FocusControl(null); // Without this, the old text does not disappear for some reason.
