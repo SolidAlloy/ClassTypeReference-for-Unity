@@ -27,39 +27,38 @@
         /// </remarks>
         public static List<Assembly> GetAssembliesTypeHasAccessTo(Type type)
         {
-            List<Assembly> assemblies;
+            Assembly typeAssembly;
 
             try
             {
-                Assembly typeAssembly = type == null ? Assembly.Load("Assembly-CSharp") : type.Assembly;
-
-                var referencedAssemblies = typeAssembly.GetReferencedAssemblies();
-                assemblies = new List<Assembly>(referencedAssemblies.Length + 1);
-
-                for (int i = 0; i < referencedAssemblies.Length; i++)
-                {
-                    assemblies[i] = Assembly.Load(referencedAssemblies[i]);
-                }
-
-                assemblies[referencedAssemblies.Length] = typeAssembly;
+                typeAssembly = type == null ? Assembly.Load("Assembly-CSharp") : type.Assembly;
             }
             catch (FileNotFoundException)
             {
-                assemblies = new List<Assembly>(AppDomain.CurrentDomain.GetAssemblies());
-            }
-
-            return assemblies;
-        }
-
-        public static List<Assembly> GetAssembliesTypeHasAccessTo(Type type, out bool containsMSCorLib)
-        {
-            if (type == null)
-            {
-                containsMSCorLib = true;
                 return GetAllAssemblies();
             }
 
-            containsMSCorLib = false;
+            var referencedAssemblies = typeAssembly.GetReferencedAssemblies();
+            var assemblies = new List<Assembly>(referencedAssemblies.Length + 1);
+
+            for (int i = 0; i < referencedAssemblies.Length; i++)
+            {
+                assemblies[i] = Assembly.Load(referencedAssemblies[i]);
+            }
+
+            assemblies[referencedAssemblies.Length] = typeAssembly;
+            return assemblies;
+        }
+
+        public static List<Assembly> GetAssembliesTypeHasAccessTo(Type type, out bool containsMscorlib)
+        {
+            if (type == null)
+            {
+                containsMscorlib = true;
+                return GetAllAssemblies();
+            }
+
+            containsMscorlib = false;
             Assembly typeAssembly = type.Assembly;
 
             var referencedAssemblies = typeAssembly.GetReferencedAssemblies();
@@ -69,17 +68,17 @@
             {
                 var assemblyName = referencedAssemblies[i];
 
-                if ( ! containsMSCorLib && assemblyName.Name == "mscorlib")
+                if ( ! containsMscorlib && assemblyName.Name == "mscorlib")
                 {
-                    containsMSCorLib = true;
+                    containsMscorlib = true;
                 }
 
                 assemblies.Add(Assembly.Load(assemblyName));
             }
 
-            if ( ! containsMSCorLib && typeAssembly.FullName.Contains("mscorlib"))
+            if ( ! containsMscorlib && typeAssembly.FullName.Contains("mscorlib"))
             {
-                containsMSCorLib = true;
+                containsMscorlib = true;
             }
 
             assemblies.Add(typeAssembly);

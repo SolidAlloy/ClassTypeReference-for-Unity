@@ -13,10 +13,6 @@
     [AttributeUsage(AttributeTargets.Field)]
     public class TypeOptionsAttribute : PropertyAttribute
     {
-        private static readonly TypeOptionsAttribute _defaultInstance = new TypeOptionsAttribute();
-
-        public static TypeOptionsAttribute Default => _defaultInstance;
-
         /// <summary>
         /// Gets or sets grouping of selectable types. Defaults to <see><cref>Grouping.ByNamespaceFlat</cref></see>
         /// unless explicitly specified.
@@ -42,7 +38,10 @@
         /// </summary>
         [PublicAPI] public string[] IncludeAdditionalAssemblies;
 
-        /// <summary>Gets or sets the height of the dropdown. Default is zero.</summary>
+        /// <summary>
+        /// Gets or sets the height of the dropdown. If not set, the height is dynamic (min 100, max 600 pixels).
+        /// If set outside the height limits, the height will be clamped.
+        /// </summary>
         [PublicAPI] public int DropdownHeight;
 
         /// <summary>

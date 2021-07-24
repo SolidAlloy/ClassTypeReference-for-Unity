@@ -35,7 +35,7 @@ namespace TypeReferences.Editor.Drawers
 
         private void DrawTypeReferenceField(Rect position, SerializedProperty property)
         {
-            var typeOptionsAttribute = attribute as TypeOptionsAttribute ?? TypeOptionsAttribute.Default;
+            var typeOptionsAttribute = attribute as TypeOptionsAttribute ?? new TypeOptionsAttribute();
             var serializedTypeRef = new SerializedTypeReference(property);
 
             var selectedType = TypeCache.GetType(serializedTypeRef.TypeNameAndAssembly);
