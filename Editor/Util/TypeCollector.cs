@@ -27,27 +27,26 @@
         /// </remarks>
         public static List<Assembly> GetAssembliesTypeHasAccessTo(Type type)
         {
-            Assembly typeAssembly;
+            List<Assembly> assemblies;
 
             try
             {
-                typeAssembly = type == null ? Assembly.Load("Assembly-CSharp") : type.Assembly;
+                Assembly typeAssembly = type == null ? Assembly.Load("Assembly-CSharp") : type.Assembly;
+
+                var referencedAssemblies = typeAssembly.GetReferencedAssemblies();
+                assemblies = new List<Assembly>(referencedAssemblies.Length + 1);
+
+                for (int i = 0; i < referencedAssemblies.Length; i++)
+                {
+                    assemblies[i] = Assembly.Load(referencedAssemblies[i]);
+                }
+
+                assemblies[referencedAssemblies.Length] = typeAssembly;
             }
             catch (FileNotFoundException)
             {
-                throw new FileNotFoundException("Assembly-CSharp.dll was not found. Please create any " +
-                                                "script in the Assets folder so that the assembly is generated.");
+                assemblies = new List<Assembly>(AppDomain.CurrentDomain.GetAssemblies());
             }
-
-            var referencedAssemblies = typeAssembly.GetReferencedAssemblies();
-            var assemblies = new List<Assembly>(referencedAssemblies.Length + 1);
-
-            for (int i = 0; i < referencedAssemblies.Length; i++)
-            {
-                assemblies[i] = Assembly.Load(referencedAssemblies[i]);
-            }
-
-            assemblies[referencedAssemblies.Length] = typeAssembly;
 
             return assemblies;
         }
@@ -171,12 +170,13 @@
             {
                 var assemblyTypes = assembly.GetTypes();
                 var visibleTypes = new List<Type>(assemblyTypes.Length);
-                for (int i = 0; i < assemblyTypes.Length; i++)
+
+                foreach (Type type in assemblyTypes)
                 {
-                    Type type = assemblyTypes[i];
                     if (type.IsVisible)
                         visibleTypes.Add(type);
                 }
+
                 return visibleTypes;
             }
             catch (ReflectionTypeLoadException e)
