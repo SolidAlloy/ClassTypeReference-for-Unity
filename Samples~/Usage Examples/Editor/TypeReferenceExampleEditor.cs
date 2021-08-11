@@ -57,7 +57,7 @@
 
         private static void DrawInfoBoxIfAttributeFound(MemberInfo field)
         {
-            var infoBoxAttribute = (InfoBoxAttribute) Attribute.GetCustomAttribute(field, typeof(InfoBoxAttribute));
+            var infoBoxAttribute = field.GetCustomAttribute<InfoBoxAttribute>();
             if (infoBoxAttribute != null)
                 InfoBox.Draw(infoBoxAttribute.Text);
         }
@@ -71,8 +71,9 @@
 
             foreach (var method in methods)
             {
-                // Get the ButtonAttribute on the method (if any)
-                var ba = (ButtonAttribute) Attribute.GetCustomAttribute(method, typeof(ButtonAttribute));
+                DrawInfoBoxIfAttributeFound(method);
+
+                var ba = method.GetCustomAttribute<ButtonAttribute>();
 
                 if (ba == null)
                     continue;
