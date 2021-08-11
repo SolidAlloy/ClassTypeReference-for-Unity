@@ -20,7 +20,6 @@
         private readonly SerializedTypeReference _serializedTypeRef;
         private readonly TypeDropdownDrawer _dropdownDrawer;
         private readonly bool _showShortName;
-        private readonly bool _useBuiltInNames;
         private readonly Rect _position;
         private readonly Action<Type> _onTypeSelected;
 
@@ -31,7 +30,6 @@
             Rect position,
             TypeDropdownDrawer dropdownDrawer,
             bool showShortName,
-            bool useBuiltInNames,
             Action<Type> onTypeSelected = null,
             bool triggerDropdown = false)
         {
@@ -39,7 +37,6 @@
             _position = position;
             _dropdownDrawer = dropdownDrawer;
             _showShortName = showShortName;
-            _useBuiltInNames = useBuiltInNames;
             _onTypeSelected = onTypeSelected;
             _triggerDropdown = triggerDropdown;
         }
@@ -124,7 +121,7 @@
 
         private string GetTypeToShow(string typeName)
         {
-            if (_useBuiltInNames)
+            if (ProjectSettings.UseBuiltInNames)
             {
                 string builtInName = typeName.ReplaceWithBuiltInName();
                 if (builtInName != typeName)

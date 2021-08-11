@@ -51,21 +51,10 @@
         [PublicAPI] public bool ExpandAllFolders;
 
         /// <summary>
-        /// Sets the minimum number of items in the drop-down for the search bar to appear. Defaults to 10.
-        /// </summary>
-        [PublicAPI] public int SearchbarMinItemsCount = 10;
-
-        /// <summary>
         /// Makes the field show the short name of the selected type instead of the full one.
         /// <see langword="false"/> by default.
         /// </summary>
         [PublicAPI] public bool ShortName;
-
-        /// <summary>
-        /// Whether to make dropdown show built-in types by their keyword name (int) instead of the full name
-        /// (System.Int32). Defaults to <see langword="true"/>.
-        /// </summary>
-        [PublicAPI] public bool UseBuiltInNames = true;
 
         /// <summary>
         /// If enabled, shows only types that can be serialized by Unity. Defaults to <see langword="false"/>.

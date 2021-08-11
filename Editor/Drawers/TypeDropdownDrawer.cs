@@ -29,7 +29,7 @@
         public void Draw(Action<Type> onTypeSelected)
         {
             var dropdownItems = GetDropdownItems();
-            var selectionTree = new SelectionTree(dropdownItems, _selectedType, onTypeSelected, _attribute.SearchbarMinItemsCount, _attribute.ExcludeNone);
+            var selectionTree = new SelectionTree(dropdownItems, _selectedType, onTypeSelected, ProjectSettings.SearchbarMinItemsCount, _attribute.ExcludeNone);
 
             if (_attribute.ExpandAllFolders)
                 selectionTree.ExpandAllFolders();
@@ -81,7 +81,7 @@
         {
             bool containsMSCorLib = false;
 
-            var typeRelatedAssemblies = _attribute.UseBuiltInNames
+            var typeRelatedAssemblies = ProjectSettings.UseBuiltInNames
                 ? TypeCollector.GetAssembliesTypeHasAccessTo(_declaringType, out containsMSCorLib)
                 : TypeCollector.GetAssembliesTypeHasAccessTo(_declaringType);
 
@@ -90,7 +90,7 @@
 
             var filteredTypes = TypeCollector.GetFilteredTypesFromAssemblies(typeRelatedAssemblies, _attribute);
 
-            bool replaceBuiltInNames = _attribute.UseBuiltInNames && containsMSCorLib;
+            bool replaceBuiltInNames = ProjectSettings.UseBuiltInNames && containsMSCorLib;
 
             int filteredTypesLength = filteredTypes.Count;
 

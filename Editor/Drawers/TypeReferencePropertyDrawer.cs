@@ -54,8 +54,7 @@ namespace TypeReferences.Editor.Drawers
                 serializedTypeRef,
                 position,
                 dropdownDrawer,
-                typeOptionsAttribute.ShortName,
-                typeOptionsAttribute.UseBuiltInNames);
+                typeOptionsAttribute.ShortName);
 
             fieldDrawer.Draw();
         }
