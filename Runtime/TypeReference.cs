@@ -105,12 +105,12 @@
             {
                 MakeSureTypeHasName(value);
 
-                if (_type != value)
-                {
-                    _type = value;
-                    TypeNameAndAssembly = GetTypeNameAndAssembly(value);
-                    _typeChanged = true;
-                }
+                if (_type == value)
+                    return;
+
+                _type = value;
+                TypeNameAndAssembly = GetTypeNameAndAssembly(value);
+                _typeChanged = true;
             }
         }
 
