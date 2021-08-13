@@ -173,24 +173,11 @@ public TypeReference allTypes;
 
 &nbsp;  
 
-By default, the searchbar appears when you have more than 10 types in the dropdown list. You can change this behaviour with the ***SearchbarMinItemsCount*** option. Here we used SearchbarMinItemsCount = 0 to make searchbar appear even though there are less than 10 types to choose from.
-
-```csharp
-[Inherits(typeof(IGreetingLogger), SearchbarMinItemsCount = 0)]
-public TypeReference greetingLoggerType;
-```
-
-&nbsp;  
-
 You can make the field show just the type name without its namespace. For example, in this case, the field will show *DefaultGreetingLogger* instead of *TypeReferences.Demo.Utils.DefaultGreetingLogger*:
 
 ```csharp
 [Inherits(typeof(IGreetingLogger), ShortName = true)] public TypeReference GreetingLoggerType;
 ```
-
-&nbsp;  
-
-By default, the field shows built-in types by their keyword name instead of the full name (e.g. `int` instead of `System.Int32`). You can change this by setting the ***UseBuiltInNames*** option to false.
 
 &nbsp;  
 
@@ -241,7 +228,17 @@ By default, abstract types (abstract classes and interfaces) are not included in
 public TypeReference greetingLoggerType;
 ```
 
-  
+  &nbsp;  
+
+## Project Settings
+
+Some options are located in Project Settings.
+
+By default, the field shows built-in types by their keyword name instead of the full name (e.g. `int` instead of `System.Int32`). You can change this by setting the ***Use built-in*** ***names*** option to false.
+
+The searchbar appears when you have more than 10 types in the dropdown list by default. You can change this behaviour with the ***Searchbar minimum items count*** option.
+
+
 
 Contribution Agreement
 ----------------------
