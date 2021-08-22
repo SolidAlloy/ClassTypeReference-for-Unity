@@ -1,3 +1,16 @@
+# [2.10.0](https://github.com/SolidAlloy/ClassTypeReference-for-Unity/compare/2.9.0...2.10.0) (2021-08-22)
+
+
+### Bug Fixes
+
+* Changed code according to changes in SolidUtilities ([e794335](https://github.com/SolidAlloy/ClassTypeReference-for-Unity/commit/e794335a483c3c3c86bca41fc4eac08360447368))
+* When calling type cannot be found, all assemblies are loaded instead of just Assembly-CSharp and its referenced assemblies. ([bdaad4a](https://github.com/SolidAlloy/ClassTypeReference-for-Unity/commit/bdaad4a8c542fafda36eefdc73c1f83c5275ccb6))
+
+
+### Features
+
+* Moved SearchbarMinItemsCount and UseBuiltInNames attribute properties to Project Settings ([361e691](https://github.com/SolidAlloy/ClassTypeReference-for-Unity/commit/361e6911640ab6494c840fb3c46b3be1dbf3bf47))
+
 # [2.9.0](https://github.com/SolidAlloy/ClassTypeReference-for-Unity/compare/2.8.7...2.9.0) (2021-03-23)
 
 
