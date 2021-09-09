@@ -16,7 +16,7 @@
         [SettingsProvider]
         public static SettingsProvider CreateSettingsProvider()
         {
-            return new SettingsProvider("Project/Type References", SettingsScope.Project)
+            return new SettingsProvider("Project/Packages/Type References", SettingsScope.Project)
             {
                 guiHandler = OnGUI,
                 keywords = GetKeywords()
