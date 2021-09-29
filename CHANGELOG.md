@@ -1,3 +1,10 @@
+## [2.10.1](https://github.com/SolidAlloy/ClassTypeReference-for-Unity/compare/2.10.0...2.10.1) (2021-09-29)
+
+
+### Bug Fixes
+
+* Fixed MissingReferenceException sometimes occurring on MacOS when opening dropdown ([87cf3c8](https://github.com/SolidAlloy/ClassTypeReference-for-Unity/commit/87cf3c869ec2cba09f381c26661d1f2791238d9f))
+
 # [2.10.0](https://github.com/SolidAlloy/ClassTypeReference-for-Unity/compare/2.9.0...2.10.0) (2021-08-22)
 
 
