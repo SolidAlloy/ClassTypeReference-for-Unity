@@ -1,3 +1,15 @@
+# [2.11.0](https://github.com/SolidAlloy/ClassTypeReference-for-Unity/compare/2.10.1...2.11.0) (2021-10-13)
+
+
+### Bug Fixes
+
+* Fixed flickering window width when opening the dropdown ([4a1383e](https://github.com/SolidAlloy/ClassTypeReference-for-Unity/commit/4a1383eb60a015b52cfa27fbc5f92f0e7f60fb15))
+
+
+### Features
+
+* Added ability to move through the list of types using keyboard ([85f834a](https://github.com/SolidAlloy/ClassTypeReference-for-Unity/commit/85f834a7a7074b74153d765f852d84b9ce62b503))
+
 ## [2.10.1](https://github.com/SolidAlloy/ClassTypeReference-for-Unity/compare/2.10.0...2.10.1) (2021-09-29)
 
 
