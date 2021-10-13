@@ -11,15 +11,9 @@
     internal enum DropdownWindowType { Dropdown, Popup }
 
     /// <summary>Creates a dropdown window that shows the <see cref="SelectionTree"/> elements.</summary>
-    internal class DropdownWindow : EditorWindow
+    internal partial class DropdownWindow : EditorWindow
     {
         private SelectionTree _selectionTree;
-        private PreventExpandingHeight _preventExpandingHeight;
-        private float _contentHeight;
-        private float _optimalWidth;
-
-        private Rect _positionOnCreation;
-        private bool _positionWasSetAfterCreation;
 
         public static DropdownWindow Create(SelectionTree selectionTree, int windowHeight, Vector2 windowPosition, DropdownWindowType windowType)
         {
@@ -64,55 +58,6 @@
             }
         }
 
-        public static float CalculateOptimalWidth(string[] selectionPaths)
-        {
-            float windowWidth = PopupHelper.CalculatePopupWidth(
-                selectionPaths,
-                DropdownStyle.DefaultLabelStyle,
-                (int) DropdownStyle.GlobalOffset,
-                (int) DropdownStyle.IndentWidth,
-                false);
-
-            return windowWidth < DropdownStyle.MinWindowWidth ? DropdownStyle.MinWindowWidth : windowWidth;
-        }
-
-        private static void ResetControl()
-        {
-            GUIUtility.hotControl = 0;
-            GUIUtility.keyboardControl = 0;
-        }
-
-        private Rect GetWindowRect(Vector2 windowPosition, float windowHeight)
-        {
-            // If the window width is smaller than the distance from cursor to the right border of the window, the
-            // window will not appear because the cursor is outside of the window and OnGUI will never be called.
-            float screenWidth = EditorGUIUtilityHelper.GetScreenWidth();
-            windowPosition.x -= 8f; // This will make the window appear so that foldout arrows are precisely below the cursor.
-            float distanceToRightBorder = screenWidth - windowPosition.x;
-
-            if (_optimalWidth > distanceToRightBorder)
-            {
-                distanceToRightBorder = _optimalWidth;
-                windowPosition.x = screenWidth - _optimalWidth;
-            }
-
-            // If given less than 100f, the window will re-position to the top left corner. If given 0f on MacOS,
-            // the window may not appear at all. Thus, the minimal value is 100f.
-            const float minHeightOnStart = 100f;
-            windowHeight = windowHeight < 100f ? minHeightOnStart : windowHeight;
-
-            float distanceToBottomBorder = EditorGUIUtilityHelper.GetMainWindowPosition().yMax - windowPosition.y;
-
-            if (distanceToBottomBorder < windowHeight)
-            {
-                windowPosition.y = EditorGUIUtilityHelper.GetMainWindowPosition().yMax - windowHeight;
-            }
-
-            var windowSize = new Vector2(distanceToRightBorder, windowHeight);
-
-            return new Rect(windowPosition, windowSize);
-        }
-
         private void OnGUI()
         {
             CloseOnEscPress();
@@ -136,23 +81,10 @@
 
         private void OnLostFocus() => Close();
 
-        private void AdjustSizeIfNeeded()
+        private static void ResetControl()
         {
-            float widthToSet = -1f;
-            float heightToSet = -1f;
-
-            if (_optimalWidth.DoesNotEqualApproximately(position.width))
-                widthToSet = _optimalWidth;
-
-            float wantedHeight = Math.Min(_contentHeight, DropdownStyle.MaxWindowHeight);
-
-            if (_preventExpandingHeight && wantedHeight != 0f && wantedHeight.DoesNotEqualApproximately(position.height))
-                heightToSet = wantedHeight;
-
-            if (widthToSet == -1f && heightToSet == -1f)
-                return;
-
-            this.Resize(widthToSet, heightToSet);
+            GUIUtility.hotControl = 0;
+            GUIUtility.keyboardControl = 0;
         }
 
         private void CloseOnEscPress()
