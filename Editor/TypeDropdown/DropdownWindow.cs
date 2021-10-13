@@ -183,8 +183,11 @@
 
         private void RepaintIfMouseWasUsed()
         {
-            if (Event.current.isMouse || Event.current.type == EventType.Used)
+            if (Event.current.isMouse || Event.current.type == EventType.Used || _selectionTree.RepaintRequested)
+            {
                 Repaint();
+                _selectionTree.RepaintRequested = false;
+            }
         }
 
         private readonly struct FixedRect : IDisposable

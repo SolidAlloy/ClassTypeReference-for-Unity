@@ -19,8 +19,8 @@
         public readonly Type Type;
 
         private readonly string _name;
-        private readonly SelectionTree _parentTree;
-        private readonly SelectionNode _parentNode;
+        protected readonly SelectionTree _parentTree;
+        public readonly SelectionNode ParentNode;
 
         private bool _expanded;
         private Rect _rect;
@@ -45,7 +45,7 @@
             Assert.IsNotNull(name);
 
             _name = name;
-            _parentNode = parentNode;
+            ParentNode = parentNode;
             _parentTree = parentTree;
             Type = type;
             FullTypeName = fullTypeName;
@@ -55,7 +55,7 @@
         /// <param name="parentTree">The tree this node belongs to.</param>
         private SelectionNode(SelectionTree parentTree)
         {
-            _parentNode = null;
+            ParentNode = null;
             _parentTree = parentTree;
             _name = string.Empty;
             Type = null;
@@ -76,15 +76,13 @@
             set => _expanded = value;
         }
 
-        private bool IsSelected => _parentTree.SelectedNode == this;
+        public bool IsFolder => ChildNodes.Count != 0;
 
-        private bool IsFolder => ChildNodes.Count != 0;
+        public bool IsRoot => ParentNode == null;
+
+        public bool IsSelected => _parentTree.SelectedNode == this;
 
         private bool IsHoveredOver => _rect.Contains(Event.current.mousePosition);
-
-        private bool IsRoot => _parentNode == null;
-
-        public void Select() => _parentTree.SelectedNode = this;
 
         /// <summary>Creates a root node that does not have a parent and does not show up in the popup.</summary>
         /// <param name="parentTree">The tree this node belongs to.</param>
@@ -133,7 +131,7 @@
             if (IsRoot)
                 yield break;
 
-            foreach (SelectionNode node in _parentNode.GetParentNodesRecursive(true))
+            foreach (SelectionNode node in ParentNode.GetParentNodesRecursive(true))
                 yield return node;
         }
 
@@ -219,11 +217,42 @@
                 return;
 
             if (IsFolder)
+            {
                 Expanded = !Expanded;
+            }
             else
-                Select();
+            {
+                _parentTree.SelectedNode = this;
+                _parentTree.FinalizeSelection();
+            }
 
             Event.current.Use();
+        }
+
+        public SelectionNode GetNextChild(SelectionNode currentChild)
+        {
+            int currentIndex = ChildNodes.IndexOf(currentChild);
+
+            if (currentIndex < 0)
+                return currentChild;
+
+            if (currentIndex == ChildNodes.Count - 1)
+                return ParentNode?.GetNextChild(this) ?? currentChild;
+
+            return ChildNodes[currentIndex + 1];
+        }
+
+        public SelectionNode GetPreviousChild(SelectionNode currentChild)
+        {
+            int currentIndex = ChildNodes.IndexOf(currentChild);
+
+            if (currentIndex < 0)
+                return currentChild;
+
+            if (currentIndex == 0)
+                return this;
+
+            return ChildNodes[currentIndex - 1];
         }
 
         private void Draw(int indentLevel, Rect visibleRect)

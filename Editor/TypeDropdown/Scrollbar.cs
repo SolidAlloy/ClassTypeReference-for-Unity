@@ -9,13 +9,22 @@
     /// </summary>
     internal class Scrollbar
     {
+        private readonly IRepainter _repainter;
+
         private bool _visible = true;
         private Vector2 _position;
-        private SelectionNode _nodeToScrollTo;
         private Rect _wholeListRect;
         private Rect _windowRect;
 
+        private SelectionNode _nodeToScrollTo;
+        private NodePosition _nodePosition;
+
         private static bool ScrollCannotBePerformed => Event.current.type != EventType.Repaint;
+
+        public Scrollbar(IRepainter repainter)
+        {
+            _repainter = repainter;
+        }
 
         /// <summary>Draws elements with scrollbar if the list is large enough.</summary>
         /// <returns>
@@ -28,12 +37,13 @@
 
         /// <summary>Ask scrollbar to start moving to a node. The process can take several frames.</summary>
         /// <param name="node">The node to scroll to.</param>
-        public void RequestScrollToNode(SelectionNode node)
+        public void RequestScrollToNode(SelectionNode node, NodePosition nodePosition)
         {
             if (node == null)
                 return;
 
             _nodeToScrollTo = node;
+            _nodePosition = nodePosition;
 
             foreach (SelectionNode parentNode in node.GetParentNodesRecursive(false))
                 parentNode.Expanded = true;
@@ -41,7 +51,7 @@
             if (ScrollCannotBePerformed)
                 return;
 
-            ScrollToNode(node.Rect);
+            ScrollToNode(node.Rect, nodePosition);
             _nodeToScrollTo = null;
         }
 
@@ -50,14 +60,27 @@
             if (_nodeToScrollTo == null || ScrollCannotBePerformed)
                 return;
 
-            ScrollToNode(_nodeToScrollTo.Rect);
+            ScrollToNode(_nodeToScrollTo.Rect, _nodePosition);
             _nodeToScrollTo = null;
         }
 
-        private void ScrollToNode(Rect nodeRect)
+        private void ScrollToNode(Rect nodeRect, NodePosition nodePosition)
         {
             float windowHalfHeight = _windowRect.height * 0.5f; // This is needed to center the item vertically.
-            _position.y = nodeRect.y - windowHalfHeight; // This scrolls to the node but places it in the center of the window.
+
+            // scroll to the node but also calculate where it needs to be inside the visible part of the dropdown.
+            float shift = nodePosition switch
+            {
+                NodePosition.Top => 0f,
+                NodePosition.Center => - windowHalfHeight,
+                NodePosition.Bottom => - windowHalfHeight * 2 + DropdownStyle.NodeHeight,
+                _ => throw new NotImplementedException()
+            };
+
+            var position = nodeRect.y + shift;
+            _position.y = position > 0 ? position : 0;
+
+            _repainter.RequestRepaint();
         }
 
         /// <summary>Draws elements with scrollbar if the list is large enough.</summary>
@@ -98,5 +121,7 @@
                 _scrollbar.ScrollToNodeIfNeeded();
             }
         }
+
+        public enum NodePosition { Top, Center, Bottom }
     }
 }

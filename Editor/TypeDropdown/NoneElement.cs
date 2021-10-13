@@ -1,5 +1,6 @@
 ﻿namespace TypeReferences.Editor.TypeDropdown
 {
+    using System.Linq;
     using UnityEditor;
     using UnityEngine;
 

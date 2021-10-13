@@ -3,6 +3,7 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using SolidUtilities.Editor.Extensions;
     using SolidUtilities.Editor.Helpers;
     using SolidUtilities.Extensions;
     using SolidUtilities.Helpers;
@@ -14,18 +15,21 @@
     /// Represents a node tree that contains folders (namespaces) and types. It is also responsible for drawing all the
     /// nodes, along with search toolbar and scrollbar.
     /// </summary>
-    internal partial class SelectionTree
+    internal partial class SelectionTree : IRepainter
     {
-        private readonly List<SelectionNode> _searchModeTree = new List<SelectionNode>();
         private readonly SelectionNode _root;
+
+        private readonly List<SelectionNode> _searchModeTree = new List<SelectionNode>();
         private readonly NoneElement _noneElement;
         private readonly string _searchFieldControlName = GUID.Generate().ToString();
         private readonly Action<Type> _onTypeSelected;
-        private readonly Scrollbar _scrollbar = new Scrollbar();
         private readonly bool _drawSearchbar;
+        private readonly Scrollbar _scrollbar;
 
         private string _searchString = string.Empty;
         private SelectionNode _selectedNode;
+        private Rect _visibleRect;
+        public bool RepaintRequested;
 
         public SelectionTree(
             TypeItem[] items,
@@ -43,6 +47,7 @@
             FillTreeWithItems(items);
             _drawSearchbar = items.Length >= searchbarMinItemsCount;
 
+            _scrollbar = new Scrollbar(this);
             SetSelection(items, selectedType);
             _onTypeSelected = onTypeSelected;
         }
@@ -57,14 +62,19 @@
             set
             {
                 _selectedNode = value;
-                _onTypeSelected?.Invoke(_selectedNode.Type);
-                SelectionChanged?.Invoke();
+                Event.current.Use();
             }
         }
 
         public bool DrawInSearchMode { get; private set; }
 
         private List<SelectionNode> Nodes => _root.ChildNodes;
+
+        public void FinalizeSelection()
+        {
+            _onTypeSelected?.Invoke(SelectedNode.Type);
+            SelectionChanged?.Invoke();
+        }
 
         public void ExpandAllFolders()
         {
@@ -91,7 +101,8 @@
 
             using (_scrollbar.Draw())
             {
-                DrawTree(GUIClip.GetVisibleRect());
+                _visibleRect = GUIClip.GetVisibleRect();
+                DrawTree(_visibleRect);
             }
         }
 
@@ -109,7 +120,7 @@
         {
             if (selectedType == null)
             {
-                _noneElement?.Select();
+                SelectedNode = _noneElement;
                 return;
             }
 
@@ -129,8 +140,8 @@
             foreach (var part in nameOfItemToSelect.Split('/'))
                 itemToSelect = itemToSelect.FindChild(part);
 
-            itemToSelect.Select();
-            _scrollbar.RequestScrollToNode(itemToSelect);
+            SelectedNode = itemToSelect;
+            _scrollbar.RequestScrollToNode(itemToSelect, Scrollbar.NodePosition.Center);
         }
 
         private void DrawSearchToolbar()
@@ -159,7 +170,7 @@
             // Without GUI.changed, the change will take place only on mouse move.
             GUI.changed = true;
             DrawInSearchMode = false;
-            _scrollbar.RequestScrollToNode(SelectedNode);
+            _scrollbar.RequestScrollToNode(SelectedNode, Scrollbar.NodePosition.Center);
         }
 
         private void EnableSearchMode()
@@ -200,16 +211,26 @@
         {
             List<SelectionNode> nodes = DrawInSearchMode ? _searchModeTree : Nodes;
             int nodesListLength = nodes.Count;
+
             for (int index = 0; index < nodesListLength; ++index)
                 nodes[index].DrawSelfAndChildren(0, visibleRect);
+
+            HandleKeyboardEvents();
         }
 
         private string DrawSearchField(Rect innerToolbarArea, string searchText)
         {
             (Rect searchFieldArea, Rect buttonRect) = innerToolbarArea.CutVertically(DropdownStyle.IconSize, true);
 
+            bool keyDown = Event.current.type == EventType.KeyDown;
+
             searchText = EditorGUIHelper.FocusedTextField(searchFieldArea, searchText, "Search",
                 DropdownStyle.SearchToolbarStyle, _searchFieldControlName);
+
+            // When the search field is in focus, it uses the keyDown event on DownArrow while doing nothing.
+            // We need this event for moving through the tree nodes.
+            if (keyDown)
+                Event.current.type = EventType.KeyDown;
 
             if (GUIHelper.CloseButton(buttonRect))
             {
@@ -219,6 +240,11 @@
             }
 
             return searchText;
+        }
+
+        public void RequestRepaint()
+        {
+            RepaintRequested = true;
         }
     }
 }
