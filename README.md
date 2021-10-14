@@ -87,6 +87,8 @@ But if you need to refer to the `System.Type` object directly, use the **Type** 
 bool isLoggerAbstract = greetingLoggerType.Type.IsAbstract;
 ```
 
+***Tip*** Instead of the mouse, you can use arrow keys to navigate the hierarchy of types in the dropdown menu and press Enter to choose a type!
+
 ## TypeOptions Attribute
 
 If you need to customize the look of the drop-down menu or change what types are included in the list, use the `[TypeOptions]` attribute.

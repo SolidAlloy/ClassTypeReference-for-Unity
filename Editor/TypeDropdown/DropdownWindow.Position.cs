@@ -60,8 +60,7 @@
             // If the window width is smaller than the distance from cursor to the right border of the window, the
             // window will not appear because the cursor is outside of the window and OnGUI will never be called.
             float screenWidth = EditorGUIUtilityHelper.GetScreenWidth();
-            requestedXPosition -=
-                8f; // This will make the window appear so that foldout arrows are precisely below the cursor.
+            requestedXPosition -= 8f; // This will make the window appear so that foldout arrows are precisely below the cursor.
             float distanceToRightBorder = screenWidth - requestedXPosition;
 
             if (windowWidth > distanceToRightBorder)
