@@ -3,7 +3,6 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
-    using SolidUtilities.Editor.Extensions;
     using SolidUtilities.Editor.Helpers;
     using SolidUtilities.Extensions;
     using SolidUtilities.Helpers;
@@ -62,7 +61,9 @@
             set
             {
                 _selectedNode = value;
-                Event.current.Use();
+
+                if (Event.current.type != EventType.Layout)
+                    Event.current.Use();
             }
         }
 
