@@ -1,3 +1,11 @@
+## [2.11.1](https://github.com/SolidAlloy/ClassTypeReference-for-Unity/compare/2.11.0...2.11.1) (2021-10-16)
+
+
+### Bug Fixes
+
+* Fixed missing extension method because of the SolidUtilties version mismatch ([bddebd1](https://github.com/SolidAlloy/ClassTypeReference-for-Unity/commit/bddebd1b0f22cdd0985eeaa98df595f5058beaf2))
+* Fixed the Event.Use() warning message when a dropdown is closed ([0b8e94c](https://github.com/SolidAlloy/ClassTypeReference-for-Unity/commit/0b8e94c20fa8a7e320141a1ee83f203c33fd83cc))
+
 # [2.11.0](https://github.com/SolidAlloy/ClassTypeReference-for-Unity/compare/2.10.1...2.11.0) (2021-10-13)
 
 
