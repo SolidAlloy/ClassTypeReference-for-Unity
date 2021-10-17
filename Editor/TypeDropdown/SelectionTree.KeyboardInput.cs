@@ -110,7 +110,7 @@
 
             var previousNode = SelectedNode.ParentNode.GetPreviousChild(SelectedNode);
 
-            if (IsExpandedFolder(previousNode))
+            if (IsExpandedFolder(previousNode) && !previousNode.ChildNodes.Contains(SelectedNode))
             {
                 // choose last item of the previous folder instead.
                 previousNode = previousNode.ChildNodes[previousNode.ChildNodes.Count - 1];
@@ -128,7 +128,7 @@
 
         private bool IsExpandedFolder(SelectionNode previousNode)
         {
-            return SelectedNode.IsFolder && previousNode.IsFolder && previousNode.Expanded && previousNode.ChildNodes.Count != 0;
+            return previousNode.IsFolder && previousNode.Expanded && previousNode.ChildNodes.Count != 0;
         }
 
         #endregion
