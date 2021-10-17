@@ -1,3 +1,11 @@
+## [2.11.2](https://github.com/SolidAlloy/ClassTypeReference-for-Unity/compare/2.11.1...2.11.2) (2021-10-17)
+
+
+### Bug Fixes
+
+* Fixed incorrect behavior when scrolling the hierarchy up with keyboard ([4a382fe](https://github.com/SolidAlloy/ClassTypeReference-for-Unity/commit/4a382fe3daaf89b82e575b96280e5412b9711890))
+* Fixed NullReferenceException when choosing a type for a generic unity object ([62d141b](https://github.com/SolidAlloy/ClassTypeReference-for-Unity/commit/62d141be1ebe3d97884add6547eebb41a1862e46))
+
 ## [2.11.1](https://github.com/SolidAlloy/ClassTypeReference-for-Unity/compare/2.11.0...2.11.1) (2021-10-16)
 
 
