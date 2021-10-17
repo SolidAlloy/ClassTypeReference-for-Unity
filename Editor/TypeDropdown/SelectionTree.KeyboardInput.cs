@@ -8,103 +8,94 @@
     {
         #region KeyboardEvents
 
-        protected void HandleKeyboardEvents()
+        private void HandleKeyboardEvents()
         {
-            // KeyDown is always used somehow, so we use KeyUp here
             if (Event.current.type != EventType.KeyDown)
                 return;
 
-            switch (Event.current.keyCode)
+            bool eventUsed = Event.current.keyCode switch
             {
-                case KeyCode.RightArrow:
-                    OnArrowRight();
-                    break;
-                case KeyCode.LeftArrow:
-                    OnArrowLeft();
-                    break;
-                case KeyCode.KeypadEnter:
-                case KeyCode.Return:
-                    OnEnter();
-                    break;
-                case KeyCode.DownArrow:
-                    if (_noneElement is { IsSelected: true })
-                    {
-                        OnArrowDownNone();
-                    }
-                    else
-                    {
-                        OnArrowDown();
-                    }
-                    break;
-                case KeyCode.UpArrow:
-                    OnArrowUp();
-                    break;
-            }
+                KeyCode.RightArrow => OnArrowRight(),
+                KeyCode.LeftArrow => OnArrowLeft(),
+                KeyCode.KeypadEnter => OnEnter(),
+                KeyCode.Return => OnEnter(),
+                KeyCode.DownArrow => _noneElement is { IsSelected: true } ? OnArrowDownNone() : OnArrowDown(),
+                KeyCode.UpArrow => OnArrowUp(),
+                _ => false
+            };
+
+            if (eventUsed)
+                Event.current.Use();
         }
 
-        private void OnArrowRight()
+        private bool OnArrowRight()
         {
             if (!SelectedNode.IsFolder || SelectedNode.Expanded)
-                return;
+                return false;
 
             SelectedNode.Expanded = true;
-            Event.current.Use();
+            return true;
         }
 
-        private void OnArrowLeft()
+        private bool OnArrowLeft()
         {
             if (!SelectedNode.IsFolder || !SelectedNode.Expanded)
-                return;
+                return false;
 
             SelectedNode.Expanded = false;
-            Event.current.Use();
+            return true;
         }
 
-        private void OnEnter()
+        private bool OnEnter()
         {
             if (SelectedNode.IsFolder)
             {
                 SelectedNode.Expanded = ! SelectedNode.Expanded;
-                RequestRepaint();
             }
             else
             {
                 FinalizeSelection();
             }
+
+            return true;
         }
 
-        private void OnArrowDown()
+        private bool OnArrowDown()
         {
             if (SelectedNode.IsFolder && SelectedNode.Expanded)
             {
                 SelectedNode = SelectedNode.ChildNodes[0];
+                return true;
             }
-            else
+
+            if (SelectedNode.IsRoot)
+                return false;
+
+            SelectedNode = SelectedNode.ParentNode.GetNextChild(SelectedNode);
+
+            if (!_visibleRect.Contains(SelectedNode.Rect))
             {
-                if (SelectedNode.IsRoot)
-                    return;
-
-                SelectedNode = SelectedNode.ParentNode.GetNextChild(SelectedNode);
-
-                if (!_visibleRect.Contains(SelectedNode.Rect))
-                {
-                    _scrollbar.RequestScrollToNode(SelectedNode, Scrollbar.NodePosition.Bottom);
-                }
+                _scrollbar.RequestScrollToNode(SelectedNode, Scrollbar.NodePosition.Bottom);
             }
+
+            return true;
         }
 
-        private void OnArrowDownNone()
+        private bool OnArrowDownNone()
         {
             var firstItem = _root.ChildNodes.FirstOrDefault();
 
-            if (firstItem != null)
-                SelectedNode = firstItem;
+            if (firstItem == null)
+                return false;
+
+            SelectedNode = firstItem;
+            return true;
         }
 
-        private void OnArrowUp()
+        private bool OnArrowUp()
         {
             if (SelectedNode.IsRoot)
-                return;
+                return false;
 
             if (SelectedNode.ParentNode.IsRoot)
             {
@@ -113,7 +104,7 @@
                 if (isFirst && _noneElement != null)
                 {
                     SelectedNode = _noneElement;
-                    return;
+                    return true;
                 }
             }
 
@@ -131,6 +122,8 @@
             {
                 _scrollbar.RequestScrollToNode(SelectedNode, Scrollbar.NodePosition.Top);
             }
+
+            return true;
         }
 
         private bool IsExpandedFolder(SelectionNode previousNode)

@@ -26,9 +26,9 @@
         private readonly Scrollbar _scrollbar;
 
         private string _searchString = string.Empty;
-        private SelectionNode _selectedNode;
         private Rect _visibleRect;
         public bool RepaintRequested;
+        public SelectionNode SelectedNode;
 
         public SelectionTree(
             TypeItem[] items,
@@ -54,18 +54,6 @@
         public event Action SelectionChanged;
 
         public string[] SelectionPaths { get; }
-
-        public SelectionNode SelectedNode
-        {
-            get => _selectedNode;
-            set
-            {
-                _selectedNode = value;
-
-                if (Event.current.type != EventType.Layout)
-                    Event.current.Use();
-            }
-        }
 
         public bool DrawInSearchMode { get; private set; }
 
