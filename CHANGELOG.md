@@ -1,3 +1,10 @@
+## [2.11.3](https://github.com/SolidAlloy/ClassTypeReference-for-Unity/compare/2.11.2...2.11.3) (2021-10-22)
+
+
+### Bug Fixes
+
+* Fixed NRE when opening a type dropdown on MacOS ([ec75afb](https://github.com/SolidAlloy/ClassTypeReference-for-Unity/commit/ec75afb614b1b21d7bb4d9d63350ad67bbaf6a33))
+
 ## [2.11.2](https://github.com/SolidAlloy/ClassTypeReference-for-Unity/compare/2.11.1...2.11.2) (2021-10-17)
 
 
