@@ -19,7 +19,7 @@
                 KeyCode.LeftArrow => OnArrowLeft(),
                 KeyCode.KeypadEnter => OnEnter(),
                 KeyCode.Return => OnEnter(),
-                KeyCode.DownArrow => _noneElement is { IsSelected: true } ? OnArrowDownNone() : OnArrowDown(),
+                KeyCode.DownArrow => OnArrowDown(),
                 KeyCode.UpArrow => OnArrowUp(),
                 _ => false
             };
@@ -30,7 +30,7 @@
 
         private bool OnArrowRight()
         {
-            if (!SelectedNode.IsFolder || SelectedNode.Expanded)
+            if (SelectedNode == null || DrawInSearchMode || !SelectedNode.IsFolder || SelectedNode.Expanded)
                 return false;
 
             SelectedNode.Expanded = true;
@@ -39,7 +39,7 @@
 
         private bool OnArrowLeft()
         {
-            if (!SelectedNode.IsFolder || !SelectedNode.Expanded)
+            if (SelectedNode == null ||DrawInSearchMode || !SelectedNode.IsFolder || !SelectedNode.Expanded)
                 return false;
 
             SelectedNode.Expanded = false;
@@ -48,6 +48,9 @@
 
         private bool OnEnter()
         {
+            if (SelectedNode == null)
+                return false;
+
             if (SelectedNode.IsFolder)
             {
                 SelectedNode.Expanded = ! SelectedNode.Expanded;
@@ -62,6 +65,28 @@
 
         private bool OnArrowDown()
         {
+            if (_noneElement is { IsSelected: true })
+                return OnArrowDownNone();
+
+            if (DrawInSearchMode)
+                return OnArrowDownSearch();
+
+            return OnArrowDownRegular();
+        }
+
+        private bool OnArrowDownRegular()
+        {
+            if (SelectedNode == null)
+            {
+                if (_root.ChildNodes.Count == 0)
+                {
+                    return false;
+                }
+
+                SelectedNode = _root.ChildNodes[0];
+                return true;
+            }
+
             if (SelectedNode.IsFolder && SelectedNode.Expanded)
             {
                 SelectedNode = SelectedNode.ChildNodes[0];
@@ -81,6 +106,26 @@
             return true;
         }
 
+        private bool OnArrowDownSearch()
+        {
+            if (_searchModeTree.Count == 0)
+                return false;
+
+            int indexOfSelected = _searchModeTree.IndexOf(SelectedNode);
+
+            if (indexOfSelected == _searchModeTree.Count - 1)
+                return false;
+
+            if (indexOfSelected == -1)
+            {
+                SelectedNode = _searchModeTree[0];
+                return true;
+            }
+
+            SelectedNode = _searchModeTree[indexOfSelected + 1];
+            return true;
+        }
+
         private bool OnArrowDownNone()
         {
             var firstItem = _root.ChildNodes.FirstOrDefault();
@@ -94,7 +139,10 @@
 
         private bool OnArrowUp()
         {
-            if (SelectedNode.IsRoot)
+            if (DrawInSearchMode)
+                return OnArrowUpSearch();
+
+            if (SelectedNode == null || SelectedNode.IsRoot)
                 return false;
 
             if (SelectedNode.ParentNode.IsRoot)
@@ -123,6 +171,20 @@
                 _scrollbar.RequestScrollToNode(SelectedNode, Scrollbar.NodePosition.Top);
             }
 
+            return true;
+        }
+
+        private bool OnArrowUpSearch()
+        {
+            if (_searchModeTree.Count == 0)
+                return false;
+
+            int indexOfSelected = _searchModeTree.IndexOf(SelectedNode);
+
+            if (indexOfSelected <= 0)
+                return false;
+
+            SelectedNode = _searchModeTree[indexOfSelected - 1];
             return true;
         }
 
