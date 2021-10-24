@@ -1,3 +1,10 @@
+## [2.11.4](https://github.com/SolidAlloy/ClassTypeReference-for-Unity/compare/2.11.3...2.11.4) (2021-10-24)
+
+
+### Bug Fixes
+
+* Fixed NullReferenceException when pressing keyboard keys in search mode ([da1113e](https://github.com/SolidAlloy/ClassTypeReference-for-Unity/commit/da1113e6e36e7819f20068b0e3447ba5734986dc))
+
 ## [2.11.3](https://github.com/SolidAlloy/ClassTypeReference-for-Unity/compare/2.11.2...2.11.3) (2021-10-22)
 
 
