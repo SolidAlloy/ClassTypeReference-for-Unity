@@ -5,7 +5,9 @@
   "description": "A plugin that allows selecting a type from a drop-down menu in the inspector.",
   "dependencies": {
     "com.solidalloy.util": "1.33.1",
-    "com.unity.settings-manager": "1.0.3"
+    "com.unity.settings-manager": "1.0.3",
+    "org.nuget.system.memory": "4.5.4",
+    "org.nuget.system.runtime.compilerservices.unsafe": "5.0.0"
   },
   "keywords": [
     "dropdown",
