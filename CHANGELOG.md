@@ -1,3 +1,10 @@
+## [2.11.5](https://github.com/SolidAlloy/ClassTypeReference-for-Unity/compare/2.11.4...2.11.5) (2021-11-09)
+
+
+### Bug Fixes
+
+* Resolved the .dll dependency conflict in Unity 2021.2 ([3779621](https://github.com/SolidAlloy/ClassTypeReference-for-Unity/commit/377962158009daf1fd0d17d8f3086f86ec665939))
+
 ## [2.11.4](https://github.com/SolidAlloy/ClassTypeReference-for-Unity/compare/2.11.3...2.11.4) (2021-10-24)
 
 
