@@ -11,32 +11,16 @@
         private readonly Action<T> _onValueSelected;
         private readonly SelectionNode<T> _root;
 
+        private SelectionNode<T> _selectedNode;
+        public override SelectionNode SelectedNode => _selectedNode;
+
         private readonly NoneElement<T> _noneElement;
         protected override SelectionNode NoneElement => _noneElement;
 
         private readonly List<SelectionNode<T>> _searchModeTree = new List<SelectionNode<T>>();
         protected override IReadOnlyCollection<SelectionNode> SearchModeTree => _searchModeTree;
 
-        // private List<SelectionNode<T>> _nodes => _root.ChildNodes;
-        protected override IReadOnlyCollection<SelectionNode> Nodes => _root.ChildNodes; // Or just expose root as SelectionNode
-        protected override void InitializeSearchModeTree()
-        {
-            _searchModeTree.Clear();
-            _searchModeTree.AddRange(EnumerateTreeTyped()
-                .Where(node => node.Value != null)
-                .Select(node =>
-                {
-                    bool includeInSearch = FuzzySearch.CanBeIncluded(_searchString, node.SearchName, out int score);
-                    return new { score, item = node, include = includeInSearch };
-                })
-                .Where(x => x.include)
-                .OrderByDescending(x => x.score)
-                .Select(x => x.item));
-        }
-
-        private IEnumerable<SelectionNode<T>> EnumerateTreeTyped() => _root.GetChildNodesRecursive();
-
-        protected override IEnumerable<SelectionNode> EnumerateTree() => EnumerateTreeTyped();
+        protected override IReadOnlyCollection<SelectionNode> Nodes => _root.ChildNodes;
 
         public SelectionTree(
             SelectionTreeItem<T>[] items,
@@ -56,6 +40,33 @@
             SetSelection(items, currentValue);
             _onValueSelected = onValueSelected;
         }
+
+        public override void FinalizeSelection()
+        {
+            base.FinalizeSelection();
+            _onValueSelected?.Invoke(_selectedNode.Value);
+        }
+
+        public void SetSelectedNode(SelectionNode<T> selectionNode) => _selectedNode = selectionNode;
+
+        protected override void InitializeSearchModeTree()
+        {
+            _searchModeTree.Clear();
+            _searchModeTree.AddRange(EnumerateTreeTyped()
+                .Where(node => node.Value != null)
+                .Select(node =>
+                {
+                    bool includeInSearch = FuzzySearch.CanBeIncluded(_searchString, node.SearchName, out int score);
+                    return new { score, item = node, include = includeInSearch };
+                })
+                .Where(x => x.include)
+                .OrderByDescending(x => x.score)
+                .Select(x => x.item));
+        }
+
+        protected override IEnumerable<SelectionNode> EnumerateTree() => EnumerateTreeTyped();
+
+        private IEnumerable<SelectionNode<T>> EnumerateTreeTyped() => _root.GetChildNodesRecursive();
 
         private void SetSelection(SelectionTreeItem<T>[] items, T selectedValue)
         {
@@ -84,15 +95,5 @@
             _selectedNode = itemToSelect;
             _scrollbar.RequestScrollToNode(itemToSelect, Scrollbar.NodePosition.Center);
         }
-
-        public override void FinalizeSelection()
-        {
-            base.FinalizeSelection();
-            _onValueSelected?.Invoke(_selectedNode.Value);
-        }
-
-        private SelectionNode<T> _selectedNode;
-        public override SelectionNode SelectedNode => _selectedNode;
-        public void SetSelectedNode(SelectionNode<T> selectionNode) => _selectedNode = selectionNode;
     }
 }

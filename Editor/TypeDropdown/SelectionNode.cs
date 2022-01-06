@@ -14,33 +14,10 @@
     internal abstract class SelectionNode
     {
         protected readonly string _name;
-
+        private readonly SelectionNode _parentNode;
         private bool _expanded;
+
         private Rect _rect;
-
-        public readonly SelectionNode ParentNode;
-        protected abstract SelectionTree ParentTree { get; }
-
-        /// <summary>
-        /// Default constructor that creates a child node of another parent node.
-        /// </summary>
-        /// <param name="name">Name that will show up in the popup.</param>
-        /// <param name="parentNode">Parent node of this node.</param>
-        /// <param name="parentTree">The tree this node belongs to.</param>
-        /// <param name="type"><see cref="System.Type"/>> this node represents.</param>
-        /// <param name="fullTypeName">
-        /// Full name of the type. It will show up instead of the short name when performing search.
-        /// </param>
-        protected SelectionNode(SelectionNode parentNode, string name, string searchName)
-        {
-            ParentNode = parentNode;
-            Assert.IsNotNull(name);
-            _name = name;
-            SearchName = searchName;
-        }
-
-        protected abstract IReadOnlyCollection<SelectionNode> _ChildNodes { get; }
-
         public Rect Rect => _rect;
 
         public string SearchName { get; }
@@ -57,11 +34,23 @@
 
         public bool IsFolder => _ChildNodes.Count != 0;
 
-        public bool IsRoot => ParentNode == null;
+        public bool IsRoot => _parentNode == null;
 
         public bool IsSelected => ParentTree.SelectedNode == this;
 
+        protected abstract SelectionTree ParentTree { get; }
+
+        protected abstract IReadOnlyCollection<SelectionNode> _ChildNodes { get; }
+
         private bool IsHoveredOver => _rect.Contains(Event.current.mousePosition);
+
+        protected SelectionNode(SelectionNode parentNode, string name, string searchName)
+        {
+            _parentNode = parentNode;
+            Assert.IsNotNull(name);
+            _name = name;
+            SearchName = searchName;
+        }
 
         public IEnumerable<SelectionNode> GetParentNodesRecursive(
             bool includeSelf)
@@ -72,7 +61,7 @@
             if (IsRoot)
                 yield break;
 
-            foreach (SelectionNode node in ParentNode.GetParentNodesRecursive(true))
+            foreach (SelectionNode node in _parentNode.GetParentNodesRecursive(true))
                 yield return node;
         }
 

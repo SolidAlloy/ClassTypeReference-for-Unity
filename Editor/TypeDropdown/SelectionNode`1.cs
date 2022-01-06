@@ -8,18 +8,20 @@
         where T : class
     {
         public readonly T Value;
-
-        public new readonly SelectionNode<T> ParentNode;
+        public readonly SelectionNode<T> ParentNode;
 
         private readonly SelectionTree<T> _parentTree;
         protected override SelectionTree ParentTree => _parentTree;
 
-        public SelectionNode(T value, SelectionNode<T> parentNode, SelectionTree<T> parentTree, string name, string searchName)
+        public readonly List<SelectionNode<T>> ChildNodes = new List<SelectionNode<T>>();
+        protected override IReadOnlyCollection<SelectionNode> _ChildNodes => ChildNodes;
+
+        protected SelectionNode(T value, SelectionNode<T> parentNode, SelectionTree<T> parentTree, string name, string searchName)
             : base(parentNode, name, searchName)
         {
+            Value = value;
             ParentNode = parentNode;
             _parentTree = parentTree;
-            Value = value;
             ParentNode = parentNode;
         }
 
@@ -30,10 +32,8 @@
 
         /// <summary>Creates a dropdown item that represents a <see cref="System.Type"/>.</summary>
         /// <param name="name">Name that will show up in the popup.</param>
-        /// <param name="type"><see cref="System.Type"/>> this node represents.</param>
-        /// <param name="fullTypeName">
-        /// Full name of the type. It will show up instead of the short name when performing search.
-        /// </param>
+        /// <param name="value">The value this node represents.</param>
+        /// <param name="searchName"> A name of the node that will show up when a search is performed.</param>
         public void CreateChildItem(string name, T value, string searchName)
         {
             var child = new SelectionNode<T>(value, this, _parentTree, name, searchName);
@@ -58,9 +58,6 @@
             foreach (var childNode in ChildNodes.SelectMany(node => node.GetChildNodesRecursive()))
                 yield return childNode;
         }
-
-        public readonly List<SelectionNode<T>> ChildNodes = new List<SelectionNode<T>>();
-        protected override IReadOnlyCollection<SelectionNode> _ChildNodes => ChildNodes;
 
         protected override void SetSelfSelected()
         {

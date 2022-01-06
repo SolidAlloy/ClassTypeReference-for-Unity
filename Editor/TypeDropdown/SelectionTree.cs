@@ -16,41 +16,40 @@
     /// </summary>
     internal abstract class SelectionTree : IRepainter
     {
-        private readonly string _searchFieldControlName = GUID.Generate().ToString();
-        private readonly bool _drawSearchbar;
-        protected readonly Scrollbar _scrollbar;
+        public bool RepaintRequested;
 
+        protected readonly Scrollbar _scrollbar;
         protected string _searchString = string.Empty;
         protected Rect _visibleRect;
-        public bool RepaintRequested;
+
+        private readonly string _searchFieldControlName = GUID.Generate().ToString();
+        private readonly bool _drawSearchbar;
+
+        public abstract SelectionNode SelectedNode { get; }
+
+        public string[] SelectionPaths { get; }
+
+        public bool DrawInSearchMode { get; private set; }
 
         protected abstract IReadOnlyCollection<SelectionNode> SearchModeTree { get; }
 
         protected abstract SelectionNode NoneElement { get; }
 
-        public SelectionTree(IReadOnlyCollection<SelectionTreeItem> items, int searchbarMinItemsCount)
+        protected abstract IReadOnlyCollection<SelectionNode> Nodes { get; }
+
+        public event Action SelectionChanged;
+
+        protected SelectionTree(IReadOnlyCollection<SelectionTreeItem> items, int searchbarMinItemsCount)
         {
             SelectionPaths = items.Select(item => item.Path).ToArray();
             _drawSearchbar = items.Count >= searchbarMinItemsCount;
             _scrollbar = new Scrollbar(this);
         }
 
-        public abstract SelectionNode SelectedNode { get; }
-
-        public event Action SelectionChanged;
-
-        public string[] SelectionPaths { get; }
-
-        public bool DrawInSearchMode { get; private set; }
-
-        protected abstract IReadOnlyCollection<SelectionNode> Nodes { get; }
-
         public virtual void FinalizeSelection()
         {
             SelectionChanged?.Invoke();
         }
-
-        protected abstract IEnumerable<SelectionNode> EnumerateTree();
 
         public void ExpandAllFolders()
         {
@@ -81,6 +80,17 @@
                 DrawTree(_visibleRect);
             }
         }
+
+        public void RequestRepaint()
+        {
+            RepaintRequested = true;
+        }
+
+        protected abstract IEnumerable<SelectionNode> EnumerateTree();
+
+        protected abstract void InitializeSearchModeTree();
+
+        protected abstract void HandleKeyboardEvents();
 
         private static void DrawInfoMessage()
         {
@@ -129,8 +139,6 @@
             InitializeSearchModeTree();
         }
 
-        protected abstract void InitializeSearchModeTree();
-
         private static Rect GetInnerToolbarArea()
         {
             Rect outerToolbarArea = GUILayoutUtility.GetRect(
@@ -155,8 +163,6 @@
             HandleKeyboardEvents();
         }
 
-        protected abstract void HandleKeyboardEvents();
-
         private string DrawSearchField(Rect innerToolbarArea, string searchText)
         {
             (Rect searchFieldArea, Rect buttonRect) = innerToolbarArea.CutVertically(DropdownStyle.IconSize, true);
@@ -179,11 +185,6 @@
             }
 
             return searchText;
-        }
-
-        public void RequestRepaint()
-        {
-            RepaintRequested = true;
         }
     }
 }
