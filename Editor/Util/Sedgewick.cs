@@ -10,12 +10,12 @@
     /// <remarks> Source: https://www.codeproject.com/Articles/146086/Fast-String-Sort-in-C-and-F </remarks>
     internal static class Sedgewick
     {
-        public static void SortInPlace(TypeItem[] input)
+        public static void SortInPlace(SelectionTreeItem[] input)
         {
             SortInPlace(input, 0, input.Length, 0);
         }
 
-        private static void SortInPlace(TypeItem[] input, int a, int n, int depth)
+        private static void SortInPlace(SelectionTreeItem[] input, int a, int n, int depth)
         {
             if (n < 10)
             {
@@ -125,7 +125,7 @@
         }
 
         // Pathological case is: strings with long common prefixes will cause long running times
-        private static void InsertionSort(TypeItem[] x, int a, int n, int depth)
+        private static void InsertionSort(SelectionTreeItem[] x, int a, int n, int depth)
         {
             for (int pi = a + 1; --n > 0; pi++)
             {
@@ -149,7 +149,7 @@
             }
         }
 
-        private static int MedianOf3(TypeItem[] x, int a, int b, int c, int depth)
+        private static int MedianOf3(SelectionTreeItem[] x, int a, int b, int c, int depth)
         {
             char va = CharOrNull(x[a].Path, depth);
             char vb = CharOrNull(x[b].Path, depth);
@@ -167,7 +167,7 @@
                 : (vb > vc ? b : (va < vc ? a : c));
         }
 
-        private static void VecSwap(TypeItem[] x, int a, int b, long n)
+        private static void VecSwap(SelectionTreeItem[] x, int a, int b, long n)
         {
             while (n-- > 0)
             {

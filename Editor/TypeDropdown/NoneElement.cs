@@ -1,26 +1,26 @@
 ﻿namespace TypeReferences.Editor.TypeDropdown
 {
-    using System.Linq;
     using UnityEditor;
     using UnityEngine;
 
     /// <summary>
     /// A node that represents the null type value. It is drawn separately from other nodes and has its own root.
     /// </summary>
-    internal class NoneElement : SelectionNode
+    internal class NoneElement<T> : SelectionNode<T>
+        where T : class
     {
-        private NoneElement(SelectionNode root, SelectionTree parentTree)
-            : base(TypeReference.NoneElement, root, parentTree, null, null) { }
+        private NoneElement(SelectionNode<T> root, SelectionTree<T> parentTree)
+            : base(null, root, parentTree, TypeReference.NoneElement, null) { }
 
-        public static NoneElement Create(SelectionTree parentTree)
+        public static NoneElement<T> Create(SelectionTree<T> parentTree)
         {
-            SelectionNode root = CreateRoot(parentTree);
-            var child = new NoneElement(root, parentTree);
+            var root = CreateRoot(parentTree);
+            var child = new NoneElement<T>(root, parentTree);
             root.ChildNodes.Add(child);
             return child;
         }
 
-        public void Draw()
+        public override void DrawSelfAndChildren(int indentLevel, Rect visibleRect)
         {
             if (ReserveSpaceAndStop())
                 return;

@@ -1,8 +1,6 @@
 ﻿namespace TypeReferences.Editor.TypeDropdown
 {
-    using System;
     using System.Collections.Generic;
-    using System.Linq;
     using SolidUtilities.Editor.Helpers;
     using SolidUtilities.Editor.Helpers.EditorIconsRelated;
     using SolidUtilities.Extensions;
@@ -13,17 +11,15 @@
     /// <summary>
     /// A node in the selection tree. It may be a folder or an item that represents <see cref="System.Type"/>.
     /// </summary>
-    internal class SelectionNode
+    internal abstract class SelectionNode
     {
-        public readonly List<SelectionNode> ChildNodes = new List<SelectionNode>();
-        public readonly Type Type;
-
-        private readonly string _name;
-        protected readonly SelectionTree _parentTree;
-        public readonly SelectionNode ParentNode;
+        protected readonly string _name;
 
         private bool _expanded;
         private Rect _rect;
+
+        public readonly SelectionNode ParentNode;
+        protected abstract SelectionTree ParentTree { get; }
 
         /// <summary>
         /// Default constructor that creates a child node of another parent node.
@@ -35,36 +31,19 @@
         /// <param name="fullTypeName">
         /// Full name of the type. It will show up instead of the short name when performing search.
         /// </param>
-        protected SelectionNode(
-            string name,
-            SelectionNode parentNode,
-            SelectionTree parentTree,
-            Type type,
-            string fullTypeName)
+        protected SelectionNode(SelectionNode parentNode, string name, string searchName)
         {
-            Assert.IsNotNull(name);
-
-            _name = name;
             ParentNode = parentNode;
-            _parentTree = parentTree;
-            Type = type;
-            FullTypeName = fullTypeName;
+            Assert.IsNotNull(name);
+            _name = name;
+            SearchName = searchName;
         }
 
-        /// <summary>Constructor of a root node that does not have a parent and does not show up in the popup.</summary>
-        /// <param name="parentTree">The tree this node belongs to.</param>
-        private SelectionNode(SelectionTree parentTree)
-        {
-            ParentNode = null;
-            _parentTree = parentTree;
-            _name = string.Empty;
-            Type = null;
-            FullTypeName = null;
-        }
+        protected abstract IReadOnlyCollection<SelectionNode> _ChildNodes { get; }
 
         public Rect Rect => _rect;
 
-        public string FullTypeName { get; }
+        public string SearchName { get; }
 
         /// <summary>
         /// If the node is folder, this shows whether is is expanded or closed. If the node is type item, setting this
@@ -76,51 +55,13 @@
             set => _expanded = value;
         }
 
-        public bool IsFolder => ChildNodes.Count != 0;
+        public bool IsFolder => _ChildNodes.Count != 0;
 
         public bool IsRoot => ParentNode == null;
 
-        public bool IsSelected => _parentTree.SelectedNode == this;
+        public bool IsSelected => ParentTree.SelectedNode == this;
 
         private bool IsHoveredOver => _rect.Contains(Event.current.mousePosition);
-
-        /// <summary>Creates a root node that does not have a parent and does not show up in the popup.</summary>
-        /// <param name="parentTree">The tree this node belongs to.</param>
-        /// <returns>The root node.</returns>
-        public static SelectionNode CreateRoot(SelectionTree parentTree) => new SelectionNode(parentTree);
-
-        /// <summary>Creates a dropdown item that represents a <see cref="System.Type"/>.</summary>
-        /// <param name="name">Name that will show up in the popup.</param>
-        /// <param name="type"><see cref="System.Type"/>> this node represents.</param>
-        /// <param name="fullTypeName">
-        /// Full name of the type. It will show up instead of the short name when performing search.
-        /// </param>
-        /// <returns>A <see cref="SelectionNode"/> instance that represents the dropdown item.</returns>
-        public SelectionNode CreateChildItem(string name, Type type, string fullTypeName)
-        {
-            var child = new SelectionNode(name, this, _parentTree, type, fullTypeName);
-            ChildNodes.Add(child);
-            return child;
-        }
-
-        /// <summary>Creates a folder that contains dropdown items.</summary>
-        /// <param name="name">Name of the folder.</param>
-        /// <returns>A <see cref="SelectionNode"/> instance that represents the folder.</returns>
-        public SelectionNode CreateChildFolder(string name)
-        {
-            var child = new SelectionNode(name, this, _parentTree, null, null);
-            ChildNodes.Add(child);
-            return child;
-        }
-
-        public IEnumerable<SelectionNode> GetChildNodesRecursive()
-        {
-            if ( ! IsRoot)
-                yield return this;
-
-            foreach (SelectionNode childNode in ChildNodes.SelectMany(node => node.GetChildNodesRecursive()))
-                yield return childNode;
-        }
 
         public IEnumerable<SelectionNode> GetParentNodesRecursive(
             bool includeSelf)
@@ -135,34 +76,13 @@
                 yield return node;
         }
 
-        /// <summary>
-        /// Returns the direct child node with the matching name, or null if the matching node was not found.
-        /// </summary>
-        /// <remarks>
-        /// One of the usages of FindNode is to build the selection tree. When a new item is added, it is checked
-        /// whether its parent folder is already created. If the folder is created, it is usually the most recently
-        /// created folder, so the list is iterated backwards to give the result as quickly as possible.
-        /// </remarks>
-        /// <param name="name">Name of the node to find.</param>
-        /// <returns>Direct child node with the matching name or null.</returns>
-        public SelectionNode FindChild(ReadOnlySpan<char> name)
-        {
-            for (int index = ChildNodes.Count - 1; index >= 0; --index)
-            {
-                if (name.Equals(ChildNodes[index]._name.AsSpan(), StringComparison.Ordinal))
-                    return ChildNodes[index];
-            }
-
-            return null;
-        }
-
-        public void DrawSelfAndChildren(int indentLevel, Rect visibleRect)
+        public virtual void DrawSelfAndChildren(int indentLevel, Rect visibleRect)
         {
             Draw(indentLevel, visibleRect);
             if ( ! Expanded)
                 return;
 
-            foreach (SelectionNode childItem in ChildNodes)
+            foreach (SelectionNode childItem in _ChildNodes)
                 childItem.DrawSelfAndChildren(indentLevel + 1, visibleRect);
         }
 
@@ -207,6 +127,8 @@
             DrawSeparator();
         }
 
+        protected abstract void SetSelfSelected();
+
         protected void HandleMouseEvents()
         {
             bool leftMouseButtonWasPressed = Event.current.type == EventType.MouseDown
@@ -222,37 +144,11 @@
             }
             else
             {
-                _parentTree.SelectedNode = this;
-                _parentTree.FinalizeSelection();
+                SetSelfSelected();
+                ParentTree.FinalizeSelection();
             }
 
             Event.current.Use();
-        }
-
-        public SelectionNode GetNextChild(SelectionNode currentChild)
-        {
-            int currentIndex = ChildNodes.IndexOf(currentChild);
-
-            if (currentIndex < 0)
-                return currentChild;
-
-            if (currentIndex == ChildNodes.Count - 1)
-                return ParentNode?.GetNextChild(this) ?? currentChild;
-
-            return ChildNodes[currentIndex + 1];
-        }
-
-        public SelectionNode GetPreviousChild(SelectionNode currentChild)
-        {
-            int currentIndex = ChildNodes.IndexOf(currentChild);
-
-            if (currentIndex < 0)
-                return currentChild;
-
-            if (currentIndex == 0)
-                return this;
-
-            return ChildNodes[currentIndex - 1];
         }
 
         private void Draw(int indentLevel, Rect visibleRect)
@@ -294,7 +190,7 @@
         private void DrawLabel(Rect indentedNodeRect)
         {
             Rect labelRect = indentedNodeRect.AlignMiddleVertically(DropdownStyle.LabelHeight);
-            string label = _parentTree.DrawInSearchMode ? FullTypeName : _name;
+            string label = ParentTree.DrawInSearchMode ? SearchName : _name;
             GUIStyle style = IsSelected ? DropdownStyle.SelectedLabelStyle : DropdownStyle.DefaultLabelStyle;
             GUI.Label(labelRect, label, style);
         }

@@ -14,42 +14,28 @@
     /// Represents a node tree that contains folders (namespaces) and types. It is also responsible for drawing all the
     /// nodes, along with search toolbar and scrollbar.
     /// </summary>
-    internal partial class SelectionTree : IRepainter
+    internal abstract class SelectionTree : IRepainter
     {
-        private readonly SelectionNode _root;
-
-        private readonly List<SelectionNode> _searchModeTree = new List<SelectionNode>();
-        private readonly NoneElement _noneElement;
         private readonly string _searchFieldControlName = GUID.Generate().ToString();
-        private readonly Action<Type> _onTypeSelected;
         private readonly bool _drawSearchbar;
-        private readonly Scrollbar _scrollbar;
+        protected readonly Scrollbar _scrollbar;
 
-        private string _searchString = string.Empty;
-        private Rect _visibleRect;
+        protected string _searchString = string.Empty;
+        protected Rect _visibleRect;
         public bool RepaintRequested;
-        public SelectionNode SelectedNode;
 
-        public SelectionTree(
-            TypeItem[] items,
-            Type selectedType,
-            Action<Type> onTypeSelected,
-            int searchbarMinItemsCount,
-            bool hideNoneElement)
+        protected abstract IReadOnlyCollection<SelectionNode> SearchModeTree { get; }
+
+        protected abstract SelectionNode NoneElement { get; }
+
+        public SelectionTree(IReadOnlyCollection<SelectionTreeItem> items, int searchbarMinItemsCount)
         {
-            _root = SelectionNode.CreateRoot(this);
-
-            if ( ! hideNoneElement)
-                _noneElement = NoneElement.Create(this);
-
             SelectionPaths = items.Select(item => item.Path).ToArray();
-            FillTreeWithItems(items);
-            _drawSearchbar = items.Length >= searchbarMinItemsCount;
-
+            _drawSearchbar = items.Count >= searchbarMinItemsCount;
             _scrollbar = new Scrollbar(this);
-            SetSelection(items, selectedType);
-            _onTypeSelected = onTypeSelected;
         }
+
+        public abstract SelectionNode SelectedNode { get; }
 
         public event Action SelectionChanged;
 
@@ -57,13 +43,14 @@
 
         public bool DrawInSearchMode { get; private set; }
 
-        private List<SelectionNode> Nodes => _root.ChildNodes;
+        protected abstract IReadOnlyCollection<SelectionNode> Nodes { get; }
 
-        public void FinalizeSelection()
+        public virtual void FinalizeSelection()
         {
-            _onTypeSelected?.Invoke(SelectedNode.Type);
             SelectionChanged?.Invoke();
         }
+
+        protected abstract IEnumerable<SelectionNode> EnumerateTree();
 
         public void ExpandAllFolders()
         {
@@ -86,7 +73,7 @@
             }
 
             if ( ! DrawInSearchMode)
-                _noneElement?.Draw();
+                NoneElement?.DrawSelfAndChildren(default, default);
 
             using (_scrollbar.Draw())
             {
@@ -101,36 +88,6 @@
             {
                 EditorGUILayoutHelper.DrawInfoMessage("No types to select.");
             }
-        }
-
-        private IEnumerable<SelectionNode> EnumerateTree() => _root.GetChildNodesRecursive();
-
-        private void SetSelection(TypeItem[] items, Type selectedType)
-        {
-            if (selectedType == null)
-            {
-                SelectedNode = _noneElement;
-                return;
-            }
-
-            ReadOnlySpan<char> nameOfItemToSelect = default;
-
-            foreach (TypeItem item in items)
-            {
-                if (item.Type == selectedType)
-                    nameOfItemToSelect = item.Path.AsSpan();
-            }
-
-            if (nameOfItemToSelect == default)
-                return;
-
-            SelectionNode itemToSelect = _root;
-
-            foreach (var part in nameOfItemToSelect.Split('/'))
-                itemToSelect = itemToSelect.FindChild(part);
-
-            SelectedNode = itemToSelect;
-            _scrollbar.RequestScrollToNode(itemToSelect, Scrollbar.NodePosition.Center);
         }
 
         private void DrawSearchToolbar()
@@ -169,18 +126,10 @@
 
             DrawInSearchMode = true;
 
-            _searchModeTree.Clear();
-            _searchModeTree.AddRange(EnumerateTree()
-                .Where(node => node.Type != null)
-                .Select(node =>
-                {
-                    bool includeInSearch = FuzzySearch.CanBeIncluded(_searchString, node.FullTypeName, out int score);
-                    return new { score, item = node, include = includeInSearch };
-                })
-                .Where(x => x.include)
-                .OrderByDescending(x => x.score)
-                .Select(x => x.item));
+            InitializeSearchModeTree();
         }
+
+        protected abstract void InitializeSearchModeTree();
 
         private static Rect GetInnerToolbarArea()
         {
@@ -198,14 +147,15 @@
 
         private void DrawTree(Rect visibleRect)
         {
-            List<SelectionNode> nodes = DrawInSearchMode ? _searchModeTree : Nodes;
-            int nodesListLength = nodes.Count;
+            var nodes = DrawInSearchMode ? SearchModeTree : Nodes;
 
-            for (int index = 0; index < nodesListLength; ++index)
-                nodes[index].DrawSelfAndChildren(0, visibleRect);
+            foreach (SelectionNode node in nodes)
+                node.DrawSelfAndChildren(0, visibleRect);
 
             HandleKeyboardEvents();
         }
+
+        protected abstract void HandleKeyboardEvents();
 
         private string DrawSearchField(Rect innerToolbarArea, string searchText)
         {

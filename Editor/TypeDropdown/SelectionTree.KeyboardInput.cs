@@ -4,11 +4,11 @@
     using SolidUtilities.Editor.Extensions;
     using UnityEngine;
 
-    internal partial class SelectionTree
+    internal partial class SelectionTree<T>
     {
         #region KeyboardEvents
 
-        private void HandleKeyboardEvents()
+        protected override void HandleKeyboardEvents()
         {
             if (Event.current.type != EventType.KeyDown)
                 return;
@@ -30,30 +30,30 @@
 
         private bool OnArrowRight()
         {
-            if (SelectedNode == null || DrawInSearchMode || !SelectedNode.IsFolder || SelectedNode.Expanded)
+            if (_selectedNode == null || DrawInSearchMode || !_selectedNode.IsFolder || _selectedNode.Expanded)
                 return false;
 
-            SelectedNode.Expanded = true;
+            _selectedNode.Expanded = true;
             return true;
         }
 
         private bool OnArrowLeft()
         {
-            if (SelectedNode == null ||DrawInSearchMode || !SelectedNode.IsFolder || !SelectedNode.Expanded)
+            if (_selectedNode == null ||DrawInSearchMode || !_selectedNode.IsFolder || !_selectedNode.Expanded)
                 return false;
 
-            SelectedNode.Expanded = false;
+            _selectedNode.Expanded = false;
             return true;
         }
 
         private bool OnEnter()
         {
-            if (SelectedNode == null)
+            if (_selectedNode == null)
                 return false;
 
-            if (SelectedNode.IsFolder)
+            if (_selectedNode.IsFolder)
             {
-                SelectedNode.Expanded = ! SelectedNode.Expanded;
+                _selectedNode.Expanded = ! _selectedNode.Expanded;
             }
             else
             {
@@ -76,31 +76,31 @@
 
         private bool OnArrowDownRegular()
         {
-            if (SelectedNode == null)
+            if (_selectedNode == null)
             {
                 if (_root.ChildNodes.Count == 0)
                 {
                     return false;
                 }
 
-                SelectedNode = _root.ChildNodes[0];
+                _selectedNode = _root.ChildNodes[0];
                 return true;
             }
 
-            if (SelectedNode.IsFolder && SelectedNode.Expanded)
+            if (_selectedNode.IsFolder && _selectedNode.Expanded)
             {
-                SelectedNode = SelectedNode.ChildNodes[0];
+                _selectedNode = _selectedNode.ChildNodes[0];
                 return true;
             }
 
-            if (SelectedNode.IsRoot)
+            if (_selectedNode.IsRoot)
                 return false;
 
-            SelectedNode = SelectedNode.ParentNode.GetNextChild(SelectedNode);
+            _selectedNode = _selectedNode.ParentNode.GetNextChild(_selectedNode);
 
-            if (!_visibleRect.Contains(SelectedNode.Rect))
+            if (!_visibleRect.Contains(_selectedNode.Rect))
             {
-                _scrollbar.RequestScrollToNode(SelectedNode, Scrollbar.NodePosition.Bottom);
+                _scrollbar.RequestScrollToNode(_selectedNode, Scrollbar.NodePosition.Bottom);
             }
 
             return true;
@@ -111,18 +111,18 @@
             if (_searchModeTree.Count == 0)
                 return false;
 
-            int indexOfSelected = _searchModeTree.IndexOf(SelectedNode);
+            int indexOfSelected = _searchModeTree.IndexOf(_selectedNode);
 
             if (indexOfSelected == _searchModeTree.Count - 1)
                 return false;
 
             if (indexOfSelected == -1)
             {
-                SelectedNode = _searchModeTree[0];
+                _selectedNode = _searchModeTree[0];
                 return true;
             }
 
-            SelectedNode = _searchModeTree[indexOfSelected + 1];
+            _selectedNode = _searchModeTree[indexOfSelected + 1];
             return true;
         }
 
@@ -133,7 +133,7 @@
             if (firstItem == null)
                 return false;
 
-            SelectedNode = firstItem;
+            _selectedNode = firstItem;
             return true;
         }
 
@@ -142,33 +142,33 @@
             if (DrawInSearchMode)
                 return OnArrowUpSearch();
 
-            if (SelectedNode == null || SelectedNode.IsRoot)
+            if (_selectedNode == null || _selectedNode.IsRoot)
                 return false;
 
-            if (SelectedNode.ParentNode.IsRoot)
+            if (_selectedNode.ParentNode.IsRoot)
             {
-                bool isFirst = SelectedNode.ParentNode.ChildNodes.IndexOf(SelectedNode) == 0;
+                bool isFirst = _selectedNode.ParentNode.ChildNodes.IndexOf(_selectedNode) == 0;
 
                 if (isFirst && _noneElement != null)
                 {
-                    SelectedNode = _noneElement;
+                    _selectedNode = _noneElement;
                     return true;
                 }
             }
 
-            var previousNode = SelectedNode.ParentNode.GetPreviousChild(SelectedNode);
+            var previousNode = _selectedNode.ParentNode.GetPreviousChild(_selectedNode);
 
-            if (IsExpandedFolder(previousNode) && !previousNode.ChildNodes.Contains(SelectedNode))
+            if (IsExpandedFolder(previousNode) && !previousNode.ChildNodes.Contains(_selectedNode))
             {
                 // choose last item of the previous folder instead.
                 previousNode = previousNode.ChildNodes[previousNode.ChildNodes.Count - 1];
             }
 
-            SelectedNode = previousNode;
+            _selectedNode = previousNode;
 
-            if (!_visibleRect.Contains(SelectedNode.Rect))
+            if (!_visibleRect.Contains(_selectedNode.Rect))
             {
-                _scrollbar.RequestScrollToNode(SelectedNode, Scrollbar.NodePosition.Top);
+                _scrollbar.RequestScrollToNode(_selectedNode, Scrollbar.NodePosition.Top);
             }
 
             return true;
@@ -179,16 +179,16 @@
             if (_searchModeTree.Count == 0)
                 return false;
 
-            int indexOfSelected = _searchModeTree.IndexOf(SelectedNode);
+            int indexOfSelected = _searchModeTree.IndexOf(_selectedNode);
 
             if (indexOfSelected <= 0)
                 return false;
 
-            SelectedNode = _searchModeTree[indexOfSelected - 1];
+            _selectedNode = _searchModeTree[indexOfSelected - 1];
             return true;
         }
 
-        private bool IsExpandedFolder(SelectionNode previousNode)
+        private bool IsExpandedFolder(SelectionNode<T> previousNode)
         {
             return previousNode.IsFolder && previousNode.Expanded && previousNode.ChildNodes.Count != 0;
         }

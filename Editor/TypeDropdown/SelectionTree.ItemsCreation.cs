@@ -7,28 +7,25 @@
      * Part of the class, responsible solely for filling the tree with items. Only FillTreeWithItems method is used in
      * the main part of the class.
      */
-    internal partial class SelectionTree
+    internal partial class SelectionTree<T>
     {
-        private void FillTreeWithItems(TypeItem[] items)
+        private void FillTreeWithItems(SelectionTreeItem<T>[] items)
         {
             if (items == null)
                 return;
 
-            foreach (TypeItem item in items)
+            foreach (var item in items)
                 CreateDropdownItem(item);
         }
 
-        private void CreateDropdownItem(in TypeItem item)
+        private void CreateDropdownItem(in SelectionTreeItem<T> item)
         {
-            SplitFullTypeName(item.Path, out string namespaceName, out string typeName);
-
-            SelectionNode directParentOfNewNode =
-                namespaceName.Length == 0 ? _root : CreateFoldersInPathIfNecessary(namespaceName);
-
-            directParentOfNewNode.CreateChildItem(typeName, item.Type, item.FullTypeName);
+            SplitFullItemPath(item.Path, out string folderPath, out string itemName);
+            var directParentOfNewNode = folderPath.Length == 0 ? _root : CreateFoldersInPathIfNecessary(folderPath);
+            directParentOfNewNode.CreateChildItem(itemName, item.Value, item.SearchName);
         }
 
-        private static void SplitFullTypeName(string nodePath, out string namespaceName, out string typeName)
+        private static void SplitFullItemPath(string nodePath, out string namespaceName, out string typeName)
         {
             int indexOfLastSeparator = nodePath.LastIndexOf('/');
 
@@ -44,9 +41,9 @@
             }
         }
 
-        private SelectionNode CreateFoldersInPathIfNecessary(string path)
+        private SelectionNode<T> CreateFoldersInPathIfNecessary(string path)
         {
-            SelectionNode parentNode = _root;
+            var parentNode = _root;
 
             foreach (var folderName in path.AsSpan().Split('/'))
             {
