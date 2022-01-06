@@ -52,6 +52,13 @@
             _parentObject.ApplyModifiedProperties();
         }
 
+        public void SetType(Type type)
+        {
+            _typeNameProperty.stringValue = TypeReference.GetTypeNameAndAssembly(type);
+            _guidProperty.stringValue = TypeReference.GetClassGUID(type);
+            _parentObject.ApplyModifiedProperties();
+        }
+
         private void SetGUIDAssignmentFailed(bool value)
         {
             _guidAssignmentFailedProperty.boolValue = value;
