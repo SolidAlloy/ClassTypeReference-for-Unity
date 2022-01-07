@@ -34,7 +34,7 @@
             if (_attribute.ExpandAllFolders)
                 selectionTree.ExpandAllFolders();
 
-            DropdownWindow.Create(selectionTree, DropdownWindowType.Dropdown, windowHeight: _attribute.DropdownHeight);
+            DropdownWindow.Create(selectionTree, DropdownWindowType.Context, windowHeight: _attribute.DropdownHeight);
         }
 
         public DropdownItem<Type>[] GetDropdownItems()
@@ -80,7 +80,7 @@
         private DropdownItem<Type> CreateItem(Type type, Grouping grouping, string searchName = null)
         {
             searchName ??= type.FullName ?? string.Empty;
-            return new DropdownItem<Type>(type, TypeNameFormatter.Format(type, searchName, grouping), searchName);
+            return new DropdownItem<Type>(type, TypeNameFormatter.Format(type, searchName, grouping), searchName: searchName);
         }
 
         private DropdownItem<Type>[] GetFilteredTypes()
