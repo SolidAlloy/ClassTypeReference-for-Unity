@@ -29,15 +29,15 @@
         public void Draw(Action<Type> onTypeSelected)
         {
             var dropdownItems = GetDropdownItems();
-            var selectionTree = new SelectionTree<Type>(dropdownItems, _selectedType, onTypeSelected, ProjectSettings.SearchbarMinItemsCount, _attribute.ExcludeNone);
+            var selectionTree = new DropdownTree<Type>(dropdownItems, _selectedType, onTypeSelected, ProjectSettings.SearchbarMinItemsCount, true, _attribute.ExcludeNone);
 
             if (_attribute.ExpandAllFolders)
                 selectionTree.ExpandAllFolders();
 
-            DropdownWindow.Create(selectionTree, _attribute.DropdownHeight, GUIUtility.GUIToScreenPoint(Event.current.mousePosition), DropdownWindowType.Dropdown);
+            DropdownWindow.Create(selectionTree, DropdownWindowType.Dropdown, windowHeight: _attribute.DropdownHeight);
         }
 
-        public SelectionTreeItem<Type>[] GetDropdownItems()
+        public DropdownItem<Type>[] GetDropdownItems()
         {
             var filteredTypes = GetFilteredTypes();
             var includedTypes = GetIncludedTypes();
@@ -45,20 +45,20 @@
             return includedTypes.Length == 0 ? filteredTypes : MergeArrays(filteredTypes, includedTypes);
         }
 
-        private SelectionTreeItem<Type>[] MergeArrays(SelectionTreeItem[] filteredTypes, SelectionTreeItem[] includedTypes)
+        private DropdownItem<Type>[] MergeArrays(DropdownItem[] filteredTypes, DropdownItem[] includedTypes)
         {
-            var totalTypes = new SelectionTreeItem<Type>[filteredTypes.Length + includedTypes.Length];
+            var totalTypes = new DropdownItem<Type>[filteredTypes.Length + includedTypes.Length];
             filteredTypes.CopyTo(totalTypes, 0);
             includedTypes.CopyTo(totalTypes, filteredTypes.Length);
             return totalTypes;
         }
 
-        private SelectionTreeItem<Type>[] GetIncludedTypes()
+        private DropdownItem<Type>[] GetIncludedTypes()
         {
             if (_attribute.IncludeTypes == null)
-                return Array.Empty<SelectionTreeItem<Type>>();
+                return Array.Empty<DropdownItem<Type>>();
 
-            var typeItems = new SelectionTreeItem<Type>[_attribute.IncludeTypes.Length];
+            var typeItems = new DropdownItem<Type>[_attribute.IncludeTypes.Length];
 
             for (int i = 0; i < _attribute.IncludeTypes.Length; i++)
             {
@@ -77,13 +77,13 @@
             return typeItems;
         }
 
-        private SelectionTreeItem<Type> CreateItem(Type type, Grouping grouping, string searchName = null)
+        private DropdownItem<Type> CreateItem(Type type, Grouping grouping, string searchName = null)
         {
             searchName ??= type.FullName ?? string.Empty;
-            return new SelectionTreeItem<Type>(type, TypeNameFormatter.Format(type, searchName, grouping), searchName);
+            return new DropdownItem<Type>(type, TypeNameFormatter.Format(type, searchName, grouping), searchName);
         }
 
-        private SelectionTreeItem<Type>[] GetFilteredTypes()
+        private DropdownItem<Type>[] GetFilteredTypes()
         {
             bool containsMSCorLib = false;
 
@@ -100,7 +100,7 @@
 
             int filteredTypesLength = filteredTypes.Count;
 
-            var typeItems = new SelectionTreeItem<Type>[filteredTypesLength];
+            var typeItems = new DropdownItem<Type>[filteredTypesLength];
 
             for (int i = 0; i < filteredTypesLength; i++)
             {
