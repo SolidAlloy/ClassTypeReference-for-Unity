@@ -213,7 +213,7 @@
             public void When_type_is_null_returns_NoneElement()
             {
                 var nullTypeRef = new TypeReference( (Type)null );
-                Assert.That(nullTypeRef.ToString(), Is.EqualTo(TypeReference.NoneElement));
+                Assert.That(nullTypeRef.ToString(), Is.EqualTo("(None)"));
             }
 
             [Test]

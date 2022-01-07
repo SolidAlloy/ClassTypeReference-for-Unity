@@ -3,7 +3,7 @@
     using System;
     using System.Linq;
     using JetBrains.Annotations;
-    using SolidUtilities.Extensions;
+    using SolidUtilities;
     using UnityEngine;
 
     /// <summary>

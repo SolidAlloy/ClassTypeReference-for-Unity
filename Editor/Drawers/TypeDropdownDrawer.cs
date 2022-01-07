@@ -3,8 +3,8 @@
     using System;
     using System.Collections.Generic;
     using System.Reflection;
-    using SolidUtilities.Helpers;
-    using TypeDropdown;
+    using SolidUtilities;
+    using UnityDropdown.Editor;
     using UnityEngine;
     using UnityEngine.Assertions;
     using Util;
@@ -114,8 +114,6 @@
 
                 typeItems[i] = CreateItem(type, _attribute.Grouping, fullTypeName);
             }
-
-            Sedgewick.SortInPlace(typeItems);
 
             return typeItems;
         }

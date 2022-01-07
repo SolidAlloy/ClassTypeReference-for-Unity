@@ -2,8 +2,9 @@
 {
     using System;
     using SolidUtilities.Editor.Helpers;
-    using SolidUtilities.Helpers;
+    using SolidUtilities;
     using TypeReferences;
+    using UnityDropdown.Editor;
     using UnityEditor;
     using UnityEngine;
     using Util;
@@ -132,7 +133,7 @@
                 typeName = TypeNameFormatter.GetShortName(typeName);
 
             if (typeName == string.Empty)
-                return TypeReference.NoneElement;
+                return DropdownWindow.NoneElementName;
 
             if (TypeCache.GetType(_serializedTypeRef.TypeNameAndAssembly) == null)
                 return typeName + MissingSuffix;

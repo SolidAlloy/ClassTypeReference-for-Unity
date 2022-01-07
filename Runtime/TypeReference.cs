@@ -3,7 +3,7 @@
     using System;
     using System.Collections.Generic;
     using JetBrains.Annotations;
-    using SolidUtilities.Extensions;
+    using SolidUtilities;
     using UnityEngine;
     using UnityEngine.Serialization;
 
@@ -13,9 +13,6 @@
     [Serializable]
     public partial class TypeReference : ISerializationCallbackReceiver
     {
-        /// <summary>Name of the element in the drop-down list that corresponds to null value.</summary>
-        internal const string NoneElement = "(None)";
-
         private static readonly HashSet<string> _reportedMissingValues = new HashSet<string>();
 
         [SerializeField] internal bool GuidAssignmentFailed;
@@ -118,7 +115,7 @@
 
         public static implicit operator TypeReference(Type type) => new TypeReference(type);
 
-        public override string ToString() => (Type == null || Type.FullName == null) ? NoneElement : Type.FullName;
+        public override string ToString() => (Type == null || Type.FullName == null) ? "None" : Type.FullName;
 
         void ISerializationCallbackReceiver.OnAfterDeserialize()
         {

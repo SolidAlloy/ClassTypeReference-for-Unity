@@ -3,7 +3,7 @@
     using System;
     using System.Linq;
     using JetBrains.Annotations;
-    using SolidUtilities.Extensions;
+    using SolidUtilities;
 
     /// <summary>
     /// Constraint that allows selection of types that inherit a specific parent type or interface when
