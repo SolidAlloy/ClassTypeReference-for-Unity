@@ -1,7 +1,7 @@
 ﻿namespace TypeReferences.Editor
 {
     using System.Collections.Generic;
-    using SolidUtilities.Editor.Helpers;
+    using SolidUtilities.Editor;
     using UnityEditor;
     using UnityEngine;
 

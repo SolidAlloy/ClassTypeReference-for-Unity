@@ -1,7 +1,7 @@
 ﻿namespace TypeReferences.Editor.Drawers
 {
     using System;
-    using SolidUtilities.Editor.Helpers;
+    using SolidUtilities.Editor;
     using SolidUtilities;
     using TypeReferences;
     using UnityDropdown.Editor;

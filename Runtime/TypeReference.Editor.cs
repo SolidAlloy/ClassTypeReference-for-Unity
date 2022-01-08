@@ -5,8 +5,7 @@
     using Debug = UnityEngine.Debug;
 
 #if UNITY_EDITOR
-    using SolidUtilities.Editor.Extensions;
-    using SolidUtilities.Editor.Helpers;
+    using SolidUtilities.Editor;
     using UnityEditor;
 #endif
 
