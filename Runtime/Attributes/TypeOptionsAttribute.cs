@@ -20,11 +20,11 @@
         [PublicAPI] public Grouping Grouping = Grouping.ByNamespaceFlat;
 
         /// <summary>
-        /// Removes (None) from the dropdown and disallows setting Type to null in Inspector.
-        /// Note that the type can still be null by default or if set through code.
-        /// Defaults to <see langword="false"/> unless explicitly specified.
+        /// Shows the (None) element in a dropdown so that the user can choose it.
+        /// Note that if this option is disabled, the type can still be null by default or if set through code.
+        /// Defaults to <see langword="true"/> unless explicitly specified.
         /// </summary>
-        [PublicAPI] public bool ExcludeNone;
+        [PublicAPI] public bool ShowNoneElement = true;
 
         /// <summary>Includes additional types in the drop-down list.</summary>
         [PublicAPI] public Type[] IncludeTypes;

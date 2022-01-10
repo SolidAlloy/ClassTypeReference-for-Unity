@@ -5,7 +5,6 @@
     using System.Reflection;
     using SolidUtilities;
     using UnityDropdown.Editor;
-    using UnityEngine;
     using UnityEngine.Assertions;
     using Util;
 
@@ -29,12 +28,14 @@
         public void Draw(Action<Type> onTypeSelected)
         {
             var dropdownItems = GetDropdownItems();
-            var selectionTree = new DropdownTree<Type>(dropdownItems, _selectedType, onTypeSelected, ProjectSettings.SearchbarMinItemsCount, true, _attribute.ExcludeNone);
+            SelectItem(dropdownItems, _selectedType);
+
+            var dropdownMenu = new DropdownMenu<Type>(dropdownItems, onTypeSelected, ProjectSettings.SearchbarMinItemsCount, true, _attribute.ShowNoneElement);
 
             if (_attribute.ExpandAllFolders)
-                selectionTree.ExpandAllFolders();
+                dropdownMenu.ExpandAllFolders();
 
-            DropdownWindow.Create(selectionTree, DropdownWindowType.Context, windowHeight: _attribute.DropdownHeight);
+            dropdownMenu.ShowAsContext(_attribute.DropdownHeight);
         }
 
         public DropdownItem<Type>[] GetDropdownItems()
@@ -45,7 +46,18 @@
             return includedTypes.Length == 0 ? filteredTypes : MergeArrays(filteredTypes, includedTypes);
         }
 
-        private DropdownItem<Type>[] MergeArrays(DropdownItem[] filteredTypes, DropdownItem[] includedTypes)
+        private void SelectItem(DropdownItem<Type>[] dropdownItems, Type selectedType)
+        {
+            if (selectedType == null)
+                return;
+
+            var itemToSelect = Array.Find(dropdownItems, item => item.Value == selectedType);
+
+            if (itemToSelect != null)
+                itemToSelect.IsSelected = true;
+        }
+
+        private DropdownItem<Type>[] MergeArrays(DropdownItem<Type>[] filteredTypes, DropdownItem<Type>[] includedTypes)
         {
             var totalTypes = new DropdownItem<Type>[filteredTypes.Length + includedTypes.Length];
             filteredTypes.CopyTo(totalTypes, 0);
@@ -66,7 +78,7 @@
 
                 if (type != null)
                 {
-                    typeItems[i] = CreateItem(type, _attribute.Grouping);
+                    typeItems[i] = CreateItem(type, _attribute.Grouping, type.FullName);
                 }
                 else
                 {
@@ -77,9 +89,8 @@
             return typeItems;
         }
 
-        private DropdownItem<Type> CreateItem(Type type, Grouping grouping, string searchName = null)
+        private DropdownItem<Type> CreateItem(Type type, Grouping grouping, string searchName)
         {
-            searchName ??= type.FullName ?? string.Empty;
             return new DropdownItem<Type>(type, TypeNameFormatter.Format(type, searchName, grouping), searchName: searchName);
         }
 
