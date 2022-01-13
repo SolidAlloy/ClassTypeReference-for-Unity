@@ -63,18 +63,18 @@
             }
 
             _type = type;
-            string previousTypeName = TypeNameAndAssembly;
-            TypeNameAndAssembly = GetTypeNameAndAssembly(_type);
+            string previousTypeName = _typeNameAndAssembly;
+            _typeNameAndAssembly = GetTypeNameAndAssembly(_type);
 
             if (! _suppressLogs)
-                Debug.Log($"Type reference has been updated from '{previousTypeName}' to '{TypeNameAndAssembly}'.");
+                Debug.Log($"Type reference has been updated from '{previousTypeName}' to '{_typeNameAndAssembly}'.");
 #endif
         }
 
         private void ReportObjectsWithMissingValue()
         {
 #if UNITY_EDITOR
-            var foundObjects = AssetSearcher.FindObjectsWithValue(nameof(TypeNameAndAssembly), TypeNameAndAssembly);
+            var foundObjects = AssetSearcher.FindObjectsWithValue(nameof(_typeNameAndAssembly), _typeNameAndAssembly);
             Debug.Log("The value is set in the following objects:");
 
             foreach (FoundObject foundObject in foundObjects)

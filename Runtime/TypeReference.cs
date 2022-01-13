@@ -18,8 +18,9 @@
         [SerializeField] internal bool GuidAssignmentFailed;
         [SerializeField] internal string GUID;
 
-        [FormerlySerializedAs("_typeNameAndAssembly")]
-        [SerializeField] internal string TypeNameAndAssembly;
+        [FormerlySerializedAs("TypeNameAndAssembly")]
+        [SerializeField] internal string _typeNameAndAssembly;
+        public string TypeNameAndAssembly => _typeNameAndAssembly;
 
         [SerializeField] private bool _suppressLogs;
 
@@ -106,7 +107,7 @@
                     return;
 
                 _type = value;
-                TypeNameAndAssembly = GetTypeNameAndAssembly(value);
+                _typeNameAndAssembly = GetTypeNameAndAssembly(value);
                 _typeChanged = true;
             }
         }
@@ -119,7 +120,7 @@
 
         void ISerializationCallbackReceiver.OnAfterDeserialize()
         {
-            _type = IsNotEmpty(TypeNameAndAssembly) ? TryGetTypeFromSerializedFields() : null;
+            _type = IsNotEmpty(_typeNameAndAssembly) ? TryGetTypeFromSerializedFields() : null;
             SubscribeToDelayCall();
         }
 
@@ -172,12 +173,12 @@
             if (_suppressLogs)
                 return;
 
-            if (_reportedMissingValues.Contains(TypeNameAndAssembly))
+            if (_reportedMissingValues.Contains(_typeNameAndAssembly))
                 return;
 
-            Debug.LogWarning($"'{TypeNameAndAssembly}' was referenced but such type was not found.");
+            Debug.LogWarning($"'{_typeNameAndAssembly}' was referenced but such type was not found.");
             ReportObjectsWithMissingValue();
-            _reportedMissingValues.Add(TypeNameAndAssembly);
+            _reportedMissingValues.Add(_typeNameAndAssembly);
         }
 
         /// <summary>
@@ -216,14 +217,14 @@
 
         private bool TypeCannotHaveGUID()
         {
-            if (string.IsNullOrEmpty(TypeNameAndAssembly))
+            if (string.IsNullOrEmpty(_typeNameAndAssembly))
                 return false;
 
-            int charAfterWhiteSpace = TypeNameAndAssembly.IndexOf(' ') + 1;
+            int charAfterWhiteSpace = _typeNameAndAssembly.IndexOf(' ') + 1;
 
-            string assemblyName = TypeNameAndAssembly.Substring(
+            string assemblyName = _typeNameAndAssembly.Substring(
                 charAfterWhiteSpace,
-                TypeNameAndAssembly.Length - charAfterWhiteSpace);
+                _typeNameAndAssembly.Length - charAfterWhiteSpace);
 
             return assemblyName == "mscorlib"
                    || assemblyName == "netstandard"
@@ -237,7 +238,7 @@
         [CanBeNull]
         private Type TryGetTypeFromSerializedFields()
         {
-            var type = Type.GetType(TypeNameAndAssembly);
+            var type = Type.GetType(_typeNameAndAssembly);
 
             // If GUID is not empty, there is still hope the type will be found in the TryUpdatingTypeUsingGUID method.
             if (type == null && GUID.Length == 0)
