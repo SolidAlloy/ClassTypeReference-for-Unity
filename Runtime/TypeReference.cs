@@ -135,6 +135,12 @@
             UnsubscribeFromDelayCall();
         }
 
+        public static string GetTypeNameFromNameAndAssembly(string typeNameAndAssembly)
+        {
+            // Remove the assembly name first, then remove the namespace from full type name.
+            return typeNameAndAssembly.GetSubstringBefore(',').GetSubstringAfterLast('.');
+        }
+
         internal static string GetTypeNameAndAssembly(Type type)
         {
             MakeSureTypeHasName(type);
