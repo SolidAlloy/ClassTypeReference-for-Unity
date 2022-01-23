@@ -39,6 +39,14 @@
         [PublicAPI] public string[] IncludeAdditionalAssemblies;
 
         /// <summary>
+        /// Shows all the public types that can be found in the project. By default, only the types that can be
+        /// referenced directly by the declaring class are included in the dropdown.
+        /// To show internal types too, use <see cref="AllowInternal"/>.
+        /// The default value of this parameter can be changed in Project Settings/Packages/Type References.
+        /// </summary>
+        [PublicAPI] public bool ShowAllTypes;
+
+        /// <summary>
         /// Gets or sets the height of the dropdown. If not set, the height is dynamic (min 100, max 600 pixels).
         /// If set outside the height limits, the height will be clamped.
         /// </summary>

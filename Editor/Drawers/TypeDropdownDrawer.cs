@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
     using System.Reflection;
     using SolidUtilities;
     using UnityDropdown.Editor;
@@ -27,7 +28,7 @@
 
         public void Draw(Action<Type> onTypeSelected)
         {
-            var dropdownItems = GetDropdownItems();
+            var dropdownItems = GetDropdownItems().ToList();
             SelectItem(dropdownItems, _selectedType);
 
             var dropdownMenu = new DropdownMenu<Type>(dropdownItems, onTypeSelected, ProjectSettings.SearchbarMinItemsCount, true, _attribute.ShowNoneElement);
@@ -38,34 +39,23 @@
             dropdownMenu.ShowAsContext(_attribute.DropdownHeight);
         }
 
-        public DropdownItem<Type>[] GetDropdownItems()
+        public IEnumerable<DropdownItem<Type>> GetDropdownItems()
         {
-            var filteredTypes = GetFilteredTypes();
-            var includedTypes = GetIncludedTypes();
-
-            return includedTypes.Length == 0 ? filteredTypes : MergeArrays(filteredTypes, includedTypes);
+            return GetMainDropdownItems().Concat(GetIncludedTypes());
         }
 
-        private void SelectItem(DropdownItem<Type>[] dropdownItems, Type selectedType)
+        private void SelectItem(List<DropdownItem<Type>> dropdownItems, Type selectedType)
         {
             if (selectedType == null)
                 return;
 
-            var itemToSelect = Array.Find(dropdownItems, item => item.Value == selectedType);
+            var itemToSelect = dropdownItems.Find(item => item.Value == selectedType);
 
             if (itemToSelect != null)
                 itemToSelect.IsSelected = true;
         }
 
-        private DropdownItem<Type>[] MergeArrays(DropdownItem<Type>[] filteredTypes, DropdownItem<Type>[] includedTypes)
-        {
-            var totalTypes = new DropdownItem<Type>[filteredTypes.Length + includedTypes.Length];
-            filteredTypes.CopyTo(totalTypes, 0);
-            includedTypes.CopyTo(totalTypes, filteredTypes.Length);
-            return totalTypes;
-        }
-
-        private DropdownItem<Type>[] GetIncludedTypes()
+        private IEnumerable<DropdownItem<Type>> GetIncludedTypes()
         {
             if (_attribute.IncludeTypes == null)
                 return Array.Empty<DropdownItem<Type>>();
@@ -94,52 +84,43 @@
             return new DropdownItem<Type>(type, TypeNameFormatter.Format(type, searchName, grouping), searchName: searchName);
         }
 
-        private DropdownItem<Type>[] GetFilteredTypes()
+        private IEnumerable<DropdownItem<Type>> GetMainDropdownItems()
         {
             bool containsMSCorLib = false;
+            var assemblies = _attribute.ShowAllTypes ? TypeCollector.GetAllAssemblies() : GetTypeRelatedAssemblies(out containsMSCorLib);
+            
+            if (_attribute.ShowAllTypes)
+                containsMSCorLib = true;
 
-            var typeRelatedAssemblies = ProjectSettings.UseBuiltInNames
-                ? TypeCollector.GetAssembliesTypeHasAccessTo(_declaringType, out containsMSCorLib)
-                : TypeCollector.GetAssembliesTypeHasAccessTo(_declaringType);
-
-            if (_attribute.IncludeAdditionalAssemblies != null)
-                IncludeAdditionalAssemblies(typeRelatedAssemblies);
-
-            var filteredTypes = TypeCollector.GetFilteredTypesFromAssemblies(typeRelatedAssemblies, _attribute);
+            var filteredTypes = TypeCollector.GetFilteredTypesFromAssemblies(assemblies, _attribute);
 
             bool replaceBuiltInNames = ProjectSettings.UseBuiltInNames && containsMSCorLib;
 
-            int filteredTypesLength = filteredTypes.Count;
-
-            var typeItems = new DropdownItem<Type>[filteredTypesLength];
-
-            for (int i = 0; i < filteredTypesLength; i++)
+            foreach (var filteredType in filteredTypes)
             {
-                var type = filteredTypes[i];
-
-                string fullTypeName = type.FullName;
+                string fullTypeName = filteredType.FullName;
                 Assert.IsNotNull(fullTypeName);
 
                 if (replaceBuiltInNames)
                     fullTypeName = fullTypeName.ReplaceWithBuiltInName(true);
 
-                typeItems[i] = CreateItem(type, _attribute.Grouping, fullTypeName);
+                yield return CreateItem(filteredType, _attribute.Grouping, fullTypeName);
             }
-
-            return typeItems;
         }
 
-        private void IncludeAdditionalAssemblies(List<Assembly> typeRelatedAssemblies)
+        private IEnumerable<Assembly> GetTypeRelatedAssemblies(out bool containsMSCorLib)
         {
-            foreach (string assemblyName in _attribute.IncludeAdditionalAssemblies)
-            {
-                var additionalAssembly = TypeCollector.TryLoadAssembly(assemblyName);
-                if (additionalAssembly == null)
-                    continue;
+            var typeRelatedAssemblies = TypeCollector.GetAssembliesTypeHasAccessTo(_declaringType, out containsMSCorLib);
 
-                if ( ! typeRelatedAssemblies.Contains(additionalAssembly))
-                    typeRelatedAssemblies.Add(additionalAssembly);
-            }
+            if (_attribute.IncludeAdditionalAssemblies != null)
+                typeRelatedAssemblies = typeRelatedAssemblies.Concat(GetAdditionalAssemblies());
+
+            return typeRelatedAssemblies;
+        }
+
+        private IEnumerable<Assembly> GetAdditionalAssemblies()
+        {
+            return _attribute.IncludeAdditionalAssemblies.Select(TypeCollector.TryLoadAssembly).Where(additionalAssembly => additionalAssembly != null);
         }
     }
 }

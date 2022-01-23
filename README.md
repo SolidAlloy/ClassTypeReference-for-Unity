@@ -148,11 +148,18 @@ public class ExampleBehaviour
 }
 ```
 
-You might need to add a reference to the assembly where `CustomPlugin` is located to make it appear in the drop-down menu. However, if it is not possible or you just need to test out some things, there is an option to include assemblies your class does not have access to - `IncludeAdditionalAssemblies`. Use it like this:
+You can use the `IncludeAdditionalAssemblies` parameter to add all types of a particular assembly to the dropdown:
 
 ```csharp
 [Inherits(typeof(IAttribute), IncludeAdditionalAssemblies = new[] { "Assembly-CSharp" })]
 public TypeReference attribute;
+```
+
+Or you can use the `ShowAllTypes` parameter to show **all** types defined in the project. But beware that it can create a large list with a lot of types you'll never need.
+
+```csharp
+[TypeOptions(ShowAllTypes = true)]
+public TypeReference AnyType;
 ```
 
 &nbsp;  

@@ -34,6 +34,18 @@
             set => _useBuiltInNames.value = value;
         }
 
+        private static UserSetting<bool> _showAllTypes;
+
+        public static bool ShowAllTypes
+        {
+            get
+            {
+                InitializeIfNeeded();
+                return _showAllTypes.value;
+            }
+            set => _showAllTypes.value = value;
+        }
+
         private static void InitializeIfNeeded()
         {
             if (_instance != null)
@@ -43,6 +55,7 @@
 
             _searchbarMinItemsCount = new UserSetting<int>(_instance, nameof(_searchbarMinItemsCount), 10);
             _useBuiltInNames = new UserSetting<bool>(_instance, nameof(_useBuiltInNames), true);
+            _showAllTypes = new UserSetting<bool>(_instance, nameof(_showAllTypes), false);
         }
     }
 }
