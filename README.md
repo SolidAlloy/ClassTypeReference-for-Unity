@@ -247,6 +247,8 @@ By default, the field shows built-in types by their keyword name instead of the 
 
 The searchbar appears when you have more than 10 types in the dropdown list by default. You can change this behaviour with the ***Searchbar minimum items count*** option.
 
+**Show all types** - search for types in all assemblies located in the project, instead of in assemblies referenced by the type's assembly. It's disabled by default, and can be enabled per field with the `[TypeOptions(ShowAllTypes = true)]` attribute. But if you need this feature in all type references, feel free to enable it here.
+
 
 
 Contribution Agreement
