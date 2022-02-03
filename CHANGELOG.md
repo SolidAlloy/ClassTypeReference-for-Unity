@@ -1,3 +1,18 @@
+# [2.12.0](https://github.com/SolidAlloy/ClassTypeReference-for-Unity/compare/2.11.5...2.12.0) (2022-02-03)
+
+
+### Bug Fixes
+
+* Fixed the package full name in the installation paragraph ([86d6547](https://github.com/SolidAlloy/ClassTypeReference-for-Unity/commit/86d654783ee88649b7553778c621aa7fac78d965))
+
+
+### Features
+
+* Added SerializedTypeReference.SetType(Type type) method ([a05110a](https://github.com/SolidAlloy/ClassTypeReference-for-Unity/commit/a05110a1bb1be0922b4905749515111e7fb06617))
+* Added the ShowAllTypes property to the TypeOptions attribute ([8c45d27](https://github.com/SolidAlloy/ClassTypeReference-for-Unity/commit/8c45d274fdfedbec5b8422b976f05561d3d3bc67))
+* Added TypeReference.GetTypeNameFromNameAndAssembly static method ([1302a1c](https://github.com/SolidAlloy/ClassTypeReference-for-Unity/commit/1302a1c5c1252eb6a6d58d59ffbe89ed89fe947f))
+* Made TypeReference.TypeNameAndAssembly property public ([77cef13](https://github.com/SolidAlloy/ClassTypeReference-for-Unity/commit/77cef13004ceb9774488ed75db8437d60aff75c4))
+
 ## [2.11.5](https://github.com/SolidAlloy/ClassTypeReference-for-Unity/compare/2.11.4...2.11.5) (2021-11-09)
 
 
