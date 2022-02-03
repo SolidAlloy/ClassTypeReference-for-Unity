@@ -14,13 +14,14 @@ Once you have the OpenUPM cli, run the following command:
 ```openupm install com.solidalloy.type.references```
 
 Or if you don't have it, add the scoped registry to manifest.json with the desired dependency semantic version: 
-```
+```json
   "scopedRegistries": [
     {
       "name": "package.openupm.com",
       "url": "https://package.openupm.com",
       "scopes": [
         "com.solidalloy.util",
+        "com.solidalloy.unity-dropdown",
         "com.solidalloy.type.references",
         "com.openupm"
       ]
