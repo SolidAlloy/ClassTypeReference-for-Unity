@@ -11,7 +11,7 @@ This is a fork of the currently inactive project by Rotorz: [ClassTypeReference 
 ## Install with OpenUPM
 Once you have the OpenUPM cli, run the following command:
 
-```openupm install com.solidalloy.type.references```
+```openupm install com.solidalloy.type-references```
 
 Or if you don't have it, add the scoped registry to manifest.json with the desired dependency semantic version: 
 ```json
@@ -22,13 +22,13 @@ Or if you don't have it, add the scoped registry to manifest.json with the desir
       "scopes": [
         "com.solidalloy.util",
         "com.solidalloy.unity-dropdown",
-        "com.solidalloy.type.references",
+        "com.solidalloy.type-references",
         "com.openupm"
       ]
     }
   ],
   "dependencies": {
-    "com.solidalloy.type.references": "2.1.0"
+    "com.solidalloy.type-references": "2.1.0"
   },
 
 ```
