@@ -1,3 +1,10 @@
+## [2.12.1](https://github.com/SolidAlloy/ClassTypeReference-for-Unity/compare/2.12.0...2.12.1) (2022-02-03)
+
+
+### Bug Fixes
+
+* Fixed the error in console regarding the immutable Changelog file ([685a566](https://github.com/SolidAlloy/ClassTypeReference-for-Unity/commit/685a566997fd1aae40b305570406661018fd3f30))
+
 # [2.12.0](https://github.com/SolidAlloy/ClassTypeReference-for-Unity/compare/2.11.5...2.12.0) (2022-02-03)
 
 
