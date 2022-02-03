@@ -8,7 +8,13 @@ A plugin that allows you to choose types from a drop-down menu in the inspector.
 ![screenshot](https://raw.githubusercontent.com/SolidAlloy/ClassTypeReference-for-Unity/master/.screenshot.png)
 
 This is a fork of the currently inactive project by Rotorz: [ClassTypeReference for Unity](https://bitbucket.org/rotorz/classtypereference-for-unity/src/master/)
-## Install with OpenUPM
+
+## Installation
+
+:heavy_exclamation_mark: Before installing the package, please disable the **Assembly Version Validation** option in **Player Settings**.
+
+### Install with OpenUPM
+
 Once you have the OpenUPM cli, run the following command:
 
 ```openupm install com.solidalloy.type-references```
@@ -33,7 +39,7 @@ Or if you don't have it, add the scoped registry to manifest.json with the desir
 
 ```
 
-## Install via Git URL
+### Install via Git URL
 
 Project supports Unity Package Manager. To install the project as a Git package do the following:
 
