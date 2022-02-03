@@ -6,7 +6,7 @@
   "dependencies": {
     "com.solidalloy.util": "1.35.0",
     "com.unity.settings-manager": "1.0.3",
-    "com.solidalloy.unity-dropdown": "1.1.0"
+    "com.solidalloy.unity-dropdown": "1.1.1"
   },
   "keywords": [
     "dropdown",
