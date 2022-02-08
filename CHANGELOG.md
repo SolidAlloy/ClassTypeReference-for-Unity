@@ -1,3 +1,10 @@
+# [2.13.0](https://github.com/SolidAlloy/ClassTypeReference-for-Unity/compare/2.12.1...2.13.0) (2022-02-08)
+
+
+### Features
+
+* Started setting GUI.changed to true when a different type is chosen in the dropdown so that one can register for 'value changed' events ([72212e2](https://github.com/SolidAlloy/ClassTypeReference-for-Unity/commit/72212e22049683836493dbfcfc2acfc260d91b1d))
+
 ## [2.12.1](https://github.com/SolidAlloy/ClassTypeReference-for-Unity/compare/2.12.0...2.12.1) (2022-02-03)
 
 
