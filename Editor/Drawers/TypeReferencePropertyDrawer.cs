@@ -1,5 +1,6 @@
 namespace TypeReferences.Editor.Drawers
 {
+    using System.Collections.Generic;
     using TypeReferences;
     using UnityEditor;
     using UnityEngine;
@@ -14,6 +15,8 @@ namespace TypeReferences.Editor.Drawers
     [CustomPropertyDrawer(typeof(TypeOptionsAttribute), true)]
     public class TypeReferencePropertyDrawer : PropertyDrawer
     {
+        private static readonly Dictionary<(SerializedObject serializedObject, string path), string> _valuesCache = new Dictionary<(SerializedObject serializedObject, string path), string>();
+
         public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
         {
             return EditorStyles.popup.CalcHeight(GUIContent.none, 0f);
@@ -48,6 +51,13 @@ namespace TypeReferences.Editor.Drawers
                 serializedTypeRef.TypeNameAndAssembly = string.Empty;
             }
 
+            // This is needed for the 'value changed' event to propagate up, so that if someones subscribes to
+            // value changed events through UI Elements, they will receive a notification.
+            // We can determine that the value changed only by comparing it with the previous value because the dropdown
+            // opens a new window and when the type is changed, the focus is on the window, not on this property drawer.
+            if (!PreviousCurrentValuesEqual(serializedTypeRef.TypeNameProperty))
+                GUI.changed = true;
+
             var dropdownDrawer = new TypeDropdownDrawer(selectedType, typeOptionsAttribute, fieldInfo?.DeclaringType);
 
             var fieldDrawer = new TypeFieldDrawer(
@@ -57,6 +67,25 @@ namespace TypeReferences.Editor.Drawers
                 typeOptionsAttribute.ShortName);
 
             fieldDrawer.Draw();
+        }
+        
+        private static bool PreviousCurrentValuesEqual(SerializedProperty typeNameProperty)
+        {
+            var key = (typeNameProperty.serializedObject, typeNameProperty.propertyPath);
+            
+            if (_valuesCache.TryGetValue(key, out string previousValue))
+            {
+                if (typeNameProperty.stringValue == previousValue)
+                {
+                    return true;
+                }
+
+                _valuesCache[key] = typeNameProperty.stringValue;
+                return false;
+            }
+
+            _valuesCache.Add(key, typeNameProperty.stringValue);
+            return true;
         }
     }
 }

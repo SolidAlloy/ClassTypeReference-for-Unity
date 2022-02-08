@@ -10,15 +10,15 @@
     /// </summary>
     internal readonly struct SerializedTypeReference
     {
+        public readonly SerializedProperty TypeNameProperty;
         private readonly SerializedObject _parentObject;
-        private readonly SerializedProperty _typeNameProperty;
         private readonly SerializedProperty _guidProperty;
         private readonly SerializedProperty _guidAssignmentFailedProperty;
 
         public SerializedTypeReference(SerializedProperty typeReferenceProperty)
         {
             _parentObject = typeReferenceProperty.serializedObject;
-            _typeNameProperty = typeReferenceProperty.FindPropertyRelative(nameof(TypeReference._typeNameAndAssembly));
+            TypeNameProperty = typeReferenceProperty.FindPropertyRelative(nameof(TypeReference._typeNameAndAssembly));
             _guidProperty = typeReferenceProperty.FindPropertyRelative(nameof(TypeReference.GUID));
             _guidAssignmentFailedProperty = typeReferenceProperty.FindPropertyRelative(nameof(TypeReference.GuidAssignmentFailed));
 
@@ -27,11 +27,11 @@
 
         public string TypeNameAndAssembly
         {
-            get => _typeNameProperty.stringValue;
+            get => TypeNameProperty.stringValue;
             set => SetTypeNameAndAssembly(value);
         }
 
-        public bool TypeNameHasMultipleDifferentValues => _typeNameProperty.hasMultipleDifferentValues;
+        public bool TypeNameHasMultipleDifferentValues => TypeNameProperty.hasMultipleDifferentValues;
 
         private bool GuidAssignmentFailed
         {
@@ -47,14 +47,14 @@
             Justification = "The method is used by TypeFieldDrawer in C# 7")]
         public void SetTypeNameAndAssembly(string value)
         {
-            _typeNameProperty.stringValue = value;
+            TypeNameProperty.stringValue = value;
             _guidProperty.stringValue = GetClassGuidFromTypeName(value);
             _parentObject.ApplyModifiedProperties();
         }
 
         public void SetType(Type type)
         {
-            _typeNameProperty.stringValue = TypeReference.GetTypeNameAndAssembly(type);
+            TypeNameProperty.stringValue = TypeReference.GetTypeNameAndAssembly(type);
             _guidProperty.stringValue = TypeReference.GetClassGUID(type);
             _parentObject.ApplyModifiedProperties();
         }
