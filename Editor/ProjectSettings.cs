@@ -2,7 +2,7 @@
 {
     using UnityEditor.SettingsManagement;
 
-    internal static class ProjectSettings
+    public static class ProjectSettings
     {
         private const string PackageName = "com.solidalloy.type-references";
 
