@@ -16,7 +16,7 @@
         public TypeReference OnlyMonoBehaviours;
 
         [InfoBox("All the TypeOptions arguments are available with Inherits too.")]
-        [Inherits(typeof(IGreetingLogger), ExcludeNone = true)]
+        [Inherits(typeof(IGreetingLogger), ShowNoneElement = false)]
         public TypeReference NoneExcluded;
     }
 }
