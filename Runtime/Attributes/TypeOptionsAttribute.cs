@@ -25,6 +25,11 @@
         /// Defaults to <see langword="true"/> unless explicitly specified.
         /// </summary>
         [PublicAPI] public bool ShowNoneElement = true;
+        
+        /// <summary>
+        /// Use <see cref="ShowNoneElement"/> instead.
+        /// </summary>
+        [PublicAPI, Obsolete("Use ShowNoneElement instead.")] public bool ExcludeNone = false;
 
         /// <summary>Includes additional types in the drop-down list.</summary>
         [PublicAPI] public Type[] IncludeTypes;
