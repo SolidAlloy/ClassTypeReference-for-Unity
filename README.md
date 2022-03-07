@@ -131,10 +131,10 @@ public TypeReference productionType;
 
 &nbsp;  
 
-You can exclude **(None)** so that no one can choose it from the dropdown.
+You can hide the **(None)** element so that no one can choose it from the dropdown.
 
 ```csharp
-[TypeOptions(ExcludeNone = true)]
+[TypeOptions(ShowNoneElement = false)]
 public TypeReference greetingLogger;
 ```
 
