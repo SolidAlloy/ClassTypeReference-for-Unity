@@ -1,3 +1,16 @@
+# [2.14.0](https://github.com/SolidAlloy/ClassTypeReference-for-Unity/compare/2.13.0...2.14.0) (2022-03-07)
+
+
+### Bug Fixes
+
+* Fixed compilation errors in samples ([8a99387](https://github.com/SolidAlloy/ClassTypeReference-for-Unity/commit/8a9938738418e7ba4ca2c20a71a258fb0f35c15d))
+* Returned the ExcludeNone parameter and marked it obsolete ([88607ee](https://github.com/SolidAlloy/ClassTypeReference-for-Unity/commit/88607eedf929e36cc1265c85af84ada76934ae46))
+
+
+### Features
+
+* Made ProjectSettings public ([c6f3c92](https://github.com/SolidAlloy/ClassTypeReference-for-Unity/commit/c6f3c926539bf83b800d0dd8f05f44456e8bb4a8))
+
 # [2.13.0](https://github.com/SolidAlloy/ClassTypeReference-for-Unity/compare/2.12.1...2.13.0) (2022-02-08)
 
 
