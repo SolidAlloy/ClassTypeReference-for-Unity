@@ -43,10 +43,18 @@ Or if you don't have it, add the scoped registry to manifest.json with the desir
 
 Project supports Unity Package Manager. To install the project as a Git package do the following:
 
-1. In Unity, open **Window** -> **Package Manager**.
-2. Press the **+** button, choose "**Add package from git URL...**"
-3. Enter "https://github.com/SolidAlloy/SolidUtilities.git" and press **Add**.
-4. When the first package is installed, add the main one: "https://github.com/SolidAlloy/ClassTypeReference-for-Unity.git".
+1. In Unity, open **Project Settings** -> **Package Manager**.
+2. Add a new scoped registry with the following details:
+   - **Name**: package.openupm.com
+   - **URL**: https://package.openupm.com
+   - Scope(s):
+     - com.openupm
+     - com.solidalloy
+     - org.nuget
+3. Hit **Apply**.
+4. Go to **Window** -> **Package Manager**.
+5. Press the **+** button, *Add package from git URL*.
+6. Enter **com.solidalloy.type-references**, press **Add**.
 
 ## Simple Usage
 
