@@ -22,7 +22,7 @@
         [SerializeField] internal string _typeNameAndAssembly;
         public string TypeNameAndAssembly => _typeNameAndAssembly;
 
-        [SerializeField] private bool _suppressLogs;
+        [SerializeField] internal bool _suppressLogs;
 
         private Type _type;
 
