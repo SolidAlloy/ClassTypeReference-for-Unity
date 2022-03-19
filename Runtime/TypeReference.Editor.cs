@@ -87,8 +87,11 @@
 
             foreach (var typeReferenceProperty in typeReferenceProperties)
             {
-                if (typeReferenceProperty.FindPropertyRelative(nameof(_typeNameAndAssembly)).stringValue != typeName)
+                if (typeReferenceProperty.FindPropertyRelative(nameof(_typeNameAndAssembly)).stringValue != typeName
+                    || typeReferenceProperty.FindPropertyRelative(nameof(_suppressLogs)).boolValue) // also don't report the missing type if the logs were suppressed for this TypeReference instance.
+                {
                     continue;
+                }
 
                 var targetObject = typeReferenceProperty.serializedObject.targetObject;
 
