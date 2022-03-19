@@ -182,8 +182,7 @@
             if (_reportedMissingValues.Contains(_typeNameAndAssembly))
                 return;
 
-            Debug.LogWarning($"'{_typeNameAndAssembly}' was referenced but such type was not found.");
-            ReportObjectsWithMissingValue();
+            ReportObjectsWithMissingValue(_typeNameAndAssembly);
             _reportedMissingValues.Add(_typeNameAndAssembly);
         }
 

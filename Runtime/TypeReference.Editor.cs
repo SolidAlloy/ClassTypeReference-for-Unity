@@ -1,12 +1,17 @@
 ﻿namespace TypeReferences
 {
     using System;
+    using System.Collections.Generic;
+    using System.Diagnostics;
     using System.Linq;
     using Debug = UnityEngine.Debug;
 
 #if UNITY_EDITOR
     using SolidUtilities.Editor;
     using UnityEditor;
+    using UnityEditor.SceneManagement;
+    using UnityEngine;
+    using UnityEngine.SceneManagement;
 #endif
 
     // This part of the class contains only the methods that are meant to be executed in Editor and not in builds.
@@ -31,7 +36,7 @@
         private static string GetGUIDFromType(Type type)
         {
 #if UNITY_EDITOR
-            return AssetSearcher.GetClassGUID(type);
+            return AssetHelper.GetClassGUID(type);
 #else
             return string.Empty;
 #endif
@@ -71,18 +76,30 @@
 #endif
         }
 
-        private void ReportObjectsWithMissingValue()
+        [Conditional("UNITY_EDITOR")]
+        private static void ReportObjectsWithMissingValue(string typeName)
         {
 #if UNITY_EDITOR
-            var foundObjects = AssetSearcher.FindObjectsWithValue(nameof(_typeNameAndAssembly), _typeNameAndAssembly);
-            Debug.Log("The value is set in the following objects:");
+            bool firstLineLogged = false;
 
-            foreach (FoundObject foundObject in foundObjects)
+            var serializedObjects = ProjectDependencySearcher.GetSerializedObjectsFromOpenScenes(new ProjectDependencySearcher.FoundObjects());
+            var typeReferenceProperties = SerializedPropertyHelper.FindPropertiesOfType(serializedObjects, "TypeReference");
+
+            foreach (var typeReferenceProperty in typeReferenceProperties)
             {
-                var details = foundObject
-                    .Select(detail => $"{detail.Key}: {detail.Value}");
+                if (typeReferenceProperty.FindPropertyRelative(nameof(_typeNameAndAssembly)).stringValue != typeName)
+                    continue;
 
-                Debug.Log($"[{foundObject.Type}] {string.Join(", ", details)}");
+                var targetObject = typeReferenceProperty.serializedObject.targetObject;
+
+                // Log the first message only if any objects with missing value were found.
+                if (!firstLineLogged)
+                {
+                    Debug.LogWarning($"'{typeName}' was referenced but such type was not found. The value was set in the following objects:");
+                    firstLineLogged = true;
+                }
+                
+                Debug.Log($"<a>{targetObject.name}{(targetObject is MonoBehaviour ? $".{targetObject.GetType().Name}" : string.Empty)}</a>");
             }
 #endif
         }
