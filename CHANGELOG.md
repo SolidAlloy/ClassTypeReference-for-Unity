@@ -1,3 +1,16 @@
+# [2.15.0](https://github.com/SolidAlloy/ClassTypeReference-for-Unity/compare/2.14.0...2.15.0) (2022-05-02)
+
+
+### Bug Fixes
+
+* Made _suppressLogs work properly for all instance of TypeReference ([4034588](https://github.com/SolidAlloy/ClassTypeReference-for-Unity/commit/40345887de9e1c17d3496116f6a6064c8401a5b4))
+
+
+### Features
+
+* Implemented new algorithm to find the objects with the missing type ([92e8d7e](https://github.com/SolidAlloy/ClassTypeReference-for-Unity/commit/92e8d7e0098ad4c073d95ef43f431242a8d8a581))
+* Started coloring missing types in red to draw attention to them. ([c06d230](https://github.com/SolidAlloy/ClassTypeReference-for-Unity/commit/c06d2301eb733a7d5e5a0277c37372ef0ce35b37))
+
 # [2.14.0](https://github.com/SolidAlloy/ClassTypeReference-for-Unity/compare/2.13.0...2.14.0) (2022-03-07)
 
 
