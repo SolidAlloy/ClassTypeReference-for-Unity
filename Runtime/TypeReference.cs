@@ -22,7 +22,7 @@
         [SerializeField] internal string _typeNameAndAssembly;
         public string TypeNameAndAssembly => _typeNameAndAssembly;
 
-        [SerializeField] private bool _suppressLogs;
+        [SerializeField] internal bool _suppressLogs;
 
         private Type _type;
 
@@ -182,8 +182,7 @@
             if (_reportedMissingValues.Contains(_typeNameAndAssembly))
                 return;
 
-            Debug.LogWarning($"'{_typeNameAndAssembly}' was referenced but such type was not found.");
-            ReportObjectsWithMissingValue();
+            ReportObjectsWithMissingValue(_typeNameAndAssembly);
             _reportedMissingValues.Add(_typeNameAndAssembly);
         }
 

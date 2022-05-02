@@ -116,12 +116,22 @@
         {
             int indexOfComma = _serializedTypeRef.TypeNameAndAssembly.IndexOf(',');
             string fullTypeName = indexOfComma == -1 ? string.Empty : _serializedTypeRef.TypeNameAndAssembly.Substring(0, indexOfComma);
-            GUIContent fieldContent = GUIContentHelper.Temp(GetTypeToShow(fullTypeName));
+            GUIContent fieldContent = GUIContentHelper.Temp(GetTypeToShow(fullTypeName, out bool typeExists));
+
+            var previousColor = GUI.backgroundColor;
+            
+            if (!typeExists) 
+                GUI.backgroundColor = new Color(1f, 0f, 0f, .5f);
+
             EditorStyles.popup.Draw(_position, fieldContent, controlID);
+            
+            GUI.backgroundColor = previousColor;
         }
 
-        private string GetTypeToShow(string typeName)
+        private string GetTypeToShow(string typeName, out bool typeExists)
         {
+            typeExists = true;
+            
             if (ProjectSettings.UseBuiltInNames)
             {
                 string builtInName = typeName.ReplaceWithBuiltInName();
@@ -136,7 +146,10 @@
                 return DropdownWindow.NoneElementName;
 
             if (TypeCache.GetType(_serializedTypeRef.TypeNameAndAssembly) == null)
+            {
+                typeExists = false;
                 return typeName + MissingSuffix;
+            }
 
             return typeName;
         }

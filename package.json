@@ -4,7 +4,7 @@
   "displayName": "Type References",
   "description": "A plugin that allows selecting a type from a drop-down menu in the inspector.",
   "dependencies": {
-    "com.solidalloy.util": "1.35.0",
+    "com.solidalloy.util": "1.37.0",
     "com.unity.settings-manager": "1.0.3",
     "com.solidalloy.unity-dropdown": "1.1.1"
   },
