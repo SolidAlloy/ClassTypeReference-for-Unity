@@ -36,11 +36,15 @@
         public bool SuppressLogs
         {
             get => _suppressLogs.boolValue;
-            set
-            {
-                _suppressLogs.boolValue = value;
+            set => SetSuppressLogs(value, true);
+        }
+
+        public void SetSuppressLogs(bool value, bool applyImmediately)
+        {
+            _suppressLogs.boolValue = value;
+
+            if (applyImmediately)
                 _parentObject.ApplyModifiedProperties();
-            }
         }
 
         public bool TypeNameHasMultipleDifferentValues => TypeNameProperty.hasMultipleDifferentValues;
@@ -80,7 +84,6 @@
         {
             TypeNameProperty.stringValue = TypeReference.GetTypeNameAndAssembly(type);
             _guidProperty.stringValue = TypeReference.GetClassGUID(type);
-            _parentObject.ApplyModifiedProperties();
         }
 
         private static string GetClassGuidFromTypeName(string typeName)
