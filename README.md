@@ -29,12 +29,13 @@ Or if you don't have it, add the scoped registry to manifest.json with the desir
         "com.solidalloy.util",
         "com.solidalloy.unity-dropdown",
         "com.solidalloy.type-references",
-        "com.openupm"
+        "com.openupm",
+        "org.nuget"
       ]
     }
   ],
   "dependencies": {
-    "com.solidalloy.type-references": "2.1.0"
+    "com.solidalloy.type-references": "2.15.0"
   },
 
 ```
