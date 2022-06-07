@@ -1,3 +1,10 @@
+## [2.15.1](https://github.com/SolidAlloy/ClassTypeReference-for-Unity/compare/2.15.0...2.15.1) (2022-06-07)
+
+
+### Bug Fixes
+
+* Fixed exception in ExtEvents related to TypeReference ([45ce1f8](https://github.com/SolidAlloy/ClassTypeReference-for-Unity/commit/45ce1f821a71e5d81bc23a7239aa872ae5505423))
+
 # [2.15.0](https://github.com/SolidAlloy/ClassTypeReference-for-Unity/compare/2.14.0...2.15.0) (2022-05-02)
 
 
