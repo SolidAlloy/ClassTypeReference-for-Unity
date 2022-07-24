@@ -1,3 +1,15 @@
+# [2.16.0](https://github.com/SolidAlloy/ClassTypeReference-for-Unity/compare/2.15.1...2.16.0) (2022-07-24)
+
+
+### Bug Fixes
+
+* Fixed type being null when SerializeReference is used on a field next to a serializable class that uses TypeReference ([cc77a82](https://github.com/SolidAlloy/ClassTypeReference-for-Unity/commit/cc77a8252fd62184093ac4bd91741cf71c856243))
+
+
+### Features
+
+* Switched from GUID to assembly names in asmdefs ([9645049](https://github.com/SolidAlloy/ClassTypeReference-for-Unity/commit/96450497153d8d101e686f232d729ccb3b8396de))
+
 ## [2.15.1](https://github.com/SolidAlloy/ClassTypeReference-for-Unity/compare/2.15.0...2.15.1) (2022-06-07)
 
 
