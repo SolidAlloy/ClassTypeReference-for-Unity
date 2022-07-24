@@ -98,7 +98,14 @@
         /// </exception>
         public Type Type
         {
-            get => _type;
+            get
+            {
+                // Workaround for a bug in Unity where a SerializeReference field affects the deserialization of a SerializeField field placed nearby.
+                if (_type == null && IsNotEmpty(_typeNameAndAssembly))
+                    _type = TryGetTypeFromSerializedFields();
+
+                return _type;
+            }
             set
             {
                 MakeSureTypeHasName(value);
